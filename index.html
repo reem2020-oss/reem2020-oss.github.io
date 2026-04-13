@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الحضور والانصراف - لوحة التحكم</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0a7ea4;
+            --success: #22C55E;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --background: #ffffff;
+            --surface: #f5f5f5;
+            --foreground: #11181C;
+            --muted: #687076;
+            --border: #E5E7EB;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header h1 {
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 3px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary);
+            background-color: var(--background);
+            border-right-color: var(--primary);
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: var(--error);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-header {
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            color: var(--foreground);
+            font-weight: 700;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(10, 126, 164, 0.1);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 24px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--foreground);
+        }
+
+        /* Charts */
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .chart-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .chart-card h2 {
+            font-size: 16px;
+            color: var(--foreground);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        /* Table */
+        .table-container {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: var(--background);
+            border-bottom: 2px solid var(--border);
+        }
+
+        th {
+            padding: 16px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--foreground);
+            font-size: 14px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background-color: var(--background);
+        }
+
+        td {
+            padding: 16px;
+            color: var(--foreground);
+            font-size: 14px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background-color: #22C55E20;
+            color: var(--success);
+        }
+
+        .status-inactive {
+            background-color: #EF444420;
+            color: var(--error);
+        }
+
+        .status-leave {
+            background-color: #F59E0B20;
+            color: var(--warning);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background-color: var(--surface);
+            color: var(--foreground);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--background);
+            border-radius: 12px 12px 0 0;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            color: var(--foreground);
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background-color: var(--surface);
+            color: var(--foreground);
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(10, 126, 164, 0.1);
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: var(--foreground);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+            }
+
+            .sidebar-header h1 {
+                display: none;
+            }
+
+            .nav-link span:not(:first-child) {
+                display: none;
+            }
+
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>نظام الحضور</h1>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-link active" onclick="showPage('dashboard')">
+                <span>📊</span>
+                <span>لوحة التحكم</span>
+            </div>
+            <div class="nav-link" onclick="showPage('employees')">
+                <span>👥</span>
+                <span>الموظفين</span>
+            </div>
+            <div class="nav-link" onclick="showPage('departments')">
+                <span>🏢</span>
+                <span>الأقسام</span>
+            </div>
+            <div class="nav-link" onclick="showPage('reports')">
+                <span>📈</span>
+                <span>التقارير</span>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="logout()">خروج</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page active">
+            <div class="page-header">
+                <h1>لوحة التحكم</h1>
+                <p style="color: var(--muted); font-size: 14px; margin-top: 8px;">
+                    <span id="current-date"></span>
+                </p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #22C55E20;">✅</div>
+                    <div>
+                        <p class="stat-label">حاضرين اليوم</p>
+                        <p class="stat-value">45</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #EF444420;">❌</div>
+                    <div>
+                        <p class="stat-label">غائبين اليوم</p>
+                        <p class="stat-value">5</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #F59E0B20;">⏰</div>
+                    <div>
+                        <p class="stat-label">متأخرين اليوم</p>
+                        <p class="stat-value">3</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #0a7ea420;">👥</div>
+                    <div>
+                        <p class="stat-label">إجمالي الموظفين</p>
+                        <p class="stat-value">55</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h2>إحصائيات الأسبوع</h2>
+                    <canvas id="weekChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h2>توزيع الحضور اليوم</h2>
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <h2 style="padding: 20px 20px 0 20px; font-size: 16px; color: var(--foreground); font-weight: 600;">آخر الحركات</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الموظف</th>
+                            <th>النوع</th>
+                            <th>الوقت</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>أحمد محمد</td>
+                            <td>حضور</td>
+                            <td>08:30 صباحاً</td>
+                            <td><span class="status-badge status-active">داخل النطاق</span></td>
+                        </tr>
+                        <tr>
+                            <td>فاطمة علي</td>
+                            <td>غياب</td>
+                            <td>09:00 صباحاً</td>
+                            <td><span class="status-badge status-inactive">غياب</span></td>
+                        </tr>
+                        <tr>
+                            <td>محمود حسن</td>
+                            <td>حضور</td>
+                            <td>09:15 صباحاً</td>
+                            <td><span class="status-badge status-leave">متأخر</span></td>
+                        </tr>
+                        <tr>
+                            <td>سارة إبراهيم</td>
+                            <td>انصراف</td>
+                            <td>05:30 مساءً</td>
+                            <td><span class="status-badge status-active">داخل النطاق</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Employees Page -->
+        <div id="employees" class="page">
+            <div class="page-header">
+                <h1>إدارة الموظفين</h1>
+                <button class="btn btn-primary" style="margin-top: 12px;" onclick="openModal('addEmployeeModal')">+ إضافة موظف</button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>البريد الإلكتروني</th>
+                            <th>القسم</th>
+                            <th>الوظيفة</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>أحمد محمد</td>
+                            <td>ahmed@example.com</td>
+                            <td>التطوير</td>
+                            <td>مطور</td>
+                            <td><span class="status-badge status-active">نشط</span></td>
+                        </tr>
+                        <tr>
+                            <td>فاطمة علي</td>
+                            <td>fatima@example.com</td>
+                            <td>الموارد البشرية</td>
+                            <td>مسؤولة موارد بشرية</td>
+                            <td><span class="status-badge status-active">نشط</span></td>
+                        </tr>
+                        <tr>
+                            <td>محمود حسن</td>
+                            <td>mahmoud@example.com</td>
+                            <td>المبيعات</td>
+                            <td>مندوب مبيعات</td>
+                            <td><span class="status-badge status-leave">في إجازة</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Departments Page -->
+        <div id="departments" class="page">
+            <div class="page-header">
+                <h1>إدارة الأقسام</h1>
+                <button class="btn btn-primary" style="margin-top: 12px;" onclick="openModal('addDepartmentModal')">+ إضافة قسم</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                <div class="chart-card">
+                    <h2>التطوير</h2>
+                    <p style="color: var(--muted); margin: 8px 0;">قسم تطوير البرمجيات</p>
+                    <div style="display: flex; gap: 16px; padding: 12px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin: 12px 0;">
+                        <div>
+                            <span style="color: var(--muted); font-size: 12px;">الموظفين</span>
+                            <p style="font-size: 18px; font-weight: 600; color: var(--foreground);">15</p>
+                        </div>
+                        <div>
+                            <span style="color: var(--muted); font-size: 12px;">الموقع</span>
+                            <p style="font-size: 14px; font-weight: 600; color: var(--foreground);">الدور الثاني</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;">عرض التفاصيل</button>
+                </div>
+
+                <div class="chart-card">
+                    <h2>الموارد البشرية</h2>
+                    <p style="color: var(--muted); margin: 8px 0;">قسم الموارد البشرية والتطوير</p>
+                    <div style="display: flex; gap: 16px; padding: 12px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin: 12px 0;">
+                        <div>
+                            <span style="color: var(--muted); font-size: 12px;">الموظفين</span>
+                            <p style="font-size: 18px; font-weight: 600; color: var(--foreground);">5</p>
+                        </div>
+                        <div>
+                            <span style="color: var(--muted); font-size: 12px;">الموقع</span>
+                            <p style="font-size: 14px; font-weight: 600; color: var(--foreground);">الدور الأول</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;">عرض التفاصيل</button>
+                </div>
+
+                <div class="chart-card">
+                    <h2>المبيعات</h2>
+                    <p style="color: var(--muted); margin: 8px 0;">قسم المبيعات والتسويق</p>
+                    <div style="display: flex; gap: 16px; padding: 12px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin: 12px 0;">
+                        <div>
+                            <span style="color: var(--muted); font-size: 12px;">الموظفين</span>
+                            <p style="font-size: 18px; font-weight: 600; color: var(--foreground);">10</p>
+                        </div>
+                        <div>
+                            <span style="color: var(--muted); font-size: 12px;">الموقع</span>
+                            <p style="font-size: 14px; font-weight: 600; color: var(--foreground);">الدور الثالث</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;">عرض التفاصيل</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Page -->
+        <div id="reports" class="page">
+            <div class="page-header">
+                <h1>التقارير الشهرية</h1>
+            </div>
+
+            <div style="background-color: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; gap: 20px;">
+                <div>
+                    <label style="font-size: 14px; font-weight: 600; color: var(--foreground); display: block; margin-bottom: 8px;">الشهر والسنة</label>
+                    <div style="display: flex; gap: 12px;">
+                        <select style="padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; background-color: var(--background); color: var(--foreground);">
+                            <option>يناير</option>
+                            <option>فبراير</option>
+                            <option>مارس</option>
+                            <option>أبريل</option>
+                        </select>
+                        <select style="padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; background-color: var(--background); color: var(--foreground);">
+                            <option>2024</option>
+                            <option>2025</option>
+                            <option>2026</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-primary">📄 تصدير PDF</button>
+                    <button class="btn btn-primary">📊 تصدير Excel</button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #22C55E20;">📅</div>
+                    <div>
+                        <p class="stat-label">أيام العمل</p>
+                        <p class="stat-value">22</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #0a7ea420;">📈</div>
+                    <div>
+                        <p class="stat-label">متوسط الحضور</p>
+                        <p class="stat-value">96.5%</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #EF444420;">📉</div>
+                    <div>
+                        <p class="stat-label">متوسط الغياب</p>
+                        <p class="stat-value">2.5%</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #F59E0B20;">⏱️</div>
+                    <div>
+                        <p class="stat-label">متوسط التأخير</p>
+                        <p class="stat-value">1%</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h2>اتجاه الحضور الشهري</h2>
+                    <canvas id="reportChart"></canvas>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الموظف</th>
+                            <th>القسم</th>
+                            <th>أيام الحضور</th>
+                            <th>أيام الغياب</th>
+                            <th>النسبة المئوية</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>أحمد محمد</td>
+                            <td>التطوير</td>
+                            <td>22</td>
+                            <td>0</td>
+                            <td><span class="status-badge status-active">100%</span></td>
+                        </tr>
+                        <tr>
+                            <td>فاطمة علي</td>
+                            <td>الموارد البشرية</td>
+                            <td>21</td>
+                            <td>1</td>
+                            <td><span class="status-badge status-active">95.5%</span></td>
+                        </tr>
+                        <tr>
+                            <td>محمود حسن</td>
+                            <td>المبيعات</td>
+                            <td>20</td>
+                            <td>2</td>
+                            <td><span class="status-badge status-leave">90.9%</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="addEmployeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إضافة موظف جديد</h2>
+                <button class="close-btn" onclick="closeModal('addEmployeeModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" placeholder="أدخل الاسم الكامل">
+                </div>
+                <div class="form-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" placeholder="أدخل البريد الإلكتروني">
+                </div>
+                <div class="form-group">
+                    <label>القسم</label>
+                    <input type="text" placeholder="أدخل القسم">
+                </div>
+                <div class="form-group">
+                    <label>الوظيفة</label>
+                    <input type="text" placeholder="أدخل الوظيفة">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addEmployeeModal')">إلغاء</button>
+                <button class="btn btn-primary">إضافة الموظف</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addDepartmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إضافة قسم جديد</h2>
+                <button class="close-btn" onclick="closeModal('addDepartmentModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>اسم القسم</label>
+                    <input type="text" placeholder="أدخل اسم القسم">
+                </div>
+                <div class="form-group">
+                    <label>الوصف</label>
+                    <textarea placeholder="أدخل وصف القسم" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>الموقع</label>
+                    <input type="text" placeholder="أدخل موقع القسم">
+                </div>
+                <div class="form-group">
+                    <label>نطاق الحضور (متر)</label>
+                    <input type="number" placeholder="أدخل نطاق الحضور" min="0">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addDepartmentModal')">إلغاء</button>
+                <button class="btn btn-primary">إضافة القسم</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update current date
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('ar-SA', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Navigation
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageName).classList.add('active');
+
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            event.target.closest('.nav-link').classList.add('active');
+
+            // Initialize charts when showing reports page
+            if (pageName === 'reports') {
+                setTimeout(initReportChart, 100);
+            }
+            // Initialize charts when showing dashboard
+            if (pageName === 'dashboard') {
+                setTimeout(initDashboardCharts, 100);
+            }
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Close modal when clicking overlay
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+
+        // Logout
+        function logout() {
+            alert('تم تسجيل الخروج بنجاح');
+            location.reload();
+        }
+
+        // Initialize dashboard charts
+        function initDashboardCharts() {
+            // Week Chart
+            const weekCtx = document.getElementById('weekChart');
+            if (weekCtx && !weekCtx.chart) {
+                weekCtx.chart = new Chart(weekCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس'],
+                        datasets: [
+                            {
+                                label: 'حاضرين',
+                                data: [45, 48, 50, 47, 49, 50],
+                                backgroundColor: '#22C55E'
+                            },
+                            {
+                                label: 'غائبين',
+                                data: [5, 2, 0, 3, 1, 0],
+                                backgroundColor: '#EF4444'
+                            },
+                            {
+                                label: 'متأخرين',
+                                data: [3, 5, 5, 5, 5, 5],
+                                backgroundColor: '#F59E0B'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart');
+            if (pieCtx && !pieCtx.chart) {
+                pieCtx.chart = new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['حاضرين', 'غائبين', 'متأخرين'],
+                        datasets: [{
+                            data: [45, 5, 3],
+                            backgroundColor: ['#22C55E', '#EF4444', '#F59E0B']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize report chart
+        function initReportChart() {
+            const reportCtx = document.getElementById('reportChart');
+            if (reportCtx && !reportCtx.chart) {
+                reportCtx.chart = new Chart(reportCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['الأسبوع 1', 'الأسبوع 2', 'الأسبوع 3', 'الأسبوع 4'],
+                        datasets: [
+                            {
+                                label: 'حاضرين',
+                                data: [45, 48, 50, 47],
+                                borderColor: '#22C55E',
+                                backgroundColor: '#22C55E20',
+                                tension: 0.4
+                            },
+                            {
+                                label: 'غائبين',
+                                data: [5, 2, 0, 3],
+                                borderColor: '#EF4444',
+                                backgroundColor: '#EF444420',
+                                tension: 0.4
+                            },
+                            {
+                                label: 'متأخرين',
+                                data: [3, 5, 5, 5],
+                                borderColor: '#F59E0B',
+                                backgroundColor: '#F59E0B20',
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize charts on load
+        window.addEventListener('load', initDashboardCharts);
+    </script>
+</body>
+</html>
