@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Pro - Requests & Approvals</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0a7ea4;
+            --secondary: #667eea;
+            --success: #22C55E;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --foreground: #f1f5f9;
+            --muted: #94a3b8;
+            --border: #475569;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, #1a1f3a 100%);
+            color: var(--foreground);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: var(--foreground);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            color: var(--foreground);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Content */
+        .content {
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        /* Request Cards */
+        .request-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .request-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(10, 126, 164, 0.1);
+        }
+
+        .request-info {
+            flex: 1;
+        }
+
+        .request-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .request-icon {
+            font-size: 24px;
+        }
+
+        .request-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        .request-meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .request-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .status-approved {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-approve {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .btn-approve:hover {
+            background: rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-reject {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        .btn-reject:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-view {
+            background: rgba(102, 126, 234, 0.2);
+            color: var(--secondary);
+        }
+
+        .btn-view:hover {
+            background: rgba(102, 126, 234, 0.3);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            color: var(--foreground);
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--muted);
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background-color: var(--surface-light);
+            color: var(--foreground);
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(10, 126, 164, 0.1);
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .modal-footer button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .modal-footer .btn-cancel {
+            background: var(--surface-light);
+            color: var(--foreground);
+        }
+
+        .modal-footer .btn-submit {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        /* Filter */
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--foreground);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .request-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .request-status {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 12px;
+                padding-top: 12px;
+                border-top: 1px solid var(--border);
+            }
+
+            .action-buttons {
+                width: 100%;
+                margin-top: 12px;
+            }
+
+            .action-buttons button {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>نظام الطلبات والموافقات</h1>
+            <p>إدارة طلبات الإجازات والأذونات والمأموريات</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('requests')">الطلبات</button>
+            <button class="tab" onclick="switchTab('approvals')">الموافقات</button>
+            <button class="tab" onclick="switchTab('statistics')">الإحصائيات</button>
+        </div>
+
+        <!-- Requests Tab -->
+        <div id="requests" class="content active">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 20px; color: var(--foreground); font-weight: 600;">طلباتي</h2>
+                <button class="btn btn-view" onclick="openNewRequestModal()" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; padding: 10px 20px;">+ طلب جديد</button>
+            </div>
+
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filterRequests('all')">الكل</button>
+                <button class="filter-btn" onclick="filterRequests('pending')">قيد الانتظار</button>
+                <button class="filter-btn" onclick="filterRequests('approved')">موافق عليه</button>
+                <button class="filter-btn" onclick="filterRequests('rejected')">مرفوض</button>
+            </div>
+
+            <div id="requestsList">
+                <!-- Request Item 1 -->
+                <div class="request-card">
+                    <div class="request-info">
+                        <div class="request-header">
+                            <span class="request-icon">🏖️</span>
+                            <span class="request-title">إجازة سنوية</span>
+                        </div>
+                        <div class="request-meta">
+                            <span>📅 2026-04-15 إلى 2026-04-17</span>
+                            <span>⏱️ 3 أيام</span>
+                            <span>👤 أحمد محمد</span>
+                        </div>
+                    </div>
+                    <div class="request-status">
+                        <span class="status-badge status-approved">✓ موافق عليه</span>
+                        <div class="action-buttons">
+                            <button class="btn btn-view" onclick="viewRequestDetails()">عرض</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Request Item 2 -->
+                <div class="request-card">
+                    <div class="request-info">
+                        <div class="request-header">
+                            <span class="request-icon">📋</span>
+                            <span class="request-title">إذن انصراف</span>
+                        </div>
+                        <div class="request-meta">
+                            <span>📅 2026-04-13</span>
+                            <span>⏱️ 3 ساعات</span>
+                            <span>👤 فاطمة علي</span>
+                        </div>
+                    </div>
+                    <div class="request-status">
+                        <span class="status-badge status-pending">⏳ قيد الانتظار</span>
+                        <div class="action-buttons">
+                            <button class="btn btn-view" onclick="viewRequestDetails()">عرض</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Request Item 3 -->
+                <div class="request-card">
+                    <div class="request-info">
+                        <div class="request-header">
+                            <span class="request-icon">🚗</span>
+                            <span class="request-title">مأمورية خارجية</span>
+                        </div>
+                        <div class="request-meta">
+                            <span>📅 2026-04-10 إلى 2026-04-12</span>
+                            <span>📍 القاهرة</span>
+                            <span>👤 محمود حسن</span>
+                        </div>
+                    </div>
+                    <div class="request-status">
+                        <span class="status-badge status-approved">✓ موافق عليه</span>
+                        <div class="action-buttons">
+                            <button class="btn btn-view" onclick="viewRequestDetails()">عرض</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Request Item 4 -->
+                <div class="request-card">
+                    <div class="request-info">
+                        <div class="request-header">
+                            <span class="request-icon">✏️</span>
+                            <span class="request-title">تصحيح بصمة</span>
+                        </div>
+                        <div class="request-meta">
+                            <span>📅 2026-04-12</span>
+                            <span>⏱️ نسي البصمة</span>
+                            <span>👤 سارة أحمد</span>
+                        </div>
+                    </div>
+                    <div class="request-status">
+                        <span class="status-badge status-rejected">✕ مرفوض</span>
+                        <div class="action-buttons">
+                            <button class="btn btn-view" onclick="viewRequestDetails()">عرض</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Approvals Tab -->
+        <div id="approvals" class="content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">قيد الانتظار</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">45</div>
+                    <div class="stat-label">موافق عليه</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">مرفوض</div>
+                </div>
+            </div>
+
+            <h2 style="font-size: 20px; color: var(--foreground); font-weight: 600; margin-bottom: 16px;">الطلبات المعلقة</h2>
+
+            <div id="approvalsList">
+                <!-- Approval Item 1 -->
+                <div class="request-card">
+                    <div class="request-info">
+                        <div class="request-header">
+                            <span class="request-icon">🏖️</span>
+                            <span class="request-title">إجازة سنوية</span>
+                        </div>
+                        <div class="request-meta">
+                            <span>👤 علي محمد</span>
+                            <span>📅 2026-04-20 إلى 2026-04-25</span>
+                            <span>⏱️ 5 أيام</span>
+                        </div>
+                    </div>
+                    <div class="request-status">
+                        <span class="status-badge status-pending">⏳ قيد الانتظار</span>
+                        <div class="action-buttons">
+                            <button class="btn btn-approve" onclick="approveRequest()">✓ موافقة</button>
+                            <button class="btn btn-reject" onclick="rejectRequest()">✕ رفض</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Approval Item 2 -->
+                <div class="request-card">
+                    <div class="request-info">
+                        <div class="request-header">
+                            <span class="request-icon">📋</span>
+                            <span class="request-title">إذن انصراف</span>
+                        </div>
+                        <div class="request-meta">
+                            <span>👤 نور الدين</span>
+                            <span>📅 2026-04-14</span>
+                            <span>⏱️ ساعتين</span>
+                        </div>
+                    </div>
+                    <div class="request-status">
+                        <span class="status-badge status-pending">⏳ قيد الانتظار</span>
+                        <div class="action-buttons">
+                            <button class="btn btn-approve" onclick="approveRequest()">✓ موافقة</button>
+                            <button class="btn btn-reject" onclick="rejectRequest()">✕ رفض</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Approval Item 3 -->
+                <div class="request-card">
+                    <div class="request-info">
+                        <div class="request-header">
+                            <span class="request-icon">🚗</span>
+                            <span class="request-title">مأمورية خارجية</span>
+                        </div>
+                        <div class="request-meta">
+                            <span>👤 خالد إبراهيم</span>
+                            <span>📅 2026-04-18 إلى 2026-04-19</span>
+                            <span>📍 الإسكندرية</span>
+                        </div>
+                    </div>
+                    <div class="request-status">
+                        <span class="status-badge status-pending">⏳ قيد الانتظار</span>
+                        <div class="action-buttons">
+                            <button class="btn btn-approve" onclick="approveRequest()">✓ موافقة</button>
+                            <button class="btn btn-reject" onclick="rejectRequest()">✕ رفض</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Tab -->
+        <div id="statistics" class="content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">65</div>
+                    <div class="stat-label">إجمالي الطلبات</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">92%</div>
+                    <div class="stat-label">معدل الموافقة</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4.2</div>
+                    <div class="stat-label">متوسط أيام الإجازة</div>
+                </div>
+            </div>
+
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                <h3 style="font-size: 16px; color: var(--foreground); margin-bottom: 16px; font-weight: 600;">توزيع الطلبات</h3>
+                <canvas id="requestsChart"></canvas>
+            </div>
+
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+                <h3 style="font-size: 16px; color: var(--foreground); margin-bottom: 16px; font-weight: 600;">نسبة الموافقة والرفض</h3>
+                <canvas id="approvalChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Details Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>تفاصيل الطلب</h2>
+                <button class="close-btn" onclick="closeModal('detailsModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>نوع الطلب</label>
+                    <input type="text" value="إجازة سنوية" disabled>
+                </div>
+                <div class="form-group">
+                    <label>الموظف</label>
+                    <input type="text" value="أحمد محمد" disabled>
+                </div>
+                <div class="form-group">
+                    <label>التاريخ</label>
+                    <input type="text" value="2026-04-15 إلى 2026-04-17" disabled>
+                </div>
+                <div class="form-group">
+                    <label>الحالة</label>
+                    <input type="text" value="موافق عليه" disabled>
+                </div>
+                <div class="form-group">
+                    <label>الملاحظات</label>
+                    <textarea disabled rows="4">طلب إجازة سنوية للراحة والاستجمام</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('detailsModal')">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Request Modal -->
+    <div id="newRequestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>تقديم طلب جديد</h2>
+                <button class="close-btn" onclick="closeModal('newRequestModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>نوع الطلب</label>
+                    <select>
+                        <option>اختر نوع الطلب</option>
+                        <option>إجازة سنوية</option>
+                        <option>إجازة مرضية</option>
+                        <option>إذن انصراف</option>
+                        <option>مأمورية خارجية</option>
+                        <option>تصحيح بصمة</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>تاريخ البداية</label>
+                    <input type="date">
+                </div>
+                <div class="form-group">
+                    <label>تاريخ النهاية</label>
+                    <input type="date">
+                </div>
+                <div class="form-group">
+                    <label>الملاحظات</label>
+                    <textarea rows="4" placeholder="أضف ملاحظاتك..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('newRequestModal')">إلغاء</button>
+                <button class="btn-submit" onclick="submitNewRequest()">إرسال الطلب</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Switch Tab
+        function switchTab(tabName) {
+            document.querySelectorAll('.content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (tabName === 'statistics') {
+                setTimeout(initCharts, 100);
+            }
+        }
+
+        // Filter Requests
+        function filterRequests(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            // Filter logic here
+        }
+
+        // Modal Functions
+        function openNewRequestModal() {
+            document.getElementById('newRequestModal').classList.add('active');
+        }
+
+        function viewRequestDetails() {
+            document.getElementById('detailsModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function submitNewRequest() {
+            alert('تم إرسال الطلب بنجاح');
+            closeModal('newRequestModal');
+        }
+
+        function approveRequest() {
+            alert('تم الموافقة على الطلب');
+        }
+
+        function rejectRequest() {
+            alert('تم رفض الطلب');
+        }
+
+        // Charts
+        function initCharts() {
+            const requestsCtx = document.getElementById('requestsChart');
+            if (requestsCtx && requestsCtx.getContext && !requestsCtx.chart) {
+                requestsCtx.chart = new Chart(requestsCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['إجازات', 'أذونات', 'مأموريات', 'تصحيحات'],
+                        datasets: [{
+                            data: [30, 20, 10, 5],
+                            backgroundColor: ['#22C55E', '#0a7ea4', '#667eea', '#F59E0B']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true
+                    }
+                });
+            }
+
+            const approvalCtx = document.getElementById('approvalChart');
+            if (approvalCtx && approvalCtx.getContext && !approvalCtx.chart) {
+                approvalCtx.chart = new Chart(approvalCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['الشهر الأول', 'الشهر الثاني', 'الشهر الثالث', 'الشهر الرابع'],
+                        datasets: [
+                            {
+                                label: 'موافق عليه',
+                                data: [12, 15, 14, 16],
+                                backgroundColor: '#22C55E'
+                            },
+                            {
+                                label: 'مرفوض',
+                                data: [2, 1, 2, 1],
+                                backgroundColor: '#EF4444'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
