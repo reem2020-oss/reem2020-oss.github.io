@@ -78,6 +78,12 @@
             font-size: 20px;
         }
 
+        .user-role {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            margin-left: 5px;
+        }
+
         .logout-btn {
             background: rgba(255,255,255,0.2);
             border: 1px solid rgba(255,255,255,0.3);
@@ -129,6 +135,11 @@
         .nav-btn.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-color: #667eea;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         /* Main Content */
@@ -271,6 +282,16 @@
             box-shadow: 0 6px 20px rgba(79,172,254,0.4);
         }
 
+        .btn-warning {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(250,112,154,0.4);
+        }
+
         /* Form */
         .form-group {
             margin-bottom: 20px;
@@ -313,6 +334,7 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            overflow-y: auto;
         }
 
         .modal.active {
@@ -329,6 +351,7 @@
             max-height: 80vh;
             overflow-y: auto;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            margin: auto;
         }
 
         .modal-header {
@@ -409,6 +432,22 @@
             margin: 0 auto;
         }
 
+        /* Location Info */
+        .location-info {
+            background: rgba(79,172,254,0.2);
+            border: 1px solid #4facfe;
+            color: #4facfe;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .location-info.error {
+            background: rgba(245,87,108,0.2);
+            border-color: #f5576c;
+            color: #f5576c;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header {
@@ -446,6 +485,34 @@
         .success-message.show {
             display: block;
         }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-admin {
+            background: rgba(245,87,108,0.2);
+            color: #f5576c;
+        }
+
+        .badge-manager {
+            background: rgba(250,112,154,0.2);
+            color: #fa709a;
+        }
+
+        .badge-hr {
+            background: rgba(79,172,254,0.2);
+            color: #4facfe;
+        }
+
+        .badge-employee {
+            background: rgba(102,126,234,0.2);
+            color: #667eea;
+        }
     </style>
 </head>
 <body>
@@ -459,7 +526,10 @@
             <div class="header-actions">
                 <div class="user-info">
                     <div class="user-avatar">👤</div>
-                    <span id="username">Admin</span>
+                    <div>
+                        <div id="username">Admin</div>
+                        <div class="user-role" id="userRole">مسؤول النظام</div>
+                    </div>
                 </div>
                 <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
             </div>
@@ -468,8 +538,9 @@
         <!-- Top Navigation -->
         <div class="top-nav">
             <button class="nav-btn active" onclick="showSection('dashboard', this)">📊 لوحة التحكم</button>
-            <button class="nav-btn" onclick="showSection('employees', this)">👥 الموظفين</button>
-            <button class="nav-btn" onclick="showSection('departments', this)">🏢 الأقسام</button>
+            <button class="nav-btn" id="usersBtn" onclick="showSection('users', this)">👥 المستخدمين</button>
+            <button class="nav-btn" id="employeesBtn" onclick="showSection('employees', this)">👨‍💼 الموظفين</button>
+            <button class="nav-btn" id="departmentsBtn" onclick="showSection('departments', this)">🏢 الأقسام</button>
             <button class="nav-btn" onclick="showSection('attendance', this)">✓ الحضور</button>
             <button class="nav-btn" onclick="showSection('requests', this)">📝 الطلبات</button>
             <button class="nav-btn" onclick="showSection('monitoring', this)">🗺️ المراقبة</button>
@@ -530,17 +601,43 @@
                                 <td>✓ حاضر</td>
                                 <td>المقر الرئيسي</td>
                             </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Users Management Section -->
+            <div id="users" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">إدارة المستخدمين والصلاحيات</h2>
+                <button class="btn btn-primary" onclick="openAddUserModal()" style="margin-bottom: 20px;">➕ إضافة مستخدم جديد</button>
+                
+                <div class="search-bar">
+                    <input type="text" id="userSearch" placeholder="🔍 ابحث عن مستخدم..." onkeyup="searchUsers()">
+                    <button class="btn btn-success" onclick="searchUsers()">بحث</button>
+                </div>
+
+                <div class="success-message" id="userSuccessMessage">تم العملية بنجاح!</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
                             <tr>
-                                <td>فاطمة علي</td>
-                                <td>08:45</td>
-                                <td>⏱️ متأخر</td>
-                                <td>المقر الرئيسي</td>
+                                <th>اسم المستخدم</th>
+                                <th>البريد الإلكتروني</th>
+                                <th>الصلاحية</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
                             </tr>
+                        </thead>
+                        <tbody id="usersTable">
                             <tr>
-                                <td>محمود حسن</td>
-                                <td>-</td>
-                                <td>✗ غائب</td>
-                                <td>-</td>
+                                <td>admin</td>
+                                <td>admin@example.com</td>
+                                <td><span class="badge badge-admin">مسؤول</span></td>
+                                <td>✓ نشط</td>
+                                <td>
+                                    <button class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;" onclick="editUser(this)">تعديل</button>
+                                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteUser(this)">حذف</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -557,7 +654,7 @@
                     <button class="btn btn-success" onclick="searchEmployees()">بحث</button>
                 </div>
 
-                <div class="success-message" id="successMessage">تم العملية بنجاح!</div>
+                <div class="success-message" id="employeeSuccessMessage">تم العملية بنجاح!</div>
                 <div class="table-container">
                     <table>
                         <thead>
@@ -576,7 +673,7 @@
                                 <td>تطوير</td>
                                 <td>5000 ريال</td>
                                 <td>
-                                    <button class="btn btn-success" style="padding: 5px 10px; font-size: 12px;" onclick="editEmployee(1)">تعديل</button>
+                                    <button class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;" onclick="editEmployee(this)">تعديل</button>
                                     <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteEmployee(this)">حذف</button>
                                 </td>
                             </tr>
@@ -589,7 +686,7 @@
             <div id="departments" class="section">
                 <h2 style="margin-bottom: 20px; color: #667eea;">إدارة الأقسام</h2>
                 <button class="btn btn-primary" onclick="openAddDepartmentModal()" style="margin-bottom: 20px;">➕ إضافة قسم جديد</button>
-                <div class="success-message" id="successMessage2">تم العملية بنجاح!</div>
+                <div class="success-message" id="departmentSuccessMessage">تم العملية بنجاح!</div>
                 <div class="table-container">
                     <table>
                         <thead>
@@ -608,7 +705,7 @@
                                 <td>25</td>
                                 <td>المقر الرئيسي</td>
                                 <td>
-                                    <button class="btn btn-success" style="padding: 5px 10px; font-size: 12px;" onclick="editDepartment(1)">تعديل</button>
+                                    <button class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;" onclick="editDepartment(this)">تعديل</button>
                                     <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteDepartment(this)">حذف</button>
                                 </td>
                             </tr>
@@ -620,6 +717,9 @@
             <!-- Attendance Section -->
             <div id="attendance" class="section">
                 <h2 style="margin-bottom: 20px; color: #667eea;">سجل الحضور</h2>
+                <div id="locationInfo" class="location-info" style="display:none;">
+                    📍 الموقع الحالي: <span id="locationText">جاري تحديد الموقع...</span>
+                </div>
                 <div class="search-bar">
                     <input type="text" id="attendanceSearch" placeholder="🔍 ابحث عن موظف...">
                     <button class="btn btn-success" onclick="searchAttendance()">بحث</button>
@@ -728,6 +828,79 @@
         </div>
     </div>
 
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إضافة مستخدم جديد</h2>
+                <button class="close-btn" onclick="closeModal('addUserModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>اسم المستخدم:</label>
+                <input type="text" id="userName" placeholder="أدخل اسم المستخدم">
+            </div>
+            <div class="form-group">
+                <label>البريد الإلكتروني:</label>
+                <input type="email" id="userEmail" placeholder="أدخل البريد الإلكتروني">
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور:</label>
+                <input type="password" id="userPassword" placeholder="أدخل كلمة المرور">
+            </div>
+            <div class="form-group">
+                <label>الصلاحية:</label>
+                <select id="userRole">
+                    <option value="">اختر الصلاحية</option>
+                    <option value="admin">مسؤول النظام</option>
+                    <option value="manager">مدير</option>
+                    <option value="hr">موارد بشرية</option>
+                    <option value="employee">موظف</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="userActive" checked>
+                    المستخدم نشط
+                </label>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="addUser()">حفظ المستخدم</button>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="editUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>تعديل المستخدم</h2>
+                <button class="close-btn" onclick="closeModal('editUserModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>اسم المستخدم:</label>
+                <input type="text" id="editUserName" placeholder="أدخل اسم المستخدم">
+            </div>
+            <div class="form-group">
+                <label>البريد الإلكتروني:</label>
+                <input type="email" id="editUserEmail" placeholder="أدخل البريد الإلكتروني">
+            </div>
+            <div class="form-group">
+                <label>الصلاحية:</label>
+                <select id="editUserRole">
+                    <option value="admin">مسؤول النظام</option>
+                    <option value="manager">مدير</option>
+                    <option value="hr">موارد بشرية</option>
+                    <option value="employee">موظف</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="editUserActive" checked>
+                    المستخدم نشط
+                </label>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="saveEditUser()">حفظ التعديلات</button>
+        </div>
+    </div>
+
     <!-- Add Employee Modal -->
     <div id="addEmployeeModal" class="modal">
         <div class="modal-content">
@@ -760,6 +933,37 @@
         </div>
     </div>
 
+    <!-- Edit Employee Modal -->
+    <div id="editEmployeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>تعديل الموظف</h2>
+                <button class="close-btn" onclick="closeModal('editEmployeeModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>اسم الموظف:</label>
+                <input type="text" id="editEmployeeName" placeholder="أدخل اسم الموظف">
+            </div>
+            <div class="form-group">
+                <label>البريد الإلكتروني:</label>
+                <input type="email" id="editEmployeeEmail" placeholder="أدخل البريد الإلكتروني">
+            </div>
+            <div class="form-group">
+                <label>القسم:</label>
+                <select id="editEmployeeDepartment">
+                    <option>قسم التطوير</option>
+                    <option>قسم المبيعات</option>
+                    <option>قسم الموارد البشرية</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>الراتب:</label>
+                <input type="number" id="editEmployeeSalary" placeholder="أدخل الراتب">
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="saveEditEmployee()">حفظ التعديلات</button>
+        </div>
+    </div>
+
     <!-- Add Department Modal -->
     <div id="addDepartmentModal" class="modal">
         <div class="modal-content">
@@ -776,20 +980,127 @@
                 <input type="text" id="departmentManager" placeholder="أدخل اسم المسؤول">
             </div>
             <div class="form-group">
-                <label>النطاق الجغرافي:</label>
-                <input type="text" id="departmentLocation" placeholder="أدخل الموقع">
+                <label>النطاق الجغرافي (خط العرض):</label>
+                <input type="number" id="departmentLat" placeholder="مثال: 30.0444" step="0.0001">
+            </div>
+            <div class="form-group">
+                <label>النطاق الجغرافي (خط الطول):</label>
+                <input type="number" id="departmentLng" placeholder="مثال: 31.2357" step="0.0001">
+            </div>
+            <div class="form-group">
+                <label>نطاق التغطية (متر):</label>
+                <input type="number" id="departmentRadius" placeholder="مثال: 500" value="500">
             </div>
             <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="addDepartment()">حفظ القسم</button>
         </div>
     </div>
 
+    <!-- Edit Department Modal -->
+    <div id="editDepartmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>تعديل القسم</h2>
+                <button class="close-btn" onclick="closeModal('editDepartmentModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>اسم القسم:</label>
+                <input type="text" id="editDepartmentName" placeholder="أدخل اسم القسم">
+            </div>
+            <div class="form-group">
+                <label>المسؤول:</label>
+                <input type="text" id="editDepartmentManager" placeholder="أدخل اسم المسؤول">
+            </div>
+            <div class="form-group">
+                <label>النطاق الجغرافي (خط العرض):</label>
+                <input type="number" id="editDepartmentLat" placeholder="مثال: 30.0444" step="0.0001">
+            </div>
+            <div class="form-group">
+                <label>النطاق الجغرافي (خط الطول):</label>
+                <input type="number" id="editDepartmentLng" placeholder="مثال: 31.2357" step="0.0001">
+            </div>
+            <div class="form-group">
+                <label>نطاق التغطية (متر):</label>
+                <input type="number" id="editDepartmentRadius" placeholder="مثال: 500">
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="saveEditDepartment()">حفظ التعديلات</button>
+        </div>
+    </div>
+
     <script>
-        // Initialize charts
+        // Global variables
+        let currentEditingRow = null;
+        let currentUserLocation = null;
         let attendanceChart = null;
         let monthlyChart = null;
 
+        // User roles and permissions
+        const userRoles = {
+            'admin': { name: 'مسؤول النظام', badge: 'badge-admin', permissions: ['users', 'employees', 'departments'] },
+            'manager': { name: 'مدير', badge: 'badge-manager', permissions: ['employees', 'departments'] },
+            'hr': { name: 'موارد بشرية', badge: 'badge-hr', permissions: ['employees'] },
+            'employee': { name: 'موظف', badge: 'badge-employee', permissions: [] }
+        };
+
+        // Get user role from localStorage
+        function getUserRole() {
+            const username = localStorage.getItem('username') || 'admin';
+            const roleMap = {
+                'admin': 'admin',
+                'manager': 'manager',
+                'hr': 'hr'
+            };
+            return roleMap[username] || 'employee';
+        }
+
+        // Update navigation based on user role
+        function updateNavigation() {
+            const role = getUserRole();
+            const roleInfo = userRoles[role];
+            
+            document.getElementById('userRole').textContent = roleInfo.name;
+            
+            // Hide/show sections based on permissions
+            if (!roleInfo.permissions.includes('users')) {
+                document.getElementById('usersBtn').style.display = 'none';
+            }
+            if (!roleInfo.permissions.includes('employees')) {
+                document.getElementById('employeesBtn').style.display = 'none';
+            }
+            if (!roleInfo.permissions.includes('departments')) {
+                document.getElementById('departmentsBtn').style.display = 'none';
+            }
+        }
+
+        // Get user location automatically
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        currentUserLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            accuracy: position.coords.accuracy
+                        };
+                        
+                        const locationInfo = document.getElementById('locationInfo');
+                        const locationText = document.getElementById('locationText');
+                        
+                        locationInfo.style.display = 'block';
+                        locationInfo.classList.remove('error');
+                        locationText.textContent = `${currentUserLocation.lat.toFixed(4)}, ${currentUserLocation.lng.toFixed(4)} (دقة: ${Math.round(currentUserLocation.accuracy)}م)`;
+                    },
+                    function(error) {
+                        const locationInfo = document.getElementById('locationInfo');
+                        locationInfo.style.display = 'block';
+                        locationInfo.classList.add('error');
+                        locationInfo.textContent = '❌ لم نتمكن من تحديد موقعك. تأكد من تفعيل خدمة الموقع.';
+                    }
+                );
+            }
+        }
+
+        // Initialize charts
         function initCharts() {
-            // Attendance Chart
             const ctx1 = document.getElementById('attendanceChart');
             if (ctx1 && !attendanceChart) {
                 attendanceChart = new Chart(ctx1, {
@@ -832,7 +1143,6 @@
                 });
             }
 
-            // Monthly Chart
             const ctx2 = document.getElementById('monthlyChart');
             if (ctx2 && !monthlyChart) {
                 monthlyChart = new Chart(ctx2, {
@@ -886,9 +1196,17 @@
             if (sectionId === 'reports' || sectionId === 'dashboard') {
                 setTimeout(initCharts, 100);
             }
+
+            if (sectionId === 'attendance') {
+                getUserLocation();
+            }
         }
 
         // Modal Functions
+        function openAddUserModal() {
+            document.getElementById('addUserModal').classList.add('active');
+        }
+
         function openAddEmployeeModal() {
             document.getElementById('addEmployeeModal').classList.add('active');
         }
@@ -899,6 +1217,77 @@
 
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Add User
+        function addUser() {
+            const name = document.getElementById('userName').value;
+            const email = document.getElementById('userEmail').value;
+            const password = document.getElementById('userPassword').value;
+            const role = document.getElementById('userRole').value;
+            const active = document.getElementById('userActive').checked;
+
+            if (name && email && password && role) {
+                const table = document.getElementById('usersTable');
+                const roleInfo = userRoles[role];
+                const newRow = table.insertRow();
+                newRow.innerHTML = `
+                    <td>${name}</td>
+                    <td>${email}</td>
+                    <td><span class="badge ${roleInfo.badge}">${roleInfo.name}</span></td>
+                    <td>${active ? '✓ نشط' : '✗ معطل'}</td>
+                    <td>
+                        <button class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;" onclick="editUser(this)">تعديل</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteUser(this)">حذف</button>
+                    </td>
+                `;
+
+                showSuccessMessage('userSuccessMessage');
+                clearUserForm();
+                closeModal('addUserModal');
+            } else {
+                alert('يرجى ملء جميع الحقول');
+            }
+        }
+
+        // Edit User
+        function editUser(element) {
+            currentEditingRow = element.parentElement.parentElement;
+            const cells = currentEditingRow.cells;
+            
+            document.getElementById('editUserName').value = cells[0].textContent;
+            document.getElementById('editUserEmail').value = cells[1].textContent;
+            document.getElementById('editUserRole').value = cells[2].textContent.includes('مسؤول') ? 'admin' : cells[2].textContent.includes('مدير') ? 'manager' : 'hr';
+            document.getElementById('editUserActive').checked = cells[3].textContent.includes('نشط');
+            
+            document.getElementById('editUserModal').classList.add('active');
+        }
+
+        // Save Edit User
+        function saveEditUser() {
+            const name = document.getElementById('editUserName').value;
+            const email = document.getElementById('editUserEmail').value;
+            const role = document.getElementById('editUserRole').value;
+            const active = document.getElementById('editUserActive').checked;
+            const roleInfo = userRoles[role];
+
+            if (name && email && role) {
+                currentEditingRow.cells[0].textContent = name;
+                currentEditingRow.cells[1].textContent = email;
+                currentEditingRow.cells[2].innerHTML = `<span class="badge ${roleInfo.badge}">${roleInfo.name}</span>`;
+                currentEditingRow.cells[3].textContent = active ? '✓ نشط' : '✗ معطل';
+                
+                showSuccessMessage('userSuccessMessage');
+                closeModal('editUserModal');
+            }
+        }
+
+        // Delete User
+        function deleteUser(element) {
+            if (confirm('هل أنت متأكد من حذف هذا المستخدم؟')) {
+                element.parentElement.parentElement.remove();
+                showSuccessMessage('userSuccessMessage');
+            }
         }
 
         // Add Employee
@@ -917,12 +1306,12 @@
                     <td>${department}</td>
                     <td>${salary} ريال</td>
                     <td>
-                        <button class="btn btn-success" style="padding: 5px 10px; font-size: 12px;" onclick="editEmployee(this)">تعديل</button>
+                        <button class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;" onclick="editEmployee(this)">تعديل</button>
                         <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteEmployee(this)">حذف</button>
                     </td>
                 `;
 
-                showSuccessMessage('successMessage');
+                showSuccessMessage('employeeSuccessMessage');
                 clearEmployeeForm();
                 closeModal('addEmployeeModal');
             } else {
@@ -930,40 +1319,68 @@
             }
         }
 
+        // Edit Employee
+        function editEmployee(element) {
+            currentEditingRow = element.parentElement.parentElement;
+            const cells = currentEditingRow.cells;
+            
+            document.getElementById('editEmployeeName').value = cells[0].textContent;
+            document.getElementById('editEmployeeEmail').value = cells[1].textContent;
+            document.getElementById('editEmployeeDepartment').value = cells[2].textContent;
+            document.getElementById('editEmployeeSalary').value = cells[3].textContent.replace(' ريال', '');
+            
+            document.getElementById('editEmployeeModal').classList.add('active');
+        }
+
+        // Save Edit Employee
+        function saveEditEmployee() {
+            const name = document.getElementById('editEmployeeName').value;
+            const email = document.getElementById('editEmployeeEmail').value;
+            const department = document.getElementById('editEmployeeDepartment').value;
+            const salary = document.getElementById('editEmployeeSalary').value;
+
+            if (name && email && department && salary) {
+                currentEditingRow.cells[0].textContent = name;
+                currentEditingRow.cells[1].textContent = email;
+                currentEditingRow.cells[2].textContent = department;
+                currentEditingRow.cells[3].textContent = salary + ' ريال';
+                
+                showSuccessMessage('employeeSuccessMessage');
+                closeModal('editEmployeeModal');
+            }
+        }
+
         // Delete Employee
         function deleteEmployee(element) {
             if (confirm('هل أنت متأكد من حذف هذا الموظف؟')) {
                 element.parentElement.parentElement.remove();
-                showSuccessMessage('successMessage');
+                showSuccessMessage('employeeSuccessMessage');
             }
-        }
-
-        // Edit Employee
-        function editEmployee(element) {
-            alert('سيتم تحديث وظيفة التعديل قريباً');
         }
 
         // Add Department
         function addDepartment() {
             const name = document.getElementById('departmentName').value;
             const manager = document.getElementById('departmentManager').value;
-            const location = document.getElementById('departmentLocation').value;
+            const lat = document.getElementById('departmentLat').value;
+            const lng = document.getElementById('departmentLng').value;
+            const radius = document.getElementById('departmentRadius').value;
 
-            if (name && manager && location) {
+            if (name && manager && lat && lng && radius) {
                 const table = document.getElementById('departmentsTable');
                 const newRow = table.insertRow();
                 newRow.innerHTML = `
                     <td>${name}</td>
                     <td>${manager}</td>
                     <td>0</td>
-                    <td>${location}</td>
+                    <td>${lat}, ${lng} (${radius}م)</td>
                     <td>
-                        <button class="btn btn-success" style="padding: 5px 10px; font-size: 12px;" onclick="editDepartment(this)">تعديل</button>
+                        <button class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;" onclick="editDepartment(this)">تعديل</button>
                         <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteDepartment(this)">حذف</button>
                     </td>
                 `;
 
-                showSuccessMessage('successMessage2');
+                showSuccessMessage('departmentSuccessMessage');
                 clearDepartmentForm();
                 closeModal('addDepartmentModal');
             } else {
@@ -971,20 +1388,61 @@
             }
         }
 
+        // Edit Department
+        function editDepartment(element) {
+            currentEditingRow = element.parentElement.parentElement;
+            const cells = currentEditingRow.cells;
+            const locationData = cells[3].textContent.match(/([-\d.]+),\s*([-\d.]+)\s*\((\d+)م\)/);
+            
+            document.getElementById('editDepartmentName').value = cells[0].textContent;
+            document.getElementById('editDepartmentManager').value = cells[1].textContent;
+            if (locationData) {
+                document.getElementById('editDepartmentLat').value = locationData[1];
+                document.getElementById('editDepartmentLng').value = locationData[2];
+                document.getElementById('editDepartmentRadius').value = locationData[3];
+            }
+            
+            document.getElementById('editDepartmentModal').classList.add('active');
+        }
+
+        // Save Edit Department
+        function saveEditDepartment() {
+            const name = document.getElementById('editDepartmentName').value;
+            const manager = document.getElementById('editDepartmentManager').value;
+            const lat = document.getElementById('editDepartmentLat').value;
+            const lng = document.getElementById('editDepartmentLng').value;
+            const radius = document.getElementById('editDepartmentRadius').value;
+
+            if (name && manager && lat && lng && radius) {
+                currentEditingRow.cells[0].textContent = name;
+                currentEditingRow.cells[1].textContent = manager;
+                currentEditingRow.cells[3].textContent = `${lat}, ${lng} (${radius}م)`;
+                
+                showSuccessMessage('departmentSuccessMessage');
+                closeModal('editDepartmentModal');
+            }
+        }
+
         // Delete Department
         function deleteDepartment(element) {
             if (confirm('هل أنت متأكد من حذف هذا القسم؟')) {
                 element.parentElement.parentElement.remove();
-                showSuccessMessage('successMessage2');
+                showSuccessMessage('departmentSuccessMessage');
             }
         }
 
-        // Edit Department
-        function editDepartment(element) {
-            alert('سيتم تحديث وظيفة التعديل قريباً');
+        // Search Functions
+        function searchUsers() {
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+            const table = document.getElementById('usersTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            }
         }
 
-        // Search Functions
         function searchEmployees() {
             const searchTerm = document.getElementById('employeeSearch').value.toLowerCase();
             const table = document.getElementById('employeesTable');
@@ -1045,6 +1503,14 @@
             }, 3000);
         }
 
+        function clearUserForm() {
+            document.getElementById('userName').value = '';
+            document.getElementById('userEmail').value = '';
+            document.getElementById('userPassword').value = '';
+            document.getElementById('userRole').value = '';
+            document.getElementById('userActive').checked = true;
+        }
+
         function clearEmployeeForm() {
             document.getElementById('employeeName').value = '';
             document.getElementById('employeeEmail').value = '';
@@ -1055,7 +1521,9 @@
         function clearDepartmentForm() {
             document.getElementById('departmentName').value = '';
             document.getElementById('departmentManager').value = '';
-            document.getElementById('departmentLocation').value = '';
+            document.getElementById('departmentLat').value = '';
+            document.getElementById('departmentLng').value = '';
+            document.getElementById('departmentRadius').value = '500';
         }
 
         // Logout
@@ -1076,7 +1544,7 @@
             });
         }
 
-        // Check if user is logged in
+        // Initialize
         window.onload = function() {
             const currentUser = sessionStorage.getItem('currentUser');
             if (!currentUser) {
@@ -1086,6 +1554,7 @@
             const username = localStorage.getItem('username') || currentUser || 'Admin';
             document.getElementById('username').textContent = username;
 
+            updateNavigation();
             setTimeout(initCharts, 500);
         }
     </script>
