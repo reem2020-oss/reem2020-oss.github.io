@@ -3,242 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance Pro - نظام الحضور والانصراف الذكي</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <title>Reem Team - نظام الحضور والانصراف الذكي</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        :root {
-            --primary: #667eea;
-            --secondary: #764ba2;
-            --accent: #f093fb;
-            --success: #00d084;
-            --warning: #ffa502;
-            --error: #ff6b6b;
-            --info: #4ecdc4;
-            --background: #0a0e27;
-            --surface: #1a1f3a;
-            --surface-light: #252d48;
-            --foreground: #f8f9fa;
-            --muted: #a0aec0;
-            --border: #2d3748;
-        }
-        
-        body {
-            font-family: 'Segoe UI', 'Roboto', 'Cairo', sans-serif;
-            background: linear-gradient(135deg, var(--background) 0%, #1a1f3a 50%, var(--secondary) 100%);
-            color: var(--foreground);
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            right: 0;
-            top: 0;
-            width: 280px;
-            height: 100vh;
-            background: linear-gradient(180deg, var(--surface) 0%, var(--surface-light) 100%);
-            border-left: 2px solid var(--border);
-            overflow-y: auto;
-            z-index: 1000;
-            padding: 0;
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .sidebar::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: var(--surface);
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 4px;
-        }
-
-        .sidebar-header {
-            padding: 25px 15px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            text-align: center;
-            border-bottom: 2px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .sidebar-logo {
-            font-size: 20px;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            word-break: break-word;
-        }
-
-        .sidebar-tagline {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 500;
-        }
-
-        .nav-menu {
-            list-style: none;
-            padding: 15px 0;
-        }
-
-        .nav-item {
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 15px;
-            color: var(--muted);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border-right: 4px solid transparent;
-            position: relative;
-            font-size: 13px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .nav-link:hover {
-            color: var(--accent);
-            background: rgba(240, 147, 251, 0.1);
-            border-right-color: var(--accent);
-            transform: translateX(-3px);
-        }
-
-        .nav-link.active {
-            color: var(--accent);
-            background: linear-gradient(90deg, rgba(240, 147, 251, 0.2) 0%, transparent 100%);
-            border-right-color: var(--accent);
-            font-weight: 600;
-        }
-
-        .nav-link i {
-            width: 20px;
-            text-align: center;
-            font-size: 15px;
-            flex-shrink: 0;
-        }
-
-        .nav-link span {
-            flex: 1;
-            min-width: 0;
-        }
-
-        /* Main Content */
-        .main-content {
-            margin-left: 280px;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ecf0f1;
             min-height: 100vh;
+        }
+
+        .container {
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
         }
 
         /* Header */
         .header {
-            background: linear-gradient(90deg, var(--surface) 0%, var(--surface-light) 100%);
-            border-bottom: 2px solid var(--border);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            flex-wrap: wrap;
-            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .header-title {
-            font-size: 24px;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .header-title .icon {
+            font-size: 32px;
         }
 
         .header-actions {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
-            flex-wrap: wrap;
         }
 
-        .user-profile {
+        .user-info {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 10px 15px;
-            background: rgba(240, 147, 251, 0.1);
-            border-radius: 10px;
-            border: 1px solid var(--border);
+            gap: 10px;
         }
 
         .user-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: rgba(255,255,255,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-name {
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .user-role {
-            font-size: 11px;
-            color: var(--muted);
+            font-size: 20px;
         }
 
         .logout-btn {
-            padding: 10px 16px;
-            background: linear-gradient(135deg, var(--error) 0%, #ff4757 100%);
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
             color: white;
-            border: none;
-            border-radius: 8px;
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
             transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: rgba(0,0,0,0.3);
+            padding: 15px 30px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            border-bottom: 1px solid rgba(102,126,234,0.2);
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(102,126,234,0.1);
+            border: 1px solid rgba(102,126,234,0.3);
+            color: #ecf0f1;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            white-space: nowrap;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .logout-btn:hover {
+        .nav-btn:hover {
+            background: rgba(102,126,234,0.3);
+            border-color: rgba(102,126,234,0.6);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
         }
 
-        /* Content Area */
-        .content {
+        .nav-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+        }
+
+        /* Main Content */
+        .main-content {
             flex: 1;
             padding: 30px;
             overflow-y: auto;
@@ -246,7 +138,7 @@
 
         .section {
             display: none;
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.3s ease;
         }
 
         .section.active {
@@ -254,8 +146,14 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Dashboard Grid */
@@ -267,67 +165,44 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-light) 100%);
-            border: 2px solid var(--border);
-            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%);
+            border: 1px solid rgba(102,126,234,0.3);
             padding: 25px;
+            border-radius: 12px;
             text-align: center;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(240, 147, 251, 0.2) 0%, transparent 70%);
-            border-radius: 50%;
         }
 
         .stat-card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 15px 40px rgba(240, 147, 251, 0.2);
-            transform: translateY(-8px);
+            transform: translateY(-5px);
+            border-color: rgba(102,126,234,0.6);
+            box-shadow: 0 8px 25px rgba(102,126,234,0.2);
         }
 
         .stat-icon {
-            font-size: 36px;
-            margin-bottom: 12px;
-            position: relative;
-            z-index: 1;
+            font-size: 32px;
+            margin-bottom: 10px;
         }
 
-        .stat-value {
+        .stat-number {
             font-size: 32px;
-            font-weight: 800;
-            margin: 12px 0;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-            z-index: 1;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
         }
 
         .stat-label {
-            font-size: 13px;
-            color: var(--muted);
-            font-weight: 500;
-            position: relative;
-            z-index: 1;
+            font-size: 14px;
+            color: #bdc3c7;
         }
 
         /* Table */
         .table-container {
-            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-light) 100%);
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            overflow: auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%);
+            border: 1px solid rgba(102,126,234,0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 30px;
         }
 
         table {
@@ -336,126 +211,92 @@
         }
 
         th {
-            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: 16px;
+            background: rgba(102,126,234,0.2);
+            padding: 15px;
             text-align: right;
-            font-weight: 700;
-            color: white;
-            font-size: 13px;
-            white-space: nowrap;
+            font-weight: 600;
+            color: #667eea;
+            border-bottom: 2px solid rgba(102,126,234,0.3);
         }
 
         td {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border);
-            color: var(--foreground);
-            font-size: 13px;
+            padding: 15px;
+            border-bottom: 1px solid rgba(102,126,234,0.1);
         }
 
         tr:hover {
-            background: rgba(240, 147, 251, 0.05);
-        }
-
-        /* Forms */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--foreground);
-            font-size: 13px;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px 14px;
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            color: var(--foreground);
-            font-size: 13px;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(240, 147, 251, 0.1);
-            background: var(--surface-light);
+            background: rgba(102,126,234,0.1);
         }
 
         /* Buttons */
         .btn {
-            padding: 10px 18px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: 600;
             transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
+            font-size: 14px;
+            font-weight: 500;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: var(--surface-light);
-            color: var(--foreground);
-            border: 2px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, var(--success) 0%, #00c896 100%);
-            color: white;
+            box-shadow: 0 6px 20px rgba(102,126,234,0.4);
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, var(--error) 0%, #ff4757 100%);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
         }
 
-        /* Cards */
-        .card {
-            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-light) 100%);
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245,87,108,0.4);
         }
 
-        .card-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 18px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79,172,254,0.4);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ecf0f1;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(102,126,234,0.3);
+            border-radius: 6px;
+            color: #ecf0f1;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(102,126,234,0.1);
+            box-shadow: 0 0 10px rgba(102,126,234,0.2);
         }
 
         /* Modal */
@@ -466,10 +307,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            align-items: center;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
             justify-content: center;
+            align-items: center;
         }
 
         .modal.active {
@@ -477,15 +318,15 @@
         }
 
         .modal-content {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 14px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid rgba(102,126,234,0.3);
+            border-radius: 12px;
             padding: 30px;
-            width: 90%;
             max-width: 500px;
-            max-height: 90vh;
+            width: 90%;
+            max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
         .modal-header {
@@ -493,589 +334,573 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--border);
         }
 
-        .modal-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--foreground);
+        .modal-header h2 {
+            color: #667eea;
         }
 
         .close-btn {
             background: none;
             border: none;
-            color: var(--muted);
+            color: #ecf0f1;
             font-size: 24px;
             cursor: pointer;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .close-btn:hover {
-            color: var(--accent);
+            color: #667eea;
+            transform: rotate(90deg);
         }
 
         /* QR Code */
         .qr-container {
             text-align: center;
-            padding: 20px;
-            background: rgba(240, 147, 251, 0.05);
+            padding: 30px;
+            background: rgba(102,126,234,0.1);
             border-radius: 12px;
-            border: 2px dashed var(--accent);
+            margin: 20px 0;
         }
 
-        #qrcode {
-            display: inline-block;
-            padding: 15px;
+        .qr-container h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .qr-code {
+            width: 250px;
+            height: 250px;
             background: white;
-            border-radius: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #333;
         }
 
         /* Responsive */
-        @media (max-width: 1024px) {
-            .sidebar { width: 240px; }
-            .main-content { margin-left: 240px; }
-            .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .top-nav {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
         }
 
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 200px;
-                position: fixed;
-            }
-            .main-content { margin-left: 200px; }
-            .content { padding: 15px; }
-            .header { padding: 15px; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .header-actions { width: 100%; flex-direction: column; }
-            .user-profile { width: 100%; }
+        .success-message {
+            background: rgba(79,172,254,0.2);
+            border: 1px solid #4facfe;
+            color: #4facfe;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo"><i class="fas fa-clock"></i> Attendance Pro</div>
-            <div class="sidebar-tagline">نظام الحضور الذكي</div>
-        </div>
-        <nav>
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a class="nav-link active" onclick="showSection('dashboard')">
-                        <i class="fas fa-chart-line"></i> <span>لوحة التحكم</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="showSection('employees')">
-                        <i class="fas fa-users"></i> <span>الموظفين</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="showSection('departments')">
-                        <i class="fas fa-building"></i> <span>الأقسام</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="showSection('attendance')">
-                        <i class="fas fa-check-circle"></i> <span>الحضور</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="showSection('requests')">
-                        <i class="fas fa-file-alt"></i> <span>الطلبات</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="showSection('monitoring')">
-                        <i class="fas fa-map"></i> <span>المراقبة</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="showSection('reports')">
-                        <i class="fas fa-file-pdf"></i> <span>التقارير</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="showSection('advanced')">
-                        <i class="fas fa-rocket"></i> <span>مميزات متقدمة</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="showSection('settings')">
-                        <i class="fas fa-cog"></i> <span>الإعدادات</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-
-    <!-- Main Content -->
-    <div class="main-content">
+    <div class="container">
         <!-- Header -->
-        <header class="header">
-            <h1 class="header-title">نظام الحضور والانصراف الذكي</h1>
-            <div class="header-actions">
-                <div class="user-profile">
-                    <div class="user-avatar">ع</div>
-                    <div class="user-info">
-                        <div class="user-name">عم الإدارة</div>
-                        <div class="user-role">مسؤول النظام</div>
-                    </div>
-                </div>
-                <button class="logout-btn" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-                </button>
+        <div class="header">
+            <div class="header-title">
+                <div class="icon">⏰</div>
+                <h1>Reem Team</h1>
             </div>
-        </header>
+            <div class="header-actions">
+                <div class="user-info">
+                    <div class="user-avatar">👤</div>
+                    <span id="username">Admin</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+            </div>
+        </div>
 
-        <!-- Content -->
-        <div class="content">
-            <!-- Dashboard -->
-            <section class="section active" id="dashboard">
-                <h2 style="margin-bottom: 25px; font-size: 22px; font-weight: 700;">📊 لوحة التحكم</h2>
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <button class="nav-btn active" onclick="showSection('dashboard')">📊 لوحة التحكم</button>
+            <button class="nav-btn" onclick="showSection('employees')">👥 الموظفين</button>
+            <button class="nav-btn" onclick="showSection('departments')">🏢 الأقسام</button>
+            <button class="nav-btn" onclick="showSection('attendance')">✓ الحضور</button>
+            <button class="nav-btn" onclick="showSection('requests')">📝 الطلبات</button>
+            <button class="nav-btn" onclick="showSection('monitoring')">🗺️ المراقبة</button>
+            <button class="nav-btn" onclick="showSection('reports')">📈 التقارير</button>
+            <button class="nav-btn" onclick="showSection('advanced')">🚀 مميزات متقدمة</button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <h2 style="margin-bottom: 20px; color: #667eea;">لوحة التحكم</h2>
                 <div class="dashboard-grid">
                     <div class="stat-card">
-                        <div class="stat-icon" style="color: var(--info);">👥</div>
-                        <div class="stat-value">245</div>
-                        <div class="stat-label">إجمالي الموظفين</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon" style="color: var(--success);">✓</div>
-                        <div class="stat-value">198</div>
+                        <div class="stat-icon">✓</div>
+                        <div class="stat-number">198</div>
                         <div class="stat-label">حاضرين اليوم</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon" style="color: var(--error);">✕</div>
-                        <div class="stat-value">47</div>
+                        <div class="stat-icon">✗</div>
+                        <div class="stat-number">47</div>
                         <div class="stat-label">غائبين</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon" style="color: var(--warning);">⚠</div>
-                        <div class="stat-value">12</div>
+                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-number">12</div>
                         <div class="stat-label">متأخرين</div>
                     </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">📋 سجل الحضور اليومي</div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>اسم الموظف</th>
-                                    <th>وقت الحضور</th>
-                                    <th>وقت الانصراف</th>
-                                    <th>الحالة</th>
-                                    <th>الموقع</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>أحمد محمد</td>
-                                    <td>08:30</td>
-                                    <td>17:00</td>
-                                    <td><span style="color: var(--success);">✓ حاضر</span></td>
-                                    <td>المقر الرئيسي</td>
-                                </tr>
-                                <tr>
-                                    <td>فاطمة علي</td>
-                                    <td>08:45</td>
-                                    <td>17:15</td>
-                                    <td><span style="color: var(--warning);">⚠ متأخر</span></td>
-                                    <td>المقر الرئيسي</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-number">257</div>
+                        <div class="stat-label">إجمالي الموظفين</div>
                     </div>
                 </div>
-            </section>
 
-            <!-- Employees -->
-            <section class="section" id="employees">
-                <h2 style="margin-bottom: 25px; font-size: 22px; font-weight: 700;">👥 إدارة الموظفين</h2>
-                <button class="btn btn-primary" onclick="openModal('addEmployeeModal')">
-                    <i class="fas fa-plus"></i> إضافة موظف
-                </button>
-                <div class="card" style="margin-top: 20px;">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>الاسم</th>
-                                    <th>البريد الإلكتروني</th>
-                                    <th>القسم</th>
-                                    <th>الإجراءات</th>
-                                </tr>
-                            </thead>
-                            <tbody id="employeesList">
-                                <tr>
-                                    <td>أحمد محمد</td>
-                                    <td>ahmed@company.com</td>
-                                    <td>تطوير البرمجيات</td>
-                                    <td>
-                                        <button class="btn btn-secondary" style="padding: 6px 10px;" onclick="editEmployee(1)">تعديل</button>
-                                        <button class="btn btn-danger" style="padding: 6px 10px;" onclick="deleteEmployee(1)">حذف</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <h3 style="margin-top: 30px; margin-bottom: 15px; color: #667eea;">سجل الحضور اليوم</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الموظف</th>
+                                <th>وقت الحضور</th>
+                                <th>الحالة</th>
+                                <th>الموقع</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>أحمد محمد</td>
+                                <td>08:30</td>
+                                <td>✓ حاضر</td>
+                                <td>المقر الرئيسي</td>
+                            </tr>
+                            <tr>
+                                <td>فاطمة علي</td>
+                                <td>08:45</td>
+                                <td>⏱️ متأخر</td>
+                                <td>المقر الرئيسي</td>
+                            </tr>
+                            <tr>
+                                <td>محمود حسن</td>
+                                <td>-</td>
+                                <td>✗ غائب</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Employees Section -->
+            <div id="employees" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">إدارة الموظفين</h2>
+                <button class="btn btn-primary" onclick="openAddEmployeeModal()" style="margin-bottom: 20px;">➕ إضافة موظف جديد</button>
+                <div class="success-message" id="successMessage">تم العملية بنجاح!</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم الموظف</th>
+                                <th>البريد الإلكتروني</th>
+                                <th>القسم</th>
+                                <th>الراتب</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeesTable">
+                            <tr>
+                                <td>أحمد محمد</td>
+                                <td>ahmed@example.com</td>
+                                <td>تطوير</td>
+                                <td>5000 ريال</td>
+                                <td>
+                                    <button class="btn btn-success" style="padding: 5px 10px; font-size: 12px;" onclick="editEmployee(1)">تعديل</button>
+                                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteEmployee(1)">حذف</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Departments Section -->
+            <div id="departments" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">إدارة الأقسام</h2>
+                <button class="btn btn-primary" onclick="openAddDepartmentModal()" style="margin-bottom: 20px;">➕ إضافة قسم جديد</button>
+                <div class="success-message" id="successMessage2">تم العملية بنجاح!</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم القسم</th>
+                                <th>المسؤول</th>
+                                <th>عدد الموظفين</th>
+                                <th>النطاق الجغرافي</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="departmentsTable">
+                            <tr>
+                                <td>قسم التطوير</td>
+                                <td>محمود حسن</td>
+                                <td>25</td>
+                                <td>المقر الرئيسي</td>
+                                <td>
+                                    <button class="btn btn-success" style="padding: 5px 10px; font-size: 12px;" onclick="editDepartment(1)">تعديل</button>
+                                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteDepartment(1)">حذف</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Attendance Section -->
+            <div id="attendance" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">سجل الحضور</h2>
+                <div class="form-group">
+                    <label>البحث عن موظف:</label>
+                    <input type="text" placeholder="اكتب اسم الموظف...">
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>التاريخ</th>
+                                <th>الموظف</th>
+                                <th>وقت الحضور</th>
+                                <th>وقت الانصراف</th>
+                                <th>ساعات العمل</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024-04-15</td>
+                                <td>أحمد محمد</td>
+                                <td>08:30</td>
+                                <td>17:30</td>
+                                <td>9 ساعات</td>
+                                <td>✓ منتظم</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Requests Section -->
+            <div id="requests" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">الطلبات والموافقات</h2>
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-number">15</div>
+                        <div class="stat-label">طلبات قيد الانتظار</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✓</div>
+                        <div class="stat-number">128</div>
+                        <div class="stat-label">طلبات موافق عليها</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✗</div>
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">طلبات مرفوضة</div>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Departments -->
-            <section class="section" id="departments">
-                <h2 style="margin-bottom: 25px; font-size: 22px; font-weight: 700;">🏢 إدارة الأقسام</h2>
-                <button class="btn btn-primary" onclick="openModal('addDepartmentModal')">
-                    <i class="fas fa-plus"></i> إضافة قسم
-                </button>
-                <div class="card" style="margin-top: 20px;">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>اسم القسم</th>
-                                    <th>المسؤول</th>
-                                    <th>عدد الموظفين</th>
-                                    <th>الإجراءات</th>
-                                </tr>
-                            </thead>
-                            <tbody id="departmentsList">
-                                <tr>
-                                    <td>تطوير البرمجيات</td>
-                                    <td>محمد علي</td>
-                                    <td>25</td>
-                                    <td>
-                                        <button class="btn btn-secondary" style="padding: 6px 10px;" onclick="editDepartment(1)">تعديل</button>
-                                        <button class="btn btn-danger" style="padding: 6px 10px;" onclick="deleteDepartment(1)">حذف</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <!-- Monitoring Section -->
+            <div id="monitoring" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">المراقبة الحية</h2>
+                <div style="background: rgba(102,126,234,0.1); border: 1px solid rgba(102,126,234,0.3); border-radius: 12px; padding: 40px; text-align: center;">
+                    <p style="color: #bdc3c7; margin-bottom: 10px;">خريطة تفاعلية لتتبع الموظفين</p>
+                    <div style="font-size: 48px;">🗺️</div>
+                    <p style="color: #667eea; margin-top: 10px;">سيتم تحديث الخريطة قريباً</p>
                 </div>
-            </section>
+            </div>
 
-            <!-- Attendance -->
-            <section class="section" id="attendance">
-                <h2 style="margin-bottom: 25px; font-size: 22px; font-weight: 700;">✓ سجل الحضور</h2>
-                <div class="card">
-                    <div class="form-group">
-                        <label>اختر الموظف:</label>
-                        <select>
-                            <option>اختر موظف</option>
-                            <option>أحمد محمد</option>
-                            <option>فاطمة علي</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-primary"><i class="fas fa-search"></i> بحث</button>
+            <!-- Reports Section -->
+            <div id="reports" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">التقارير</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;">📊 تقرير الحضور الشهري</button>
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;">📈 تقرير الرواتب</button>
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;">📋 تقرير الإجازات</button>
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;">📥 تصدير PDF</button>
                 </div>
-            </section>
+            </div>
 
-            <!-- Requests -->
-            <section class="section" id="requests">
-                <h2 style="margin-bottom: 25px; font-size: 22px; font-weight: 700;">📝 الطلبات والموافقات</h2>
-                <div class="card">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>الموظف</th>
-                                    <th>نوع الطلب</th>
-                                    <th>التاريخ</th>
-                                    <th>الحالة</th>
-                                    <th>الإجراء</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>أحمد محمد</td>
-                                    <td>إجازة</td>
-                                    <td>2026-04-20</td>
-                                    <td><span style="color: var(--warning);">قيد الانتظار</span></td>
-                                    <td>
-                                        <button class="btn btn-success" style="padding: 6px 10px;" onclick="approveRequest(1)">قبول</button>
-                                        <button class="btn btn-danger" style="padding: 6px 10px;" onclick="rejectRequest(1)">رفض</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Monitoring -->
-            <section class="section" id="monitoring">
-                <h2 style="margin-bottom: 25px; font-size: 22px; font-weight: 700;">🗺️ المراقبة الحية</h2>
-                <div class="card">
-                    <div style="width: 100%; height: 500px; background: linear-gradient(135deg, var(--surface) 0%, var(--surface-light) 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--muted); border: 2px dashed var(--border);">
-                        خريطة المراقبة الحية
-                    </div>
-                </div>
-            </section>
-
-            <!-- Reports -->
-            <section class="section" id="reports">
-                <h2 style="margin-bottom: 25px; font-size: 22px; font-weight: 700;">📈 التقارير</h2>
-                <div class="card">
-                    <div class="form-group">
-                        <label>نوع التقرير:</label>
-                        <select>
-                            <option>اختر نوع التقرير</option>
-                            <option>سجل الحضور</option>
-                            <option>الإجازات والأذونات</option>
-                            <option>تقرير الرواتب</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-primary"><i class="fas fa-file-pdf"></i> تصدير PDF</button>
-                    <button class="btn btn-secondary"><i class="fas fa-file-excel"></i> تصدير Excel</button>
-                </div>
-            </section>
-
-            <!-- Advanced Features -->
-            <section class="section" id="advanced">
-                <h2 style="margin-bottom: 25px; font-size: 22px; font-weight: 700;">🚀 المميزات المتقدمة</h2>
+            <!-- Advanced Features Section -->
+            <div id="advanced" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">المميزات المتقدمة</h2>
                 
-                <div class="card">
-                    <div class="card-title">📱 Offline Mode</div>
-                    <p style="margin-bottom: 15px; color: var(--muted); font-size: 13px;">السماح للموظفين بتسجيل الحضور بدون إنترنت وتزامن البيانات تلقائياً عند توفر الاتصال</p>
-                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                        <input type="checkbox" checked> تفعيل Offline Mode
-                    </label>
+                <div style="background: rgba(102,126,234,0.1); border: 1px solid rgba(102,126,234,0.3); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">🚀 المميزات المتاحة:</h3>
+                    <ul style="list-style: none; color: #ecf0f1;">
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(102,126,234,0.2);">✓ Offline Mode - العمل بدون إنترنت</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(102,126,234,0.2);">✓ Face ID / Biometric - مصادقة بيومترية</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(102,126,234,0.2);">✓ Anti-Fake GPS - حماية من تزييف الموقع</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(102,126,234,0.2);">✓ API Integration - ربط مع الأنظمة الأخرى</li>
+                        <li style="padding: 10px 0;">✓ Real-time Notifications - إشعارات فورية</li>
+                    </ul>
                 </div>
 
-                <div class="card">
-                    <div class="card-title">👤 Face ID / Biometric</div>
-                    <p style="margin-bottom: 15px; color: var(--muted); font-size: 13px;">استخدام بصمة الوجه أو بصمة الإصبع للمصادقة الآمنة والسريعة</p>
-                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                        <input type="checkbox" checked> تفعيل Face ID
-                    </label>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">🛡️ Anti-Fake GPS</div>
-                    <p style="margin-bottom: 15px; color: var(--muted); font-size: 13px;">حماية من تزييف الموقع الجغرافي ومنع استخدام برامج تزييف الموقع</p>
-                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                        <input type="checkbox" checked> تفعيل Anti-Fake GPS
-                    </label>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">📱 تحميل البرنامج</div>
-                    <p style="margin-bottom: 15px; color: var(--muted); font-size: 13px;">امسح رمز QR لتحميل تطبيق الموظف على هاتفك الذكي</p>
-                    <div class="qr-container">
-                        <div id="qrcode"></div>
-                        <p style="margin-top: 15px; color: var(--muted); font-size: 12px;">امسح الرمز لتحميل البرنامج</p>
+                <div class="qr-container">
+                    <h3>📱 تحميل تطبيق Reem Team</h3>
+                    <p style="color: #bdc3c7; margin-bottom: 20px;">امسح رمز QR لتحميل التطبيق على هاتفك</p>
+                    <div class="qr-code">
+                        <svg viewBox="0 0 200 200" style="width: 100%; height: 100%;">
+                            <!-- QR Code Placeholder -->
+                            <rect width="200" height="200" fill="white"/>
+                            <text x="100" y="100" text-anchor="middle" dy=".3em" font-size="12" fill="black">
+                                QR Code
+                            </text>
+                        </svg>
                     </div>
+                    <p style="color: #667eea; margin-top: 20px; font-weight: 500;">أو اضغط الزر أدناه للتحميل المباشر</p>
+                    <button class="btn btn-success" style="margin-top: 15px;">📥 تحميل التطبيق</button>
                 </div>
-            </section>
-
-            <!-- Settings -->
-            <section class="section" id="settings">
-                <h2 style="margin-bottom: 25px; font-size: 22px; font-weight: 700;">⚙️ الإعدادات</h2>
-                <div class="card">
-                    <div class="form-group">
-                        <label>اسم الشركة:</label>
-                        <input type="text" value="شركتي">
-                    </div>
-                    <div class="form-group">
-                        <label>البريد الإلكتروني:</label>
-                        <input type="email" value="admin@company.com">
-                    </div>
-                    <div class="form-group">
-                        <label>رقم الهاتف:</label>
-                        <input type="tel" value="+966501234567">
-                    </div>
-                    <button class="btn btn-primary"><i class="fas fa-save"></i> حفظ الإعدادات</button>
-                </div>
-            </section>
+            </div>
         </div>
     </div>
 
-    <!-- Modals -->
-    <div class="modal" id="addEmployeeModal">
+    <!-- Add Employee Modal -->
+    <div id="addEmployeeModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">إضافة موظف جديد</h3>
+                <h2>إضافة موظف جديد</h2>
                 <button class="close-btn" onclick="closeModal('addEmployeeModal')">×</button>
             </div>
             <div class="form-group">
-                <label>الاسم:</label>
-                <input type="text" id="employeeName">
+                <label>اسم الموظف:</label>
+                <input type="text" id="employeeName" placeholder="أدخل اسم الموظف">
             </div>
             <div class="form-group">
                 <label>البريد الإلكتروني:</label>
-                <input type="email" id="employeeEmail">
+                <input type="email" id="employeeEmail" placeholder="أدخل البريد الإلكتروني">
             </div>
             <div class="form-group">
                 <label>القسم:</label>
                 <select id="employeeDepartment">
                     <option>اختر القسم</option>
-                    <option>تطوير البرمجيات</option>
-                    <option>الموارد البشرية</option>
-                    <option>المبيعات</option>
+                    <option>قسم التطوير</option>
+                    <option>قسم المبيعات</option>
+                    <option>قسم الموارد البشرية</option>
                 </select>
             </div>
-            <button class="btn btn-primary" onclick="addEmployee()"><i class="fas fa-save"></i> حفظ</button>
-            <button class="btn btn-secondary" onclick="closeModal('addEmployeeModal')">إلغاء</button>
+            <div class="form-group">
+                <label>الراتب:</label>
+                <input type="number" id="employeeSalary" placeholder="أدخل الراتب">
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="addEmployee()">حفظ الموظف</button>
         </div>
     </div>
 
-    <div class="modal" id="addDepartmentModal">
+    <!-- Add Department Modal -->
+    <div id="addDepartmentModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">إضافة قسم جديد</h3>
+                <h2>إضافة قسم جديد</h2>
                 <button class="close-btn" onclick="closeModal('addDepartmentModal')">×</button>
             </div>
             <div class="form-group">
                 <label>اسم القسم:</label>
-                <input type="text" id="departmentName">
+                <input type="text" id="departmentName" placeholder="أدخل اسم القسم">
             </div>
             <div class="form-group">
                 <label>المسؤول:</label>
-                <input type="text" id="departmentManager">
+                <input type="text" id="departmentManager" placeholder="أدخل اسم المسؤول">
             </div>
-            <button class="btn btn-primary" onclick="addDepartment()"><i class="fas fa-save"></i> حفظ</button>
-            <button class="btn btn-secondary" onclick="closeModal('addDepartmentModal')">إلغاء</button>
+            <div class="form-group">
+                <label>النطاق الجغرافي:</label>
+                <input type="text" id="departmentLocation" placeholder="أدخل الموقع">
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="addDepartment()">حفظ القسم</button>
         </div>
     </div>
 
     <script>
-        // Initialize QR Code
-        window.addEventListener('load', function() {
-            new QRCode(document.getElementById('qrcode'), {
-                text: 'https://reem2020-oss.github.io/employee-app.html',
-                width: 200,
-                height: 200,
-                colorDark: '#667eea',
-                colorLight: '#ffffff'
-            });
-        });
-
-        // Navigation
+        // Show Section
         function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Remove active class from all nav buttons
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected section
             document.getElementById(sectionId).classList.add('active');
-            
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            event.target.closest('.nav-link').classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
         }
 
         // Modal Functions
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
+        function openAddEmployeeModal() {
+            document.getElementById('addEmployeeModal').classList.add('active');
+        }
+
+        function openAddDepartmentModal() {
+            document.getElementById('addDepartmentModal').classList.add('active');
         }
 
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
         }
 
-        // Employee Functions
+        // Add Employee
         function addEmployee() {
             const name = document.getElementById('employeeName').value;
             const email = document.getElementById('employeeEmail').value;
             const department = document.getElementById('employeeDepartment').value;
-            
-            if (name && email && department !== 'اختر القسم') {
-                const tbody = document.getElementById('employeesList');
-                const newRow = tbody.insertRow();
+            const salary = document.getElementById('employeeSalary').value;
+
+            if (name && email && department && salary) {
+                const table = document.getElementById('employeesTable');
+                const newRow = table.insertRow();
                 newRow.innerHTML = `
                     <td>${name}</td>
                     <td>${email}</td>
                     <td>${department}</td>
+                    <td>${salary} ريال</td>
                     <td>
-                        <button class="btn btn-secondary" style="padding: 6px 10px;" onclick="editEmployee(this)">تعديل</button>
-                        <button class="btn btn-danger" style="padding: 6px 10px;" onclick="deleteEmployee(this)">حذف</button>
+                        <button class="btn btn-success" style="padding: 5px 10px; font-size: 12px;" onclick="editEmployee(this)">تعديل</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteEmployee(this)">حذف</button>
                     </td>
                 `;
-                closeModal('addEmployeeModal');
+
+                // Show success message
+                document.getElementById('successMessage').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('successMessage').classList.remove('show');
+                }, 3000);
+
+                // Clear form and close modal
                 document.getElementById('employeeName').value = '';
                 document.getElementById('employeeEmail').value = '';
-                alert('تم إضافة الموظف بنجاح!');
+                document.getElementById('employeeDepartment').value = '';
+                document.getElementById('employeeSalary').value = '';
+                closeModal('addEmployeeModal');
             } else {
                 alert('يرجى ملء جميع الحقول');
             }
         }
 
-        function editEmployee(element) {
-            alert('تم تعديل الموظف بنجاح!');
-        }
-
+        // Delete Employee
         function deleteEmployee(element) {
-            if (confirm('هل تريد حذف هذا الموظف؟')) {
-                if (typeof element === 'number') {
-                    document.getElementById('employeesList').deleteRow(element - 1);
-                } else {
-                    element.closest('tr').remove();
-                }
-                alert('تم حذف الموظف بنجاح!');
+            if (confirm('هل أنت متأكد من حذف هذا الموظف؟')) {
+                element.parentElement.parentElement.remove();
+                document.getElementById('successMessage').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('successMessage').classList.remove('show');
+                }, 3000);
             }
         }
 
-        // Department Functions
+        // Edit Employee
+        function editEmployee(element) {
+            alert('سيتم تحديث وظيفة التعديل قريباً');
+        }
+
+        // Add Department
         function addDepartment() {
             const name = document.getElementById('departmentName').value;
             const manager = document.getElementById('departmentManager').value;
-            
-            if (name && manager) {
-                const tbody = document.getElementById('departmentsList');
-                const newRow = tbody.insertRow();
+            const location = document.getElementById('departmentLocation').value;
+
+            if (name && manager && location) {
+                const table = document.getElementById('departmentsTable');
+                const newRow = table.insertRow();
                 newRow.innerHTML = `
                     <td>${name}</td>
                     <td>${manager}</td>
                     <td>0</td>
+                    <td>${location}</td>
                     <td>
-                        <button class="btn btn-secondary" style="padding: 6px 10px;" onclick="editDepartment(this)">تعديل</button>
-                        <button class="btn btn-danger" style="padding: 6px 10px;" onclick="deleteDepartment(this)">حذف</button>
+                        <button class="btn btn-success" style="padding: 5px 10px; font-size: 12px;" onclick="editDepartment(this)">تعديل</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteDepartment(this)">حذف</button>
                     </td>
                 `;
-                closeModal('addDepartmentModal');
+
+                // Show success message
+                document.getElementById('successMessage2').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('successMessage2').classList.remove('show');
+                }, 3000);
+
+                // Clear form and close modal
                 document.getElementById('departmentName').value = '';
                 document.getElementById('departmentManager').value = '';
-                alert('تم إضافة القسم بنجاح!');
+                document.getElementById('departmentLocation').value = '';
+                closeModal('addDepartmentModal');
             } else {
                 alert('يرجى ملء جميع الحقول');
             }
         }
 
-        function editDepartment(element) {
-            alert('تم تعديل القسم بنجاح!');
-        }
-
+        // Delete Department
         function deleteDepartment(element) {
-            if (confirm('هل تريد حذف هذا القسم؟')) {
-                element.closest('tr').remove();
-                alert('تم حذف القسم بنجاح!');
+            if (confirm('هل أنت متأكد من حذف هذا القسم؟')) {
+                element.parentElement.parentElement.remove();
+                document.getElementById('successMessage2').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('successMessage2').classList.remove('show');
+                }, 3000);
             }
         }
 
-        // Request Functions
-        function approveRequest(id) {
-            alert('تم قبول الطلب بنجاح!');
-        }
-
-        function rejectRequest(id) {
-            alert('تم رفض الطلب!');
+        // Edit Department
+        function editDepartment(element) {
+            alert('سيتم تحديث وظيفة التعديل قريباً');
         }
 
         // Logout
         function logout() {
             if (confirm('هل تريد تسجيل الخروج؟')) {
-                window.location.href = 'index-fixed.html';
+                // Redirect to login page
+                window.location.href = 'index.html';
             }
         }
 
         // Close modal when clicking outside
         window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
-            }
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        }
+
+        // Get username from localStorage or set default
+        window.onload = function() {
+            const username = localStorage.getItem('username') || 'Admin';
+            document.getElementById('username').textContent = username;
         }
     </script>
 </body>
