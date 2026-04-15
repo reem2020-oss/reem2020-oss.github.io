@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reem Team - نظام الحضور والانصراف الذكي</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -354,6 +356,36 @@
             transform: rotate(90deg);
         }
 
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            flex: 1;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+        }
+
+        /* Charts */
+        .chart-container {
+            background: linear-gradient(135deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%);
+            border: 1px solid rgba(102,126,234,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
         /* QR Code */
         .qr-container {
             text-align: center;
@@ -375,11 +407,6 @@
             padding: 10px;
             border-radius: 8px;
             margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: #333;
         }
 
         /* Responsive */
@@ -440,14 +467,14 @@
 
         <!-- Top Navigation -->
         <div class="top-nav">
-            <button class="nav-btn active" onclick="showSection('dashboard')">📊 لوحة التحكم</button>
-            <button class="nav-btn" onclick="showSection('employees')">👥 الموظفين</button>
-            <button class="nav-btn" onclick="showSection('departments')">🏢 الأقسام</button>
-            <button class="nav-btn" onclick="showSection('attendance')">✓ الحضور</button>
-            <button class="nav-btn" onclick="showSection('requests')">📝 الطلبات</button>
-            <button class="nav-btn" onclick="showSection('monitoring')">🗺️ المراقبة</button>
-            <button class="nav-btn" onclick="showSection('reports')">📈 التقارير</button>
-            <button class="nav-btn" onclick="showSection('advanced')">🚀 مميزات متقدمة</button>
+            <button class="nav-btn active" onclick="showSection('dashboard', this)">📊 لوحة التحكم</button>
+            <button class="nav-btn" onclick="showSection('employees', this)">👥 الموظفين</button>
+            <button class="nav-btn" onclick="showSection('departments', this)">🏢 الأقسام</button>
+            <button class="nav-btn" onclick="showSection('attendance', this)">✓ الحضور</button>
+            <button class="nav-btn" onclick="showSection('requests', this)">📝 الطلبات</button>
+            <button class="nav-btn" onclick="showSection('monitoring', this)">🗺️ المراقبة</button>
+            <button class="nav-btn" onclick="showSection('reports', this)">📈 التقارير</button>
+            <button class="nav-btn" onclick="showSection('advanced', this)">🚀 مميزات متقدمة</button>
         </div>
 
         <!-- Main Content -->
@@ -475,6 +502,13 @@
                         <div class="stat-icon">👥</div>
                         <div class="stat-number">257</div>
                         <div class="stat-label">إجمالي الموظفين</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 style="color: #667eea; margin-bottom: 20px;">📊 إحصائيات الحضور الأسبوعية</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="attendanceChart"></canvas>
                     </div>
                 </div>
 
@@ -517,6 +551,12 @@
             <div id="employees" class="section">
                 <h2 style="margin-bottom: 20px; color: #667eea;">إدارة الموظفين</h2>
                 <button class="btn btn-primary" onclick="openAddEmployeeModal()" style="margin-bottom: 20px;">➕ إضافة موظف جديد</button>
+                
+                <div class="search-bar">
+                    <input type="text" id="employeeSearch" placeholder="🔍 ابحث عن موظف..." onkeyup="searchEmployees()">
+                    <button class="btn btn-success" onclick="searchEmployees()">بحث</button>
+                </div>
+
                 <div class="success-message" id="successMessage">تم العملية بنجاح!</div>
                 <div class="table-container">
                     <table>
@@ -537,7 +577,7 @@
                                 <td>5000 ريال</td>
                                 <td>
                                     <button class="btn btn-success" style="padding: 5px 10px; font-size: 12px;" onclick="editEmployee(1)">تعديل</button>
-                                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteEmployee(1)">حذف</button>
+                                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteEmployee(this)">حذف</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -569,7 +609,7 @@
                                 <td>المقر الرئيسي</td>
                                 <td>
                                     <button class="btn btn-success" style="padding: 5px 10px; font-size: 12px;" onclick="editDepartment(1)">تعديل</button>
-                                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteDepartment(1)">حذف</button>
+                                    <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" onclick="deleteDepartment(this)">حذف</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -580,9 +620,9 @@
             <!-- Attendance Section -->
             <div id="attendance" class="section">
                 <h2 style="margin-bottom: 20px; color: #667eea;">سجل الحضور</h2>
-                <div class="form-group">
-                    <label>البحث عن موظف:</label>
-                    <input type="text" placeholder="اكتب اسم الموظف...">
+                <div class="search-bar">
+                    <input type="text" id="attendanceSearch" placeholder="🔍 ابحث عن موظف...">
+                    <button class="btn btn-success" onclick="searchAttendance()">بحث</button>
                 </div>
                 <div class="table-container">
                     <table>
@@ -596,7 +636,7 @@
                                 <th>الحالة</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="attendanceTable">
                             <tr>
                                 <td>2024-04-15</td>
                                 <td>أحمد محمد</td>
@@ -645,11 +685,18 @@
             <!-- Reports Section -->
             <div id="reports" class="section">
                 <h2 style="margin-bottom: 20px; color: #667eea;">التقارير</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;">📊 تقرير الحضور الشهري</button>
-                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;">📈 تقرير الرواتب</button>
-                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;">📋 تقرير الإجازات</button>
-                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;">📥 تصدير PDF</button>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;" onclick="generateMonthlyReport()">📊 تقرير الحضور الشهري</button>
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;" onclick="generateSalaryReport()">📈 تقرير الرواتب</button>
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;" onclick="generateLeaveReport()">📋 تقرير الإجازات</button>
+                    <button class="btn btn-success" style="padding: 20px; text-align: center; height: auto;" onclick="exportToPDF()">📥 تصدير PDF</button>
+                </div>
+
+                <div class="chart-container">
+                    <h3 style="color: #667eea; margin-bottom: 20px;">📊 إحصائيات الحضور الشهرية</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -672,16 +719,10 @@
                     <h3>📱 تحميل تطبيق Reem Team</h3>
                     <p style="color: #bdc3c7; margin-bottom: 20px;">امسح رمز QR لتحميل التطبيق على هاتفك</p>
                     <div class="qr-code">
-                        <svg viewBox="0 0 200 200" style="width: 100%; height: 100%;">
-                            <!-- QR Code Placeholder -->
-                            <rect width="200" height="200" fill="white"/>
-                            <text x="100" y="100" text-anchor="middle" dy=".3em" font-size="12" fill="black">
-                                QR Code
-                            </text>
-                        </svg>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://reem2020-oss.github.io" alt="QR Code" style="width: 100%; height: 100%;">
                     </div>
                     <p style="color: #667eea; margin-top: 20px; font-weight: 500;">أو اضغط الزر أدناه للتحميل المباشر</p>
-                    <button class="btn btn-success" style="margin-top: 15px;">📥 تحميل التطبيق</button>
+                    <button class="btn btn-success" style="margin-top: 15px;" onclick="downloadApp()">📥 تحميل التطبيق</button>
                 </div>
             </div>
         </div>
@@ -743,21 +784,108 @@
     </div>
 
     <script>
+        // Initialize charts
+        let attendanceChart = null;
+        let monthlyChart = null;
+
+        function initCharts() {
+            // Attendance Chart
+            const ctx1 = document.getElementById('attendanceChart');
+            if (ctx1 && !attendanceChart) {
+                attendanceChart = new Chart(ctx1, {
+                    type: 'bar',
+                    data: {
+                        labels: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس'],
+                        datasets: [{
+                            label: 'حاضرين',
+                            data: [198, 195, 200, 192, 198, 205],
+                            backgroundColor: 'rgba(102, 126, 234, 0.6)',
+                            borderColor: 'rgba(102, 126, 234, 1)',
+                            borderWidth: 1
+                        }, {
+                            label: 'غائبين',
+                            data: [47, 50, 45, 53, 47, 40],
+                            backgroundColor: 'rgba(245, 87, 108, 0.6)',
+                            borderColor: 'rgba(245, 87, 108, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#ecf0f1' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                ticks: { color: '#ecf0f1' },
+                                grid: { color: 'rgba(102, 126, 234, 0.1)' }
+                            },
+                            x: {
+                                ticks: { color: '#ecf0f1' },
+                                grid: { color: 'rgba(102, 126, 234, 0.1)' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Monthly Chart
+            const ctx2 = document.getElementById('monthlyChart');
+            if (ctx2 && !monthlyChart) {
+                monthlyChart = new Chart(ctx2, {
+                    type: 'line',
+                    data: {
+                        labels: ['الأسبوع 1', 'الأسبوع 2', 'الأسبوع 3', 'الأسبوع 4'],
+                        datasets: [{
+                            label: 'متوسط الحضور',
+                            data: [195, 198, 192, 200],
+                            borderColor: 'rgba(102, 126, 234, 1)',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#ecf0f1' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                ticks: { color: '#ecf0f1' },
+                                grid: { color: 'rgba(102, 126, 234, 0.1)' }
+                            },
+                            x: {
+                                ticks: { color: '#ecf0f1' },
+                                grid: { color: 'rgba(102, 126, 234, 0.1)' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
         // Show Section
-        function showSection(sectionId) {
-            // Hide all sections
+        function showSection(sectionId, element) {
             const sections = document.querySelectorAll('.section');
             sections.forEach(section => section.classList.remove('active'));
 
-            // Remove active class from all nav buttons
             const navBtns = document.querySelectorAll('.nav-btn');
             navBtns.forEach(btn => btn.classList.remove('active'));
 
-            // Show selected section
             document.getElementById(sectionId).classList.add('active');
+            element.classList.add('active');
 
-            // Add active class to clicked button
-            event.target.classList.add('active');
+            if (sectionId === 'reports' || sectionId === 'dashboard') {
+                setTimeout(initCharts, 100);
+            }
         }
 
         // Modal Functions
@@ -780,7 +908,7 @@
             const department = document.getElementById('employeeDepartment').value;
             const salary = document.getElementById('employeeSalary').value;
 
-            if (name && email && department && salary) {
+            if (name && email && department !== 'اختر القسم' && salary) {
                 const table = document.getElementById('employeesTable');
                 const newRow = table.insertRow();
                 newRow.innerHTML = `
@@ -794,17 +922,8 @@
                     </td>
                 `;
 
-                // Show success message
-                document.getElementById('successMessage').classList.add('show');
-                setTimeout(() => {
-                    document.getElementById('successMessage').classList.remove('show');
-                }, 3000);
-
-                // Clear form and close modal
-                document.getElementById('employeeName').value = '';
-                document.getElementById('employeeEmail').value = '';
-                document.getElementById('employeeDepartment').value = '';
-                document.getElementById('employeeSalary').value = '';
+                showSuccessMessage('successMessage');
+                clearEmployeeForm();
                 closeModal('addEmployeeModal');
             } else {
                 alert('يرجى ملء جميع الحقول');
@@ -815,10 +934,7 @@
         function deleteEmployee(element) {
             if (confirm('هل أنت متأكد من حذف هذا الموظف؟')) {
                 element.parentElement.parentElement.remove();
-                document.getElementById('successMessage').classList.add('show');
-                setTimeout(() => {
-                    document.getElementById('successMessage').classList.remove('show');
-                }, 3000);
+                showSuccessMessage('successMessage');
             }
         }
 
@@ -847,16 +963,8 @@
                     </td>
                 `;
 
-                // Show success message
-                document.getElementById('successMessage2').classList.add('show');
-                setTimeout(() => {
-                    document.getElementById('successMessage2').classList.remove('show');
-                }, 3000);
-
-                // Clear form and close modal
-                document.getElementById('departmentName').value = '';
-                document.getElementById('departmentManager').value = '';
-                document.getElementById('departmentLocation').value = '';
+                showSuccessMessage('successMessage2');
+                clearDepartmentForm();
                 closeModal('addDepartmentModal');
             } else {
                 alert('يرجى ملء جميع الحقول');
@@ -867,10 +975,7 @@
         function deleteDepartment(element) {
             if (confirm('هل أنت متأكد من حذف هذا القسم؟')) {
                 element.parentElement.parentElement.remove();
-                document.getElementById('successMessage2').classList.add('show');
-                setTimeout(() => {
-                    document.getElementById('successMessage2').classList.remove('show');
-                }, 3000);
+                showSuccessMessage('successMessage2');
             }
         }
 
@@ -879,11 +984,85 @@
             alert('سيتم تحديث وظيفة التعديل قريباً');
         }
 
+        // Search Functions
+        function searchEmployees() {
+            const searchTerm = document.getElementById('employeeSearch').value.toLowerCase();
+            const table = document.getElementById('employeesTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            }
+        }
+
+        function searchAttendance() {
+            const searchTerm = document.getElementById('attendanceSearch').value.toLowerCase();
+            const table = document.getElementById('attendanceTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            }
+        }
+
+        // Report Functions
+        function generateMonthlyReport() {
+            alert('تم إنشاء تقرير الحضور الشهري\nسيتم تحميله قريباً...');
+        }
+
+        function generateSalaryReport() {
+            alert('تم إنشاء تقرير الرواتب\nسيتم تحميله قريباً...');
+        }
+
+        function generateLeaveReport() {
+            alert('تم إنشاء تقرير الإجازات\nسيتم تحميله قريباً...');
+        }
+
+        function exportToPDF() {
+            const element = document.querySelector('.main-content');
+            const opt = {
+                margin: 10,
+                filename: 'reem-team-report.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function downloadApp() {
+            alert('سيتم إضافة رابط التحميل قريباً');
+        }
+
+        // Helper Functions
+        function showSuccessMessage(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.add('show');
+            setTimeout(() => {
+                element.classList.remove('show');
+            }, 3000);
+        }
+
+        function clearEmployeeForm() {
+            document.getElementById('employeeName').value = '';
+            document.getElementById('employeeEmail').value = '';
+            document.getElementById('employeeDepartment').value = '';
+            document.getElementById('employeeSalary').value = '';
+        }
+
+        function clearDepartmentForm() {
+            document.getElementById('departmentName').value = '';
+            document.getElementById('departmentManager').value = '';
+            document.getElementById('departmentLocation').value = '';
+        }
+
         // Logout
         function logout() {
             if (confirm('هل تريد تسجيل الخروج؟')) {
-                // Redirect to login page
-                window.location.href = 'index.html';
+                sessionStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
             }
         }
 
@@ -897,10 +1076,17 @@
             });
         }
 
-        // Get username from localStorage or set default
+        // Check if user is logged in
         window.onload = function() {
-            const username = localStorage.getItem('username') || 'Admin';
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'login.html';
+            }
+
+            const username = localStorage.getItem('username') || currentUser || 'Admin';
             document.getElementById('username').textContent = username;
+
+            setTimeout(initCharts, 500);
         }
     </script>
 </body>
