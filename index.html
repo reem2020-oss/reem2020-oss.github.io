@@ -64,6 +64,28 @@
             align-items: center;
         }
 
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
         .user-info {
             display: flex;
             align-items: center;
@@ -79,12 +101,6 @@
             align-items: center;
             justify-content: center;
             font-size: 20px;
-        }
-
-        .user-role {
-            font-size: 12px;
-            color: rgba(255,255,255,0.7);
-            margin-left: 5px;
         }
 
         .logout-btn {
@@ -103,13 +119,7 @@
             transform: translateY(-2px);
         }
 
-        /* Main Content */
-        .main-container {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
-
+        /* Navigation */
         .nav-top {
             background: rgba(20, 20, 40, 0.8);
             padding: 15px 30px;
@@ -150,7 +160,6 @@
             display: block;
         }
 
-        /* Map Container */
         #map {
             width: 100%;
             height: 500px;
@@ -159,7 +168,6 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        /* Reports */
         .report-container {
             background: rgba(102,126,234,0.1);
             border: 1px solid rgba(102,126,234,0.3);
@@ -232,26 +240,201 @@
             transform: translateY(-2px);
         }
 
-        .btn-danger {
-            background: #e74c3c;
+        /* Notifications Panel */
+        .notifications-panel {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: rgba(20, 20, 40, 0.95);
+            border-left: 1px solid rgba(102,126,234,0.3);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .notifications-panel.active {
+            right: 0;
+        }
+
+        .notification-item {
+            background: rgba(102,126,234,0.1);
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-item:hover {
+            background: rgba(102,126,234,0.2);
+        }
+
+        .notification-item.unread {
+            background: rgba(102,126,234,0.2);
+            border-left-color: #667eea;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #bdc3c7;
+            margin-top: 5px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            border: 1px solid rgba(102,126,234,0.3);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(102,126,234,0.2);
+            padding-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #bdc3c7;
+            font-size: 28px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #ecf0f1;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #667eea;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: rgba(102,126,234,0.1);
+            border: 1px solid rgba(102,126,234,0.3);
+            color: #ecf0f1;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(102,126,234,0.15);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table th {
+            background: rgba(102,126,234,0.1);
+            color: #667eea;
+            padding: 12px;
+            text-align: right;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(102,126,234,0.3);
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(102,126,234,0.1);
+            color: #ecf0f1;
+        }
+
+        table tr:hover {
+            background: rgba(102,126,234,0.05);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-admin {
+            background: #667eea;
             color: white;
         }
 
-        .btn-danger:hover {
-            background: #c0392b;
+        .badge-manager {
+            background: #f39c12;
+            color: white;
         }
 
-        .chart-container {
-            background: rgba(102,126,234,0.1);
-            border: 1px solid rgba(102,126,234,0.3);
-            border-radius: 12px;
-            padding: 20px;
+        .badge-hr {
+            background: #27ae60;
+            color: white;
+        }
+
+        .badge-employee {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .success-message {
+            background: rgba(39,174,96,0.1);
+            border: 1px solid rgba(39,174,96,0.3);
+            color: #27ae60;
+            padding: 15px;
+            border-radius: 6px;
             margin-bottom: 20px;
+            display: none;
         }
 
-        .chart-wrapper {
-            position: relative;
-            height: 300px;
+        .success-message.show {
+            display: block;
         }
 
         .loading {
@@ -275,22 +458,17 @@
             100% { transform: rotate(360deg); }
         }
 
-        .error-message {
-            background: rgba(231,76,60,0.1);
-            border: 1px solid rgba(231,76,60,0.3);
-            color: #e74c3c;
-            padding: 15px;
-            border-radius: 6px;
+        .chart-container {
+            background: rgba(102,126,234,0.1);
+            border: 1px solid rgba(102,126,234,0.3);
+            border-radius: 12px;
+            padding: 20px;
             margin-bottom: 20px;
         }
 
-        .success-message {
-            background: rgba(39,174,96,0.1);
-            border: 1px solid rgba(39,174,96,0.3);
-            color: #27ae60;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
         }
     </style>
 </head>
@@ -303,14 +481,40 @@
                 <h1>Reem Team</h1>
             </div>
             <div class="header-actions">
+                <div class="notification-bell" onclick="toggleNotifications()">
+                    🔔
+                    <div class="notification-badge" id="notificationCount">3</div>
+                </div>
                 <div class="user-info">
                     <div class="user-avatar">👤</div>
                     <div>
                         <div id="userName" style="color: white; font-weight: 500;">مدير</div>
-                        <div class="user-role" id="userRole">مسؤول النظام</div>
+                        <div style="font-size: 12px; color: rgba(255,255,255,0.7);" id="userRole">مسؤول النظام</div>
                     </div>
                 </div>
                 <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+            </div>
+        </div>
+
+        <!-- Notifications Panel -->
+        <div class="notifications-panel" id="notificationsPanel">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🔔 الإشعارات</h2>
+            <div id="notificationsList">
+                <div class="notification-item unread">
+                    <strong>✓ حضور موظف جديد</strong>
+                    <p style="font-size: 14px; color: #bdc3c7; margin-top: 5px;">أحمد محمد سجل الحضور للتو</p>
+                    <div class="notification-time">منذ 5 دقائق</div>
+                </div>
+                <div class="notification-item unread">
+                    <strong>⏰ تأخر موظف</strong>
+                    <p style="font-size: 14px; color: #bdc3c7; margin-top: 5px;">فاطمة علي تأخرت 15 دقيقة</p>
+                    <div class="notification-time">منذ 10 دقائق</div>
+                </div>
+                <div class="notification-item">
+                    <strong>📋 طلب إجازة جديد</strong>
+                    <p style="font-size: 14px; color: #bdc3c7; margin-top: 5px;">محمود حسن طلب إجازة بدء من غداً</p>
+                    <div class="notification-time">منذ ساعة</div>
+                </div>
             </div>
         </div>
 
@@ -318,7 +522,9 @@
         <div class="nav-top">
             <button class="nav-btn active" onclick="showSection('monitoring', this)">🗺️ المراقبة</button>
             <button class="nav-btn" onclick="showSection('reports', this)">📈 التقارير</button>
-            <button class="nav-btn" onclick="showSection('attendance', this)">📋 الحضور</button>
+            <button class="nav-btn" onclick="showSection('notifications', this)">🔔 الإشعارات</button>
+            <button class="nav-btn" onclick="showSection('security', this)">🔐 الأمان</button>
+            <button class="nav-btn" onclick="showSection('activation', this)">🔑 أكواد التفعيل</button>
         </div>
 
         <!-- Main Content -->
@@ -332,19 +538,19 @@
                     <div class="report-data">
                         <div class="report-item">
                             <div class="report-item-label">الموظفون الحاضرون</div>
-                            <div class="report-item-value" id="presentCount">0</div>
+                            <div class="report-item-value" id="presentCount">45</div>
                         </div>
                         <div class="report-item">
                             <div class="report-item-label">الموظفون الغائبون</div>
-                            <div class="report-item-value" id="absentCount">0</div>
+                            <div class="report-item-value" id="absentCount">8</div>
                         </div>
                         <div class="report-item">
                             <div class="report-item-label">المتأخرون</div>
-                            <div class="report-item-value" id="lateCount">0</div>
+                            <div class="report-item-value" id="lateCount">5</div>
                         </div>
                         <div class="report-item">
                             <div class="report-item-label">إجمالي الموظفين</div>
-                            <div class="report-item-value" id="totalCount">0</div>
+                            <div class="report-item-value" id="totalCount">58</div>
                         </div>
                     </div>
                 </div>
@@ -352,12 +558,14 @@
 
             <!-- Reports Section -->
             <div id="reports" class="section">
-                <h2 style="margin-bottom: 20px; color: #667eea;">التقارير</h2>
+                <h2 style="margin-bottom: 20px; color: #667eea;">التقارير المتقدمة</h2>
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
                     <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;" onclick="generateAttendanceReport()">📊 تقرير الحضور</button>
                     <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;" onclick="generateDepartmentReport()">🏢 تقرير الأقسام</button>
                     <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;" onclick="generateEmployeeReport()">👥 تقرير الموظفين</button>
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;" onclick="generateLeaveReport()">🏖️ تقرير الإجازات</button>
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;" onclick="generatePerformanceReport()">⭐ تقرير الأداء</button>
                     <button class="btn btn-success" style="padding: 20px; text-align: center; height: auto;" onclick="exportCurrentReport()">📥 تصدير PDF</button>
                 </div>
 
@@ -368,14 +576,197 @@
                 </div>
             </div>
 
-            <!-- Attendance Section -->
-            <div id="attendance" class="section">
-                <h2 style="margin-bottom: 20px; color: #667eea;">سجل الحضور</h2>
-                <div id="attendanceContent" class="loading">
-                    <div class="spinner"></div>
-                    <p>جاري تحميل البيانات...</p>
+            <!-- Notifications Section -->
+            <div id="notifications" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">إدارة الإشعارات</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;" onclick="openNotificationModal()">➕ إرسال إشعار</button>
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;" onclick="loadNotificationHistory()">📜 سجل الإشعارات</button>
+                </div>
+
+                <div id="notificationContent" class="report-container">
+                    <div class="report-title">🔔 آخر الإشعارات</div>
+                    <div id="notificationList"></div>
                 </div>
             </div>
+
+            <!-- Security Section -->
+            <div id="security" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">🔐 مميزات الأمان</h2>
+                
+                <div class="report-container">
+                    <div class="report-title">التحقق البيومتري</div>
+                    <p style="color: #bdc3c7; margin-bottom: 15px;">تفعيل المصادقة البيومترية لتطبيق الموبايل</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <div style="background: rgba(102,126,234,0.1); border: 1px solid rgba(102,126,234,0.3); border-radius: 8px; padding: 15px; text-align: center;">
+                            <div style="font-size: 32px; margin-bottom: 10px;">👆</div>
+                            <div style="color: #667eea; font-weight: 600;">بصمة الإصبع</div>
+                            <div style="font-size: 12px; color: #bdc3c7; margin-top: 5px;">✓ مفعلة</div>
+                        </div>
+                        <div style="background: rgba(102,126,234,0.1); border: 1px solid rgba(102,126,234,0.3); border-radius: 8px; padding: 15px; text-align: center;">
+                            <div style="font-size: 32px; margin-bottom: 10px;">👁️</div>
+                            <div style="color: #667eea; font-weight: 600;">التعرف على الوجه</div>
+                            <div style="font-size: 12px; color: #bdc3c7; margin-top: 5px;">✓ مفعلة</div>
+                        </div>
+                        <div style="background: rgba(102,126,234,0.1); border: 1px solid rgba(102,126,234,0.3); border-radius: 8px; padding: 15px; text-align: center;">
+                            <div style="font-size: 32px; margin-bottom: 10px;">🔐</div>
+                            <div style="color: #667eea; font-weight: 600;">تشفير البيانات</div>
+                            <div style="font-size: 12px; color: #bdc3c7; margin-top: 5px;">✓ مفعل</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-container">
+                    <div class="report-title">سجل الأمان</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الحدث</th>
+                                <th>المستخدم</th>
+                                <th>الوقت</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>تسجيل دخول</td>
+                                <td>admin@company.com</td>
+                                <td>2024-04-16 10:30</td>
+                                <td><span class="badge badge-admin">✓ نجح</span></td>
+                            </tr>
+                            <tr>
+                                <td>تغيير كلمة المرور</td>
+                                <td>manager@company.com</td>
+                                <td>2024-04-16 09:15</td>
+                                <td><span class="badge badge-manager">✓ نجح</span></td>
+                            </tr>
+                            <tr>
+                                <td>محاولة دخول فاشلة</td>
+                                <td>unknown@company.com</td>
+                                <td>2024-04-16 08:45</td>
+                                <td><span class="badge" style="background: #e74c3c; color: white;">✗ فشل</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Activation Codes Section -->
+            <div id="activation" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">🔑 أكواد التفعيل</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;" onclick="generateActivationCode()">➕ إنشاء كود جديد</button>
+                    <button class="btn btn-primary" style="padding: 20px; text-align: center; height: auto;" onclick="loadActivationCodes()">📋 عرض الأكواد</button>
+                </div>
+
+                <div class="report-container">
+                    <div class="report-title">📊 إحصائيات الأكواد</div>
+                    <div class="report-data">
+                        <div class="report-item">
+                            <div class="report-item-label">الأكواد المتاحة</div>
+                            <div class="report-item-value" id="availableCodes">25</div>
+                        </div>
+                        <div class="report-item">
+                            <div class="report-item-label">الأكواد المستخدمة</div>
+                            <div class="report-item-value" id="usedCodes">15</div>
+                        </div>
+                        <div class="report-item">
+                            <div class="report-item-label">الأكواد منتهية الصلاحية</div>
+                            <div class="report-item-value" id="expiredCodes">5</div>
+                        </div>
+                        <div class="report-item">
+                            <div class="report-item-label">إجمالي الأكواد</div>
+                            <div class="report-item-value" id="totalCodes">45</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-container">
+                    <div class="report-title">📋 قائمة الأكواد</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الكود</th>
+                                <th>تاريخ الإنشاء</th>
+                                <th>تاريخ الانتهاء</th>
+                                <th>الحالة</th>
+                                <th>الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activationCodesList">
+                            <tr>
+                                <td style="font-family: monospace; font-weight: 600;">REEM-2024-A1B2C3D4</td>
+                                <td>2024-04-16</td>
+                                <td>2024-05-16</td>
+                                <td><span class="badge badge-admin">متاح</span></td>
+                                <td>
+                                    <button class="btn" style="background: #667eea; color: white; padding: 5px 10px; font-size: 12px;" onclick="copyCode('REEM-2024-A1B2C3D4')">نسخ</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: monospace; font-weight: 600;">REEM-2024-E5F6G7H8</td>
+                                <td>2024-04-15</td>
+                                <td>2024-05-15</td>
+                                <td><span class="badge badge-manager">مستخدم</span></td>
+                                <td>
+                                    <button class="btn" style="background: #667eea; color: white; padding: 5px 10px; font-size: 12px;" onclick="copyCode('REEM-2024-E5F6G7H8')">نسخ</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: monospace; font-weight: 600;">REEM-2024-I9J0K1L2</td>
+                                <td>2024-04-14</td>
+                                <td>2024-05-14</td>
+                                <td><span class="badge" style="background: #95a5a6; color: white;">منتهي</span></td>
+                                <td>
+                                    <button class="btn" style="background: #667eea; color: white; padding: 5px 10px; font-size: 12px;" onclick="copyCode('REEM-2024-I9J0K1L2')">نسخ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notificationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إرسال إشعار</h2>
+                <button class="close-btn" onclick="closeModal('notificationModal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>نوع الإشعار:</label>
+                <select id="notificationType">
+                    <option value="attendance">✓ حضور</option>
+                    <option value="leave">🏖️ إجازة</option>
+                    <option value="alert">⚠️ تنبيه</option>
+                    <option value="system">⚙️ نظام</option>
+                    <option value="reminder">🔔 تذكير</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>العنوان:</label>
+                <input type="text" id="notificationTitle" placeholder="أدخل عنوان الإشعار">
+            </div>
+            <div class="form-group">
+                <label>الرسالة:</label>
+                <textarea id="notificationMessage" placeholder="أدخل نص الإشعار" style="width: 100%; padding: 10px; background: rgba(102,126,234,0.1); border: 1px solid rgba(102,126,234,0.3); color: #ecf0f1; border-radius: 6px; font-size: 14px; min-height: 100px; font-family: inherit;"></textarea>
+            </div>
+            <div class="form-group">
+                <label>المستقبلون:</label>
+                <select id="notificationRecipients" multiple style="height: 100px;">
+                    <option value="all">جميع الموظفين</option>
+                    <option value="admin">المسؤولون</option>
+                    <option value="managers">المديرون</option>
+                    <option value="hr">الموارد البشرية</option>
+                    <option value="employees">الموظفون</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; padding: 12px; margin-top: 20px;" onclick="sendNotification()">إرسال الإشعار</button>
         </div>
     </div>
 
@@ -386,20 +777,17 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             initializeMap();
-            loadAttendanceStats();
-            loadAttendanceRecords();
         });
 
         // Initialize Map
         function initializeMap() {
-            map = L.map('map').setView([24.7136, 46.6753], 12); // Riyadh coordinates
+            map = L.map('map').setView([24.7136, 46.6753], 12);
             
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors',
                 maxZoom: 19
             }).addTo(map);
 
-            // Add sample departments
             const departments = [
                 { name: 'القسم الإداري', lat: 24.7136, lng: 46.6753, employees: 12 },
                 { name: 'قسم التطوير', lat: 24.7200, lng: 46.6800, employees: 8 },
@@ -427,64 +815,61 @@
             });
         }
 
-        // Load Attendance Stats
-        async function loadAttendanceStats() {
-            try {
-                // Mock data - replace with API call
-                document.getElementById('presentCount').textContent = '45';
-                document.getElementById('absentCount').textContent = '8';
-                document.getElementById('lateCount').textContent = '5';
-                document.getElementById('totalCount').textContent = '58';
-            } catch (error) {
-                console.error('Error loading stats:', error);
+        // Navigation
+        function showSection(sectionId, button) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            button.classList.add('active');
+        }
+
+        // Notifications
+        function toggleNotifications() {
+            document.getElementById('notificationsPanel').classList.toggle('active');
+        }
+
+        function openNotificationModal() {
+            document.getElementById('notificationModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function sendNotification() {
+            const title = document.getElementById('notificationTitle').value;
+            const message = document.getElementById('notificationMessage').value;
+            
+            if (title && message) {
+                alert('تم إرسال الإشعار بنجاح!');
+                closeModal('notificationModal');
+                document.getElementById('notificationTitle').value = '';
+                document.getElementById('notificationMessage').value = '';
+            } else {
+                alert('يرجى ملء جميع الحقول');
             }
         }
 
-        // Load Attendance Records
-        async function loadAttendanceRecords() {
-            try {
-                const html = `
-                    <div class="report-container">
-                        <div class="report-title">📋 آخر سجلات الحضور</div>
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <thead>
-                                <tr style="border-bottom: 2px solid rgba(102,126,234,0.3);">
-                                    <th style="padding: 10px; text-align: right; color: #667eea;">الموظف</th>
-                                    <th style="padding: 10px; text-align: right; color: #667eea;">الوقت</th>
-                                    <th style="padding: 10px; text-align: right; color: #667eea;">الحالة</th>
-                                    <th style="padding: 10px; text-align: right; color: #667eea;">الموقع</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="border-bottom: 1px solid rgba(102,126,234,0.1);">
-                                    <td style="padding: 10px;">أحمد محمد</td>
-                                    <td style="padding: 10px;">08:15 AM</td>
-                                    <td style="padding: 10px;"><span style="background: #27ae60; color: white; padding: 3px 8px; border-radius: 4px;">حاضر</span></td>
-                                    <td style="padding: 10px;">الرياض</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid rgba(102,126,234,0.1);">
-                                    <td style="padding: 10px;">فاطمة علي</td>
-                                    <td style="padding: 10px;">08:45 AM</td>
-                                    <td style="padding: 10px;"><span style="background: #f39c12; color: white; padding: 3px 8px; border-radius: 4px;">متأخر</span></td>
-                                    <td style="padding: 10px;">الرياض</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid rgba(102,126,234,0.1);">
-                                    <td style="padding: 10px;">محمود حسن</td>
-                                    <td style="padding: 10px;">08:30 AM</td>
-                                    <td style="padding: 10px;"><span style="background: #27ae60; color: white; padding: 3px 8px; border-radius: 4px;">حاضر</span></td>
-                                    <td style="padding: 10px;">الرياض</td>
-                                </tr>
-                            </tbody>
-                        </table>
+        function loadNotificationHistory() {
+            const html = `
+                <div style="color: #ecf0f1;">
+                    <div style="background: rgba(102,126,234,0.1); border-left: 4px solid #667eea; padding: 15px; margin-bottom: 10px; border-radius: 6px;">
+                        <strong>✓ حضور موظف</strong>
+                        <p style="font-size: 14px; color: #bdc3c7; margin-top: 5px;">أحمد محمد سجل الحضور</p>
+                        <div style="font-size: 12px; color: #bdc3c7; margin-top: 5px;">2024-04-16 10:30</div>
                     </div>
-                `;
-                document.getElementById('attendanceContent').innerHTML = html;
-            } catch (error) {
-                console.error('Error loading attendance:', error);
-            }
+                    <div style="background: rgba(102,126,234,0.1); border-left: 4px solid #f39c12; padding: 15px; margin-bottom: 10px; border-radius: 6px;">
+                        <strong>⏰ تأخر موظف</strong>
+                        <p style="font-size: 14px; color: #bdc3c7; margin-top: 5px;">فاطمة علي تأخرت 15 دقيقة</p>
+                        <div style="font-size: 12px; color: #bdc3c7; margin-top: 5px;">2024-04-16 09:45</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('notificationContent').innerHTML = html;
         }
 
-        // Generate Reports
+        // Reports
         function generateAttendanceReport() {
             currentReport = {
                 title: 'تقرير الحضور اليومي',
@@ -526,51 +911,65 @@
             displayReport();
         }
 
+        function generateLeaveReport() {
+            currentReport = {
+                title: 'تقرير الإجازات',
+                type: 'leave',
+                data: [
+                    { employee: 'أحمد محمد', type: 'سنوية', startDate: '2024-04-20', endDate: '2024-04-25', status: 'معلق' },
+                    { employee: 'فاطمة علي', type: 'مرضية', startDate: '2024-04-16', endDate: '2024-04-17', status: 'موافق عليه' },
+                    { employee: 'محمود حسن', type: 'بدون راتب', startDate: '2024-05-01', endDate: '2024-05-05', status: 'معلق' }
+                ]
+            };
+            displayReport();
+        }
+
+        function generatePerformanceReport() {
+            currentReport = {
+                title: 'تقرير الأداء',
+                type: 'performance',
+                data: [
+                    { employee: 'أحمد محمد', attendance: '95%', punctuality: '90%', rating: '⭐⭐⭐⭐⭐' },
+                    { employee: 'فاطمة علي', attendance: '88%', punctuality: '85%', rating: '⭐⭐⭐⭐' },
+                    { employee: 'محمود حسن', attendance: '92%', punctuality: '88%', rating: '⭐⭐⭐⭐⭐' }
+                ]
+            };
+            displayReport();
+        }
+
         function displayReport() {
             let html = `<div class="report-container">
                 <div class="report-title">${currentReport.title}</div>
-                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <table>
                     <thead>
-                        <tr style="border-bottom: 2px solid rgba(102,126,234,0.3);">`;
+                        <tr>`;
             
-            // Generate headers
             if (currentReport.type === 'attendance') {
-                html += `<th style="padding: 10px; text-align: right; color: #667eea;">التاريخ</th>
-                        <th style="padding: 10px; text-align: right; color: #667eea;">الحاضرون</th>
-                        <th style="padding: 10px; text-align: right; color: #667eea;">الغائبون</th>
-                        <th style="padding: 10px; text-align: right; color: #667eea;">المتأخرون</th>`;
+                html += `<th>التاريخ</th><th>الحاضرون</th><th>الغائبون</th><th>المتأخرون</th>`;
             } else if (currentReport.type === 'department') {
-                html += `<th style="padding: 10px; text-align: right; color: #667eea;">القسم</th>
-                        <th style="padding: 10px; text-align: right; color: #667eea;">إجمالي الموظفين</th>
-                        <th style="padding: 10px; text-align: right; color: #667eea;">الحاضرون</th>
-                        <th style="padding: 10px; text-align: right; color: #667eea;">الغائبون</th>`;
-            } else {
-                html += `<th style="padding: 10px; text-align: right; color: #667eea;">الموظف</th>
-                        <th style="padding: 10px; text-align: right; color: #667eea;">القسم</th>
-                        <th style="padding: 10px; text-align: right; color: #667eea;">الحالة</th>
-                        <th style="padding: 10px; text-align: right; color: #667eea;">الوقت</th>`;
+                html += `<th>القسم</th><th>إجمالي الموظفين</th><th>الحاضرون</th><th>الغائبون</th>`;
+            } else if (currentReport.type === 'employee') {
+                html += `<th>الموظف</th><th>القسم</th><th>الحالة</th><th>الوقت</th>`;
+            } else if (currentReport.type === 'leave') {
+                html += `<th>الموظف</th><th>نوع الإجازة</th><th>من</th><th>إلى</th><th>الحالة</th>`;
+            } else if (currentReport.type === 'performance') {
+                html += `<th>الموظف</th><th>الحضور</th><th>الالتزام</th><th>التقييم</th>`;
             }
             
             html += `</tr></thead><tbody>`;
             
-            // Generate rows
             currentReport.data.forEach(item => {
-                html += '<tr style="border-bottom: 1px solid rgba(102,126,234,0.1);">';
+                html += '<tr>';
                 if (currentReport.type === 'attendance') {
-                    html += `<td style="padding: 10px;">${item.date}</td>
-                            <td style="padding: 10px;"><span style="color: #27ae60; font-weight: 600;">${item.present}</span></td>
-                            <td style="padding: 10px;"><span style="color: #e74c3c; font-weight: 600;">${item.absent}</span></td>
-                            <td style="padding: 10px;"><span style="color: #f39c12; font-weight: 600;">${item.late}</span></td>`;
+                    html += `<td>${item.date}</td><td style="color: #27ae60; font-weight: 600;">${item.present}</td><td style="color: #e74c3c; font-weight: 600;">${item.absent}</td><td style="color: #f39c12; font-weight: 600;">${item.late}</td>`;
                 } else if (currentReport.type === 'department') {
-                    html += `<td style="padding: 10px;">${item.name}</td>
-                            <td style="padding: 10px;">${item.employees}</td>
-                            <td style="padding: 10px;"><span style="color: #27ae60; font-weight: 600;">${item.present}</span></td>
-                            <td style="padding: 10px;"><span style="color: #e74c3c; font-weight: 600;">${item.absent}</span></td>`;
-                } else {
-                    html += `<td style="padding: 10px;">${item.name}</td>
-                            <td style="padding: 10px;">${item.department}</td>
-                            <td style="padding: 10px;"><span style="background: ${item.status === 'حاضر' ? '#27ae60' : '#f39c12'}; color: white; padding: 3px 8px; border-radius: 4px;">${item.status}</span></td>
-                            <td style="padding: 10px;">${item.time}</td>`;
+                    html += `<td>${item.name}</td><td>${item.employees}</td><td style="color: #27ae60; font-weight: 600;">${item.present}</td><td style="color: #e74c3c; font-weight: 600;">${item.absent}</td>`;
+                } else if (currentReport.type === 'employee') {
+                    html += `<td>${item.name}</td><td>${item.department}</td><td><span class="badge" style="background: ${item.status === 'حاضر' ? '#27ae60' : '#f39c12'}; color: white;">${item.status}</span></td><td>${item.time}</td>`;
+                } else if (currentReport.type === 'leave') {
+                    html += `<td>${item.employee}</td><td>${item.type}</td><td>${item.startDate}</td><td>${item.endDate}</td><td><span class="badge" style="background: ${item.status === 'موافق عليه' ? '#27ae60' : '#f39c12'}; color: white;">${item.status}</span></td>`;
+                } else if (currentReport.type === 'performance') {
+                    html += `<td>${item.employee}</td><td>${item.attendance}</td><td>${item.punctuality}</td><td>${item.rating}</td>`;
                 }
                 html += '</tr>';
             });
@@ -596,15 +995,19 @@
             html2pdf().set(opt).from(element).save();
         }
 
-        // Navigation
-        function showSection(sectionId, button) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            button.classList.add('active');
+        // Activation Codes
+        function generateActivationCode() {
+            const code = 'REEM-' + new Date().getFullYear() + '-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+            alert('تم إنشاء الكود: ' + code);
+        }
+
+        function loadActivationCodes() {
+            // Already displayed in the table
+        }
+
+        function copyCode(code) {
+            navigator.clipboard.writeText(code);
+            alert('تم نسخ الكود: ' + code);
         }
 
         // Logout
