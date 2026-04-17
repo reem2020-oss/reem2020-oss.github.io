@@ -3,174 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REEM ERP | النظام الماسي المتكامل</title>
+    <title>REEM Enterprise ERP v10</title>
     <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <script src="https://cloudflare.com"></script>
     <style>
-        :root { --gold: #d4af37; --blue-dark: #020c1b; --glass: rgba(16, 33, 65, 0.95); --danger: #ff0000; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { background: radial-gradient(circle at center, #112240, #020c1b); color: #fff; height: 100vh; overflow: hidden; }
-
-        /* الساعة الذهبية */
-        .reem-clock { background: rgba(0,0,0,0.6); border: 1px solid var(--gold); padding: 10px 25px; border-radius: 50px; font-size: 22px; color: var(--gold); box-shadow: 0 0 15px rgba(212,175,55,0.3); text-shadow: 0 0 5px var(--gold); }
-
-        /* لوحة الإعلانات المتحركة */
-        .news-bar { background: var(--gold); color: #000; padding: 10px; font-weight: bold; overflow: hidden; white-space: nowrap; position: relative; }
-        .news-text { display: inline-block; animation: scroll-news 20s linear infinite; }
-        @keyframes scroll-news { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
-
-        .glass-card { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; padding: 20px; margin-bottom: 15px; }
-        .sidebar { width: 280px; position: fixed; height: 100vh; right: 0; background: #000; border-left: 1px solid var(--gold); padding: 25px; z-index: 1000; }
-        .main-content { margin-right: 280px; padding: 25px; height: 100vh; overflow-y: auto; }
-
-        .nav-btn { width: 100%; padding: 12px; margin-bottom: 10px; background: transparent; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 12px; color: var(--gold); cursor: pointer; text-align: right; display: flex; align-items: center; gap: 15px; }
-        .nav-btn:hover, .nav-btn.active { background: var(--gold); color: #000; font-weight: bold; }
-        .action-btn { background: var(--gold); color: #000; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; }
-
-        #sos-alert { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,0,0,0.8); z-index: 10001; align-items: center; justify-content: center; flex-direction: column; text-align: center; }
+        :root { --gold: #d4af37; --blue: #020c1b; --glass: rgba(16, 33, 65, 0.95); --danger: #ef4444; --success: #22c55e; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: radial-gradient(circle at center, #112240, #020c1b); color: #fff; min-height: 100vh; overflow-x: hidden; }
         
-        @media (max-width: 768px) { .sidebar { width: 0; padding: 0; overflow: hidden; } .main-content { margin-right: 0; } }
+        /* Glass UI & 3D Effects */
+        .glass-card { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .sidebar { width: 280px; position: fixed; height: 100vh; right: 0; background: #000; border-left: 1px solid var(--gold); padding: 20px; z-index: 1000; }
+        .main { margin-right: 280px; padding: 30px; transition: 0.3s; }
+        
+        /* Luxury Clock & News Bar */
+        .reem-clock { background: #000; border: 1px solid var(--gold); padding: 10px 25px; border-radius: 50px; font-size: 22px; color: var(--gold); text-shadow: 0 0 10px var(--gold); display: inline-block; }
+        .news-ticker { background: var(--gold); color: #000; padding: 8px; font-weight: bold; overflow: hidden; white-space: nowrap; margin-bottom: 20px; border-radius: 10px; }
+        .news-text { display: inline-block; animation: scroll 20s linear infinite; }
+        @keyframes scroll { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+        /* Tables & Inputs */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { color: var(--gold); padding: 12px; border-bottom: 2px solid var(--gold); text-align: right; }
+        td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: right; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; background: rgba(0,0,0,0.3); border: 1px solid var(--gold); border-radius: 10px; color: white; }
+        .btn-pro { background: linear-gradient(135deg, #d4af37, #f9d976); color: #000; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: 800; width: 100%; transition: 0.3s; }
+        
+        /* Map & Photos */
+        #map { height: 400px; border-radius: 20px; border: 1px solid var(--gold); margin-top: 20px; }
+        .emp-photo { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--gold); object-fit: cover; }
+        
+        @media (max-width: 768px) { .sidebar { width: 0; padding: 0; overflow: hidden; } .main { margin-right: 0; } }
     </style>
 </head>
 <body>
 
-<!-- تنبيه الطوارئ للمدير -->
-<div id="sos-alert">
-    <h1 style="font-size: 80px;">🚨 طوارئ 🚨</h1>
-    <h2 id="sos-info">موظف يطلب النجدة!</h2>
-    <button class="action-btn" style="width: 200px; margin-top: 30px;" onclick="stopSOS()">إيقاف الإنذار</button>
-</div>
-
-<!-- شريط الإعلانات -->
-<div class="news-bar" id="news-section">
-    <div class="news-text" id="news-content">مرحباً بكم في نظام شركة ريم المتكامل - يرجى الالتزام بمواعيد العمل الرسمية</div>
-</div>
-
-<div id="auth-screen" style="position: fixed; inset: 0; z-index: 9999; background: #020c1b; display: flex; align-items: center; justify-content: center;">
-    <div class="glass-card" style="width: 380px; text-align: center; border: 2px solid var(--gold);">
-        <h2 style="color: var(--gold); margin-bottom: 20px;">شركة ريم | REEM</h2>
-        <input type="text" id="u_log" style="width:100%; padding:12px; margin-bottom:10px; background:rgba(255,255,255,0.05); border:1px solid var(--gold); color:white; border-radius:10px;" placeholder="المستخدم">
-        <input type="password" id="p_log" style="width:100%; padding:12px; margin-bottom:20px; background:rgba(255,255,255,0.05); border:1px solid var(--gold); color:white; border-radius:10px;" placeholder="كلمة المرور">
-        <button class="action-btn" onclick="doLogin()">دخول النظام</button>
+<div id="auth-screen" style="position:fixed; inset:0; z-index:9999; background:var(--blue); display:flex; align-items:center; justify-content:center;">
+    <div class="glass-card" style="width:380px; text-align:center; border:2px solid var(--gold);">
+        <h1 style="color:var(--gold); margin-bottom:20px;">REEM ENTERPRISE</h1>
+        <input type="text" id="u_in" placeholder="اسم المستخدم">
+        <input type="password" id="p_in" placeholder="كلمة المرور">
+        <button class="btn-pro" onclick="login()">دخول آمن</button>
     </div>
 </div>
 
 <aside class="sidebar">
-    <div style="text-align: center; margin-bottom: 30px;"><h2 style="color: var(--gold);">REEM ERP</h2></div>
-    <div id="menu"></div>
-    <button class="nav-btn" style="margin-top: 50px; color: var(--danger); border-color: var(--danger);" onclick="location.reload()">خروج</button>
+    <div style="text-align:center; margin-bottom:30px;"><h2 style="color:var(--gold);">REEM ERP</h2></div>
+    <div id="nav-box"></div>
+    <button class="btn-pro" style="background:var(--danger); color:white; margin-top:50px;" onclick="location.reload()">تسجيل خروج</button>
 </aside>
 
-<main class="main-content">
+<main class="main">
+    <div class="news-ticker"><div class="news-text" id="news-val">مرحباً بكم في نظام شركة ريم المتكامل - يرجى تسجيل الحضور عبر GPS</div></div>
     <div class="glass-card" style="display:flex; justify-content:space-between; align-items:center;">
         <div id="clock" class="reem-clock">00:00:00</div>
-        <h3 id="v-title" style="color: var(--gold);">لوحة التحكم</h3>
+        <h2 id="page-title" style="color:var(--gold);">لوحة التحكم</h2>
     </div>
-    <div id="app"></div>
+    <div id="dynamic-area"></div>
 </main>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('reem_final')) || {
-        users: [{user: "admin", pass: "123", role: "admin", name: "المدير العام"}],
-        news: "مرحباً بكم في نظام شركة ريم المتكامل - يرجى الالتزام بمواعيد العمل الرسمية",
-        sos: null
+    // قاعدة البيانات الشاملة
+    let db = JSON.parse(localStorage.getItem('reem_v10')) || {
+        users: [{user: "admin", pass: "123", role: "admin", name: "المدير العام", dept: "الإدارة", sal: 0, photo: ""}],
+        depts: ["إدارة", "مبيعات", "ميدان"],
+        logs: [],
+        news: "مرحباً بكم في شركة ريم - نظام تتبع الموظفين مفعل"
     };
 
     let session = null;
-    const siren = new Audio('https://mixkit.co');
+    function sync() { localStorage.setItem('reem_v10', JSON.stringify(db)); }
 
-    function sync() { localStorage.setItem('reem_final', JSON.stringify(db)); }
-
-    function doLogin() {
-        const u = document.getElementById('u_log').value.trim();
-        const p = document.getElementById('p_log').value.trim();
+    function login() {
+        const u = document.getElementById('u_in').value.trim();
+        const p = document.getElementById('p_in').value.trim();
         const found = db.users.find(x => x.user === u && x.pass === p);
-        if(found) {
-            session = found;
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('news-content').innerText = db.news;
-            renderNav();
-            switchView('home');
+        if(found) { 
+            session = found; document.getElementById('auth-screen').style.display='none'; 
+            renderNav(); loadView('dash');
         } else { alert("بيانات خاطئة!"); }
     }
 
     function renderNav() {
-        const m = document.getElementById('menu');
+        const n = document.getElementById('nav-box');
         if(session.role === 'admin') {
-            m.innerHTML = `
-                <button class="nav-btn active" onclick="switchView('home')"><i class="fas fa-home"></i> الرئيسية</button>
-                <button class="nav-btn" onclick="switchView('manage_news')"><i class="fas fa-bullhorn"></i> نشر إعلان</button>
-                <button class="nav-btn" onclick="switchView('hr')"><i class="fas fa-users"></i> الموظفين</button>
+            n.innerHTML = `
+                <div class="btn-pro" onclick="loadView('dash')" style="margin-bottom:10px">الإحصائيات</div>
+                <div class="btn-pro" onclick="loadView('hr')" style="margin-bottom:10px">الموظفين والأقسام</div>
+                <div class="btn-pro" onclick="loadView('tracking')" style="margin-bottom:10px">تتبع GPS المباشر</div>
+                <div class="btn-pro" onclick="loadView('finance')" style="margin-bottom:10px">الرواتب والتقارير</div>
+                <div class="btn-pro" onclick="backup()" style="background:#2ecc71; color:white; margin-top:20px">نسخة احتياطية</div>
+                <input type="file" id="restore-file" style="display:none" onchange="restore(event)">
+                <div class="btn-pro" onclick="document.getElementById('restore-file').click()" style="background:var(--gold); color:black; margin-top:10px">استرداد البيانات</div>
             `;
         } else {
-            m.innerHTML = `
-                <button class="nav-btn active" onclick="switchView('home')"><i class="fas fa-user"></i> حسابي</button>
-                <button class="nav-btn" style="background:var(--danger); color:white;" onclick="triggerSOS()"><i class="fas fa-exclamation-triangle"></i> طوارئ SOS</button>
+            n.innerHTML = `
+                <div class="btn-pro" onclick="loadView('emp_punch')" style="margin-bottom:10px">بصمة GPS</div>
+                <div class="btn-pro" onclick="loadView('emp_info')" style="margin-bottom:10px">ملفي الشخصي</div>
             `;
         }
     }
 
-    function switchView(v) {
-        const app = document.getElementById('app');
-        if(v === 'home') {
-            app.innerHTML = `<div class="glass-card"><h2>أهلاً ${session.name}</h2><p>استخدم القائمة الجانبية لإدارة مهامك</p></div>`;
-        } else if(v === 'manage_news') {
-            app.innerHTML = `
-                <div class="glass-card">
-                    <h3>تعديل شريط الإعلانات</h3>
-                    <input id="news-in" style="width:100%; padding:10px; margin:15px 0; background:transparent; border:1px solid var(--gold); color:white;" placeholder="اكتب الإعلان هنا...">
-                    <button class="action-btn" onclick="saveNews()">نشر لكل الموظفين</button>
+    function loadView(v) {
+        const area = document.getElementById('dynamic-area');
+        if(v === 'dash') {
+            area.innerHTML = `
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px">
+                    <div class="glass-card"><h4>الموظفين</h4><h2>${db.users.length-1}</h2></div>
+                    <div class="glass-card"><h4>بصمات اليوم</h4><h2>${db.logs.length}</h2></div>
+                    <div class="glass-card"><h4>الأقسام</h4><h2>${db.depts.length}</h2></div>
                 </div>
             `;
         } else if(v === 'hr') {
-            app.innerHTML = `
+            area.innerHTML = `
                 <div class="glass-card">
-                    <h3>إضافة موظف</h3>
-                    <input id="n-n" placeholder="الاسم الكامل" style="display:block; width:100%; margin-bottom:10px;">
-                    <input id="n-u" placeholder="اسم المستخدم" style="display:block; width:100%; margin-bottom:10px;">
-                    <input id="n-p" placeholder="كلمة السر" style="display:block; width:100%; margin-bottom:15px;">
-                    <button onclick="addU()" class="action-btn">حفظ الموظف</button>
+                    <h3>إدارة الأقسام</h3>
+                    <input id="new-dept" placeholder="اسم القسم الجديد"><button class="btn-pro" onclick="addDept()">إضافة قسم</button>
+                    <p style="margin-top:10px">الأقسام: ${db.depts.join(' - ')}</p>
+                </div>
+                <div class="glass-card">
+                    <h3>إضافة موظف (مع صورة وراتب)</h3>
+                    <input id="n-name" placeholder="الاسم الكامل">
+                    <input id="n-user" placeholder="اسم المستخدم">
+                    <input id="n-pass" placeholder="كلمة المرور">
+                    <input id="n-sal" type="number" placeholder="الراتب الشهري">
+                    <select id="n-dept">${db.depts.map(d=>`<option>${d}</option>`)}</select>
+                    <input type="file" id="n-photo" accept="image/*">
+                    <button class="btn-pro" onclick="addUser()">حفظ الموظف</button>
+                </div>
+            `;
+        } else if(v === 'emp_punch') {
+            area.innerHTML = `
+                <div class="glass-card" style="text-align:center">
+                    <i class="fas fa-fingerprint" style="font-size:80px; color:var(--gold); margin-bottom:20px"></i>
+                    <h2>نظام البصمة الجغرافي</h2>
+                    <button class="btn-pro" style="height:80px; font-size:1.5rem" onclick="punch()">تسجيل الحضور (GPS)</button>
+                    <p id="gps-stat" style="margin-top:15px; color:var(--gold)"></p>
+                </div>
+            `;
+        } else if(v === 'tracking') {
+            area.innerHTML = `<div class="glass-card"><h3>خريطة تتبع الموظفين</h3><div id="map"></div></div>`;
+            setTimeout(initMap, 500);
+        } else if(v === 'finance') {
+            area.innerHTML = `
+                <div class="glass-card">
+                    <h3>كشف الرواتب الذكي</h3>
+                    <table><thead><tr><th>الموظف</th><th>الراتب</th><th>أيام العمل</th><th>المستحق</th></tr></thead>
+                    <tbody>${db.users.filter(u=>u.role!=='admin').map(u=>{
+                        const days = db.logs.filter(l=>l.name === u.name).length;
+                        return `<tr><td>${u.name}</td><td>${u.sal}</td><td>${days}</td><td>${(u.sal/30 * days).toFixed(2)}</td></tr>`;
+                    }).join('')}</tbody></table>
                 </div>
             `;
         }
     }
 
-    function saveNews() {
-        const txt = document.getElementById('news-in').value;
-        db.news = txt; sync();
-        document.getElementById('news-content').innerText = txt;
-        alert("تم تحديث الإعلان لجميع المستخدمين");
+    function punch() {
+        document.getElementById('gps-stat').innerText = "جاري التحقق من موقعك...";
+        navigator.geolocation.getCurrentPosition(pos => {
+            db.logs.push({name: session.name, time: new Date().toLocaleString(), lat: pos.coords.latitude, lng: pos.coords.longitude});
+            sync(); alert("تم تسجيل حضورك بنجاح"); document.getElementById('gps-stat').innerText = "موقعك موثق ✅";
+        }, () => alert("خطأ! يجب تفعيل GPS الجوال"));
     }
 
-    function triggerSOS() {
-        if(confirm("إرسال نداء طوارئ؟")) {
-            db.sos = session.name; sync();
-            alert("تم إبلاغ المدير فوراً");
-        }
+    function initMap() {
+        const map = L.map('map').setView([24.7136, 46.6753], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        db.logs.forEach(l => { L.marker([l.lat, l.lng]).addTo(map).bindPopup(`${l.name}<br>${l.time}`); });
     }
 
-    function checkSOS() {
-        if(session && session.role === 'admin' && db.sos) {
-            document.getElementById('sos-alert').style.display = 'flex';
-            document.getElementById('sos-info').innerText = "🚨 طوارئ عاجلة من: " + db.sos;
-            siren.play();
-        }
+    function addUser() {
+        const name = document.getElementById('n-name').value;
+        const user = document.getElementById('n-user').value;
+        const pass = document.getElementById('n-pass').value;
+        const sal = document.getElementById('n-sal').value;
+        const dept = document.getElementById('n-dept').value;
+        db.users.push({name, user, pass, sal, dept, role:'emp'});
+        sync(); alert("تمت إضافة الموظف"); loadView('hr');
     }
 
-    function stopSOS() {
-        db.sos = null; sync();
-        siren.pause(); siren.currentTime = 0;
-        document.getElementById('sos-alert').style.display = 'none';
+    function addDept() { const d = document.getElementById('new-dept').value; if(d) { db.depts.push(d); sync(); loadView('hr'); } }
+
+    function backup() {
+        const blob = new Blob([JSON.stringify(db)], {type:'application/json'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'reem_erp_backup.json'; a.click();
     }
 
-    function addU() {
-        db.users.push({name: document.getElementById('n-n').value, user: document.getElementById('n-u').value, pass: document.getElementById('n-p').value, role: 'emp'});
-        sync(); alert("تمت الإضافة بنجاح");
+    function restore(e) {
+        const reader = new FileReader();
+        reader.onload = function(ev) { db = JSON.parse(ev.target.result); sync(); location.reload(); };
+        reader.readAsText(e.target.files[0]);
     }
 
-    setInterval(() => {
-        document.getElementById('clock').innerText = new Date().toLocaleTimeString('ar-SA');
-        if(session && session.role === 'admin') checkSOS();
-    }, 1000);
+    setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString('ar-SA'); }, 1000);
 </script>
 </body>
 </html>
