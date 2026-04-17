@@ -3,209 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reem ERP Pro | النظام المتكامل</title>
+    <title>REEM Pro | نظام الطوارئ والاتصال الذكي</title>
     <link rel="stylesheet" href="https://cloudflare.com">
-    <script src="https://jsdelivr.net"></script>
     <style>
-        :root {
-            --bg: #0f172a; --card: #1e293b; --primary: #6366f1; --danger: #ef4444; --success: #22c55e; --text: #f8fafc;
-        }
+        :root { --gold: #d4af37; --blue: #020c1b; --danger: #ff0000; --glass: rgba(16, 33, 65, 0.95); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+        body { background: radial-gradient(circle at center, #112240, #020c1b); color: #fff; height: 100vh; overflow: hidden; }
+
+        /* الأنيميشن الخاص بزر الطوارئ */
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(255, 0, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); } }
+        .sos-btn { background: var(--danger); color: white; border: none; padding: 20px; border-radius: 50%; font-size: 24px; font-weight: bold; cursor: pointer; animation: pulse-red 1.5s infinite; width: 100px; height: 100px; }
         
-        /* Auth Screen */
-        #auth-screen { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .login-card { background: var(--card); padding: 40px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        /* تأثير وضع الاستنفار للمدير */
+        @keyframes alert-bg { 0% { background: #020c1b; } 50% { background: #4d0000; } 100% { background: #020c1b; } }
+        .emergency-active { animation: alert-bg 0.5s infinite; }
+
+        .glass-card { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; padding: 20px; margin-bottom: 15px; }
+        .sidebar { width: 260px; position: fixed; height: 100vh; right: 0; background: #000; border-left: 1px solid var(--gold); padding: 20px; z-index: 1000; }
+        .main-content { margin-right: 260px; padding: 20px; height: 100vh; overflow-y: auto; transition: 0.3s; }
         
-        /* Sidebar */
-        .sidebar { width: 260px; background: #020617; border-left: 1px solid #1e293b; padding: 20px; position: fixed; height: 100vh; right: 0; transition: 0.3s; }
-        .nav-item { padding: 12px; margin-bottom: 10px; cursor: pointer; border-radius: 10px; display: flex; align-items: center; gap: 10px; color: #94a3b8; }
-        .nav-item:hover, .nav-item.active { background: var(--primary); color: white; }
-
-        /* Main Content */
-        .main { flex: 1; margin-right: 260px; padding: 30px; width: calc(100% - 260px); }
-        .section { display: none; animation: fadeIn 0.4s; }
-        .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Tables & UI */
-        .card { background: var(--card); padding: 20px; border-radius: 15px; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: right; }
-        th, td { padding: 12px; border-bottom: 1px solid #334155; }
-        input, select { background: #0f172a; border: 1px solid #334155; color: white; padding: 10px; border-radius: 8px; width: 100%; margin-top: 5px; }
-        .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; background: var(--primary); color: white; }
-        .btn-danger { background: var(--danger); }
-
-        @media (max-width: 768px) { .sidebar { width: 0; overflow: hidden; padding: 0; } .main { margin-right: 0; width: 100%; } }
+        .nav-btn { width: 100%; padding: 12px; margin-bottom: 8px; background: transparent; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 10px; color: var(--gold); cursor: pointer; text-align: right; display: flex; align-items: center; gap: 10px; }
+        .nav-btn:hover, .nav-btn.active { background: var(--gold); color: #000; }
+        .action-btn { background: var(--gold); color: #000; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; }
+        
+        #chat-box { height: 250px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin-bottom: 10px; }
+        .msg { margin-bottom: 8px; padding: 8px; border-radius: 8px; font-size: 13px; }
+        .msg-admin { background: var(--gold); color: #000; }
+        .msg-emp { background: #1e293b; color: #fff; border: 1px solid var(--gold); }
     </style>
 </head>
-<body>
+<body id="main-body">
 
-<!-- صفحة تسجيل الدخول -->
-<div id="auth-screen">
-    <div class="login-card">
-        <h2 style="color: var(--primary); margin-bottom: 20px;">Reem Pro | دخول</h2>
-        <input type="text" id="user-input" placeholder="اسم المستخدم">
-        <input type="password" id="pass-input" placeholder="كلمة المرور">
-        <button class="btn" style="width: 100%; margin-top: 20px;" onclick="login()">دخول للنظام</button>
+<div id="auth-screen" style="position: fixed; inset: 0; z-index: 9999; background: #020c1b; display: flex; align-items: center; justify-content: center;">
+    <div class="glass-card" style="width: 350px; text-align: center; border: 2px solid var(--gold);">
+        <h2 style="color: var(--gold); margin-bottom: 20px;">REEM Pro | 2026</h2>
+        <input type="text" id="u_log" style="width:100%; padding:10px; margin-bottom:10px; background:transparent; border:1px solid var(--gold); color:white;" placeholder="المستخدم">
+        <input type="password" id="p_log" style="width:100%; padding:10px; margin-bottom:15px; background:transparent; border:1px solid var(--gold); color:white;" placeholder="كلمة المرور">
+        <button class="action-btn" onclick="doLogin()">دخول النظام</button>
     </div>
 </div>
 
-<aside class="sidebar" id="sidebar">
-    <h2 style="color: var(--primary); margin-bottom: 30px; text-align: center;">Reem ERP</h2>
-    <div id="menu-content"></div>
-    <button class="btn btn-danger" style="width: 100%; margin-top: 40px;" onclick="location.reload()">تسجيل خروج</button>
+<aside class="sidebar">
+    <div style="text-align: center; margin-bottom: 20px;"><h2 style="color: var(--gold);">شركة ريم</h2></div>
+    <div id="menu"></div>
+    <button class="nav-btn" style="margin-top: 30px; color: #ff4d4d; border-color: #ff4d4d;" onclick="location.reload()">تسجيل خروج</button>
 </aside>
 
-<main class="main">
-    <div id="content-area"></div>
+<main class="main-content">
+    <div class="glass-card" style="display:flex; justify-content:space-between; align-items:center;">
+        <div id="reem-clock" style="font-size:20px; color:var(--gold); font-family:monospace;">00:00:00</div>
+        <h3 id="v-title" style="color: var(--gold);">لوحة الإدارة</h3>
+    </div>
+    <div id="app"></div>
 </main>
 
 <script>
-    // بيانات النظام (تخزن في المتصفح)
-    let db = JSON.parse(localStorage.getItem('reem_db')) || {
+    let db = JSON.parse(localStorage.getItem('reem_v8')) || {
         users: [{user: "admin", pass: "123", role: "admin", name: "المدير العام"}],
-        attendance: [],
-        tasks: []
+        chats: [],
+        alerts: []
     };
 
-    let loggedInUser = null;
+    let session = null;
+    const siren = new Audio('https://mixkit.co'); // صوت إنذار
+    const msgSound = new Audio('https://mixkit.co');
 
-    function saveDB() { localStorage.setItem('reem_db', JSON.stringify(db)); }
+    function sync() { localStorage.setItem('reem_v8', JSON.stringify(db)); }
 
-    function login() {
-        const u = document.getElementById('user-input').value;
-        const p = document.getElementById('pass-input').value;
-        const user = db.users.find(x => x.user === u && x.pass === p);
-
-        if (user) {
-            loggedInUser = user;
+    function doLogin() {
+        const u = document.getElementById('u_log').value.trim();
+        const p = document.getElementById('p_log').value.trim();
+        const found = db.users.find(x => x.user === u && x.pass === p);
+        if(found) {
+            session = found;
             document.getElementById('auth-screen').style.display = 'none';
-            renderUI();
+            renderNav();
+            switchView('home');
+        } else { alert("بيانات خاطئة!"); }
+    }
+
+    function renderNav() {
+        const m = document.getElementById('menu');
+        if(session.role === 'admin') {
+            m.innerHTML = `
+                <button class="nav-btn" onclick="switchView('home')">الرئيسية</button>
+                <button class="nav-btn" onclick="switchView('chat')">الدردشة والاتصال</button>
+                <button class="nav-btn" onclick="switchView('hr')">الموظفين</button>
+            `;
         } else {
-            alert("بيانات الدخول غير صحيحة!");
+            m.innerHTML = `
+                <button class="nav-btn" onclick="switchView('home')">واجهتي</button>
+                <button class="nav-btn" onclick="switchView('chat')">مراسلة المدير</button>
+            `;
         }
     }
 
-    function renderUI() {
-        const menu = document.getElementById('menu-content');
-        if (loggedInUser.role === 'admin') {
-            menu.innerHTML = `
-                <div class="nav-item active" onclick="show('admin-dash')"><i class="fas fa-chart-pie"></i> لوحة التحكم</div>
-                <div class="nav-item" onclick="show('manage-users')"><i class="fas fa-users-cog"></i> إدارة الموظفين</div>
-                <div class="nav-item" onclick="show('all-attendance')"><i class="fas fa-fingerprint"></i> سجل الحضور العام</div>
-                <div class="nav-item" onclick="show('admin-tasks')"><i class="fas fa-tasks"></i> إدارة المهام</div>
-            `;
-            renderAdminDash();
-        } else {
-            menu.innerHTML = `
-                <div class="nav-item active" onclick="show('emp-dash')"><i class="fas fa-user"></i> صفحتي الشخصية</div>
-                <div class="nav-item" onclick="show('emp-tasks')"><i class="fas fa-list"></i> مهامي الوظيفية</div>
-            `;
-            renderEmpDash();
-        }
-    }
-
-    // --- وظائف المدير ---
-    function renderAdminDash() {
-        document.getElementById('content-area').innerHTML = `
-            <div id="admin-dash" class="section active">
-                <h1 style="margin-bottom:20px">مرحباً ${loggedInUser.name}</h1>
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:20px">
-                    <div class="card"><h4>إجمالي الموظفين</h4><h2>${db.users.length - 1}</h2></div>
-                    <div class="card"><h4>البصمات اليوم</h4><h2>${db.attendance.length}</h2></div>
-                </div>
-            </div>
-            
-            <div id="manage-users" class="section">
-                <div class="card">
-                    <h3>إضافة موظف جديد</h3>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:10px; margin-top:10px">
-                        <input id="new-name" placeholder="الاسم الكامل">
-                        <input id="new-user" placeholder="اسم المستخدم">
-                        <input id="new-pass" placeholder="كلمة المرور">
-                        <button class="btn" onclick="addUser()">إضافة</button>
+    function switchView(v) {
+        const app = document.getElementById('app');
+        if(v === 'home') {
+            if(session.role === 'admin') {
+                app.innerHTML = `
+                    <div class="glass-card" id="alert-panel">
+                        <h3>حالة النظام: <span id="sys-status" style="color:var(--gold)">مستقر ✅</span></h3>
+                        <div id="active-alerts"></div>
+                    </div>
+                `;
+                checkAlerts();
+            } else {
+                app.innerHTML = `
+                    <div class="glass-card" style="text-align:center; padding:40px;">
+                        <button class="sos-btn" onclick="sendSOS()">SOS</button>
+                        <h2 style="margin-top:20px; color:var(--danger)">زر الطوارئ</h2>
+                        <p>اضغط فقط في الحالات العاجلة جداً</p>
+                    </div>
+                `;
+            }
+        } else if(v === 'chat') {
+            app.innerHTML = `
+                <div class="glass-card">
+                    <div id="chat-box"></div>
+                    <div style="display:flex; gap:10px;">
+                        <input id="m-in" style="flex:1; padding:10px; border-radius:10px; border:1px solid var(--gold); background:transparent; color:white;" placeholder="اكتب هنا...">
+                        <button onclick="sendMsg()" class="action-btn" style="width:60px;"><i class="fas fa-paper-plane"></i></button>
                     </div>
                 </div>
-                <div class="card">
-                    <table>
-                        <thead><tr><th>الاسم</th><th>المستخدم</th><th>كلمة المرور</th><th>إجراء</th></tr></thead>
-                        <tbody id="users-list"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="all-attendance" class="section">
-                <div class="card"><h3>سجل الحضور الكامل</h3><table id="full-att-table"><thead><tr><th>الموظف</th><th>النوع</th><th>الوقت</th></tr></thead><tbody></tbody></table></div>
-            </div>
-        `;
-        updateUsersList();
-        updateFullAttendance();
+            `;
+            renderChat();
+        } else if(v === 'hr') {
+            app.innerHTML = `<div class="glass-card"><h3>إضافة موظف</h3><input id="n-n" placeholder="الاسم"><input id="n-u" placeholder="المستخدم"><input id="n-p" placeholder="كلمة السر"><button onclick="addU()" class="action-btn">حفظ</button></div>`;
+        }
     }
 
-    function addUser() {
-        const name = document.getElementById('new-name').value;
-        const user = document.getElementById('new-user').value;
-        const pass = document.getElementById('new-pass').value;
-        if(!name || !user || !pass) return;
-        db.users.push({name, user, pass, role: 'emp'});
-        saveDB(); updateUsersList();
-        alert("تمت إضافة الموظف بنجاح");
+    function sendSOS() {
+        if(!confirm("هل أنت متأكد من إرسال نداء استغاثة للمدير؟")) return;
+        navigator.geolocation.getCurrentPosition(pos => {
+            db.alerts.push({ name: session.name, time: new Date().toLocaleTimeString(), lat: pos.coords.latitude, lng: pos.coords.longitude });
+            sync();
+            alert("تم إرسال نداء الطوارئ. ابقَ في مكانك.");
+        });
     }
 
-    function updateUsersList() {
-        const list = document.getElementById('users-list');
-        if(!list) return;
-        list.innerHTML = db.users.filter(u => u.role !== 'admin').map((u, i) => `
-            <tr><td>${u.name}</td><td>${u.user}</td><td>${u.pass}</td>
-            <td><button class="btn btn-danger" onclick="deleteUser(${i+1})">حذف</button></td></tr>
-        `).join('');
+    function checkAlerts() {
+        const panel = document.getElementById('active-alerts');
+        if(!panel) return;
+        if(db.alerts.length > 0) {
+            document.getElementById('sys-status').innerHTML = "استنفار 🚨";
+            document.getElementById('main-body').classList.add('emergency-active');
+            siren.play();
+            panel.innerHTML = db.alerts.map(a => `<div class="glass-card" style="border-color:red"><strong>طوارئ: ${a.name}</strong><br>الوقت: ${a.time}<br><button onclick="clearAlerts()" class="action-btn" style="background:red">إيقاف الإنذار</button></div>`).join('');
+        }
     }
 
-    function deleteUser(index) { if(confirm("حذف الموظف؟")) { db.users.splice(index, 1); saveDB(); updateUsersList(); } }
-
-    // --- وظائف الموظف ---
-    function renderEmpDash() {
-        document.getElementById('content-area').innerHTML = `
-            <div id="emp-dash" class="section active">
-                <div class="card" style="text-align:center">
-                    <h2>أهلاً ${loggedInUser.name}</h2>
-                    <p style="margin:15px 0">سجل حضورك الآن عبر الموقع الجغرافي</p>
-                    <button class="btn" style="width:100%; height:60px; font-size:1.2rem" onclick="empLog('دخول')">إثبات حضور</button>
-                </div>
-                <div class="card"><h3>سجلي اليوم</h3><table id="my-att-table"></table></div>
-            </div>
-        `;
-        updateMyAttendance();
+    function clearAlerts() {
+        db.alerts = [];
+        sync();
+        siren.pause();
+        siren.currentTime = 0;
+        document.getElementById('main-body').classList.remove('emergency-active');
+        switchView('home');
     }
 
-    function empLog(type) {
-        const time = new Date().toLocaleString('ar-SA');
-        db.attendance.push({name: loggedInUser.name, type, time});
-        saveDB();
-        alert("تم تسجيل حضورك بنجاح");
-        updateMyAttendance();
+    function sendMsg() {
+        const t = document.getElementById('m-in').value; if(!t) return;
+        db.chats.push({ n: session.name, t, r: session.role });
+        sync(); document.getElementById('m-in').value = ''; renderChat();
     }
 
-    function updateMyAttendance() {
-        const table = document.getElementById('my-att-table');
-        if(!table) return;
-        const myData = db.attendance.filter(a => a.name === loggedInUser.name);
-        table.innerHTML = myData.map(a => `<tr><td>${a.type}</td><td>${a.time}</td></tr>`).join('');
+    function renderChat() {
+        const b = document.getElementById('chat-box'); if(!b) return;
+        b.innerHTML = db.chats.map(c => `<div class="msg ${c.r==='admin'?'msg-admin':'msg-emp'}"><strong>${c.n}:</strong> ${c.t}</div>`).join('');
+        b.scrollTop = b.scrollHeight;
     }
 
-    function updateFullAttendance() {
-        const table = document.getElementById('full-att-table')?.querySelector('tbody');
-        if(!table) return;
-        table.innerHTML = db.attendance.map(a => `<tr><td>${a.name}</td><td>${a.type}</td><td>${a.time}</td></tr>`).join('');
+    function addU() {
+        db.users.push({name: document.getElementById('n-n').value, user: document.getElementById('n-u').value, pass: document.getElementById('n_p').value, role: 'emp'});
+        sync(); alert("تم الإضافة");
     }
 
-    function show(id) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        updateFullAttendance();
-    }
+    setInterval(() => { document.getElementById('reem-clock').innerText = new Date().toLocaleTimeString('ar-SA'); checkAlerts(); }, 1000);
 </script>
-
 </body>
 </html>
