@@ -1,202 +1,263 @@
+html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REEM Enterprise ERP v10</title>
+    <title>REEM Ultimate ERP v10.5 | Integrated System</title>
+    
+    <!-- Libraries -->
+    <script src="https://jsdelivr.net"></script>
     <link rel="stylesheet" href="https://cloudflare.com">
-    <link rel="stylesheet" href="https://cloudflare.com">
-    <script src="https://cloudflare.com"></script>
-    <style>
-        :root { --gold: #d4af37; --blue: #020c1b; --glass: rgba(16, 33, 65, 0.95); --danger: #ef4444; --success: #22c55e; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: radial-gradient(circle at center, #112240, #020c1b); color: #fff; min-height: 100vh; overflow-x: hidden; }
-        
-        /* Glass UI & 3D Effects */
-        .glass-card { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-        .sidebar { width: 280px; position: fixed; height: 100vh; right: 0; background: #000; border-left: 1px solid var(--gold); padding: 20px; z-index: 1000; }
-        .main { margin-right: 280px; padding: 30px; transition: 0.3s; }
-        
-        /* Luxury Clock & News Bar */
-        .reem-clock { background: #000; border: 1px solid var(--gold); padding: 10px 25px; border-radius: 50px; font-size: 22px; color: var(--gold); text-shadow: 0 0 10px var(--gold); display: inline-block; }
-        .news-ticker { background: var(--gold); color: #000; padding: 8px; font-weight: bold; overflow: hidden; white-space: nowrap; margin-bottom: 20px; border-radius: 10px; }
-        .news-text { display: inline-block; animation: scroll 20s linear infinite; }
-        @keyframes scroll { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+    <link rel="stylesheet" href="https://unpkg.com" />
+    <script src="https://unpkg.com"></script>
 
-        /* Tables & Inputs */
+    <style>
+        :root {
+            --gold: #d4af37; --gold-light: #f9d976; --dark: #020c1b;
+            --glass: rgba(16, 33, 65, 0.9); --card-bg: rgba(255, 255, 255, 0.05);
+            --accent: #64ffda; --danger: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: radial-gradient(circle at top right, #0a192f, #020c1b); color: #e6f1ff; min-height: 100vh; overflow-x: hidden; }
+        
+        /* Layout */
+        .sidebar { width: 260px; background: rgba(0, 0, 0, 0.9); border-left: 1px solid var(--gold); height: 100vh; position: fixed; right: 0; padding: 20px; z-index: 1000; transition: 0.3s; }
+        .main-content { margin-right: 260px; padding: 30px; transition: 0.3s; width: calc(100% - 260px); }
+
+        /* Components */
+        .glass-card { background: var(--glass); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; padding: 25px; margin-bottom: 25px; backdrop-filter: blur(10px); }
+        .nav-link { padding: 15px; margin-bottom: 10px; border-radius: 12px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; }
+        .nav-link:hover, .nav-link.active { background: rgba(212, 175, 55, 0.15); color: var(--gold); border-right: 4px solid var(--gold); }
+        
+        .btn-gold { background: linear-gradient(135deg, var(--gold), #b38f2d); color: #000; padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; font-size: 16px; }
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); }
+
+        input, select { width: 100%; padding: 12px; margin: 10px 0; background: rgba(0,0,0,0.3); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; color: white; }
+        
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { color: var(--gold); padding: 12px; border-bottom: 2px solid var(--gold); text-align: right; }
-        td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: right; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; background: rgba(0,0,0,0.3); border: 1px solid var(--gold); border-radius: 10px; color: white; }
-        .btn-pro { background: linear-gradient(135deg, #d4af37, #f9d976); color: #000; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: 800; width: 100%; transition: 0.3s; }
+        th { background: rgba(212, 175, 55, 0.1); color: var(--gold); padding: 15px; text-align: right; }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+        #map-canvas { height: 450px; width: 100%; border-radius: 15px; border: 1px solid var(--gold); margin-top: 15px; }
         
-        /* Map & Photos */
-        #map { height: 400px; border-radius: 20px; border: 1px solid var(--gold); margin-top: 20px; }
-        .emp-photo { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--gold); object-fit: cover; }
-        
-        @media (max-width: 768px) { .sidebar { width: 0; padding: 0; overflow: hidden; } .main { margin-right: 0; } }
+        .pulse { width: 10px; height: 10px; background: #22c55e; border-radius: 50%; display: inline-block; animation: pulse-animation 1.5s infinite; }
+        @keyframes pulse-animation { 0% { box-shadow: 0 0 0 0px rgba(34, 197, 94, 0.7); } 100% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); } }
+
+        .toast-msg { position: fixed; bottom: 20px; left: 20px; background: var(--gold); color: #000; padding: 15px 25px; border-radius: 10px; z-index: 10001; animation: slideUp 0.5s ease; font-weight: bold; }
+        @keyframes slideUp { from { transform: translateY(100px); } to { transform: translateY(0); } }
+
+        #auth-screen { position: fixed; inset: 0; background: var(--dark); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+
+        @media (max-width: 768px) { .sidebar { width: 0; padding: 0; overflow: hidden; } .main-content { margin-right: 0; width: 100%; } }
     </style>
 </head>
 <body>
 
-<div id="auth-screen" style="position:fixed; inset:0; z-index:9999; background:var(--blue); display:flex; align-items:center; justify-content:center;">
-    <div class="glass-card" style="width:380px; text-align:center; border:2px solid var(--gold);">
-        <h1 style="color:var(--gold); margin-bottom:20px;">REEM ENTERPRISE</h1>
+<div id="auth-screen">
+    <div class="glass-card" style="width: 380px; text-align: center;">
+        <h1 style="color: var(--gold); margin-bottom: 20px;">REEM ERP</h1>
         <input type="text" id="u_in" placeholder="اسم المستخدم">
         <input type="password" id="p_in" placeholder="كلمة المرور">
-        <button class="btn-pro" onclick="login()">دخول آمن</button>
+        <button class="btn-gold" onclick="login()">دخول آمن</button>
+        <p style="margin-top: 15px; font-size: 12px; color: #888;">Admin / 123</p>
     </div>
 </div>
 
 <aside class="sidebar">
-    <div style="text-align:center; margin-bottom:30px;"><h2 style="color:var(--gold);">REEM ERP</h2></div>
-    <div id="nav-box"></div>
-    <button class="btn-pro" style="background:var(--danger); color:white; margin-top:50px;" onclick="location.reload()">تسجيل خروج</button>
+    <div style="text-align: center; margin-bottom: 30px;"><h2 style="color: var(--gold);">REEM ERP</h2></div>
+    <div id="nav-links"></div>
+    <button class="btn-gold" style="background: var(--danger); color: white; margin-top: auto;" onclick="location.reload()">خروج</button>
 </aside>
 
-<main class="main">
-    <div class="news-ticker"><div class="news-text" id="news-val">مرحباً بكم في نظام شركة ريم المتكامل - يرجى تسجيل الحضور عبر GPS</div></div>
-    <div class="glass-card" style="display:flex; justify-content:space-between; align-items:center;">
-        <div id="clock" class="reem-clock">00:00:00</div>
-        <h2 id="page-title" style="color:var(--gold);">لوحة التحكم</h2>
+<main class="main-content">
+    <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 25px;">
+        <div id="clock" style="font-size: 20px; color: var(--gold); font-weight: bold;">00:00:00</div>
+        <div id="user-tag" style="font-weight: bold;"></div>
     </div>
-    <div id="dynamic-area"></div>
+    <div id="dynamic-view"></div>
 </main>
 
 <script>
-    // قاعدة البيانات الشاملة
-    let db = JSON.parse(localStorage.getItem('reem_v10')) || {
-        users: [{user: "admin", pass: "123", role: "admin", name: "المدير العام", dept: "الإدارة", sal: 0, photo: ""}],
-        depts: ["إدارة", "مبيعات", "ميدان"],
+    // --- Database & Logic ---
+    let db = JSON.parse(localStorage.getItem('reem_erp_full')) || {
+        users: [{user: "admin", pass: "123", role: "admin", name: "المدير العام", dept: "الإدارة", sal: 10000}],
+        depts: ["الإدارة", "الميدان", "المبيعات"],
         logs: [],
-        news: "مرحباً بكم في شركة ريم - نظام تتبع الموظفين مفعل"
+        assets: []
     };
 
     let session = null;
-    function sync() { localStorage.setItem('reem_v10', JSON.stringify(db)); }
+    const sounds = {
+        punch: new Audio('https://mixkit.co'),
+        asset: new Audio('https://mixkit.co')
+    };
+
+    function sync() { localStorage.setItem('reem_erp_full', JSON.stringify(db)); }
 
     function login() {
-        const u = document.getElementById('u_in').value.trim();
-        const p = document.getElementById('p_in').value.trim();
+        const u = document.getElementById('u_in').value;
+        const p = document.getElementById('p_in').value;
         const found = db.users.find(x => x.user === u && x.pass === p);
-        if(found) { 
-            session = found; document.getElementById('auth-screen').style.display='none'; 
-            renderNav(); loadView('dash');
-        } else { alert("بيانات خاطئة!"); }
+        if(found) {
+            session = found;
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('user-tag').innerText = session.name;
+            renderNav();
+            loadView(session.role === 'admin' ? 'dash' : 'emp_punch');
+            startClock();
+        } else { alert("بيانات الدخول خاطئة!"); }
     }
 
     function renderNav() {
-        const n = document.getElementById('nav-box');
-        if(session.role === 'admin') {
-            n.innerHTML = `
-                <div class="btn-pro" onclick="loadView('dash')" style="margin-bottom:10px">الإحصائيات</div>
-                <div class="btn-pro" onclick="loadView('hr')" style="margin-bottom:10px">الموظفين والأقسام</div>
-                <div class="btn-pro" onclick="loadView('tracking')" style="margin-bottom:10px">تتبع GPS المباشر</div>
-                <div class="btn-pro" onclick="loadView('finance')" style="margin-bottom:10px">الرواتب والتقارير</div>
-                <div class="btn-pro" onclick="backup()" style="background:#2ecc71; color:white; margin-top:20px">نسخة احتياطية</div>
-                <input type="file" id="restore-file" style="display:none" onchange="restore(event)">
-                <div class="btn-pro" onclick="document.getElementById('restore-file').click()" style="background:var(--gold); color:black; margin-top:10px">استرداد البيانات</div>
-            `;
-        } else {
-            n.innerHTML = `
-                <div class="btn-pro" onclick="loadView('emp_punch')" style="margin-bottom:10px">بصمة GPS</div>
-                <div class="btn-pro" onclick="loadView('emp_info')" style="margin-bottom:10px">ملفي الشخصي</div>
-            `;
-        }
+        const nav = document.getElementById('nav-links');
+        const links = session.role === 'admin' ? 
+            [{id:'dash', i:'fa-chart-line', n:'الرئيسية'}, {id:'hr', i:'fa-users', n:'الموظفين'}, {id:'tracking', i:'fa-map-location-dot', n:'التتبع المباشر'}, {id:'assets_admin', i:'fa-box-open', n:'العهدة والمستندات'}] :
+            [{id:'emp_punch', i:'fa-fingerprint', n:'تسجيل حضور'}, {id:'assets_emp', i:'fa-camera', n:'رفع عهدة'}, {id:'daily_report', i:'fa-paper-plane', n:'التقرير اليومي'}];
+        
+        nav.innerHTML = links.map(l => `<div class="nav-link" onclick="loadView('${l.id}')"><i class="fas ${l.i}"></i> <span>${l.n}</span></div>`).join('');
     }
 
     function loadView(v) {
-        const area = document.getElementById('dynamic-area');
+        const area = document.getElementById('dynamic-view');
+        
         if(v === 'dash') {
             area.innerHTML = `
-                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px">
-                    <div class="glass-card"><h4>الموظفين</h4><h2>${db.users.length-1}</h2></div>
-                    <div class="glass-card"><h4>بصمات اليوم</h4><h2>${db.logs.length}</h2></div>
-                    <div class="glass-card"><h4>الأقسام</h4><h2>${db.depts.length}</h2></div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
+                    <div class="glass-card"><h4>الموظفين</h4><h2>${db.users.length}</h2></div>
+                    <div class="glass-card"><h4>حضور اليوم</h4><h2>${db.logs.filter(l=>l.date === new Date().toLocaleDateString('ar-EG')).length}</h2></div>
+                    <div class="glass-card"><h4>إجمالي العهدة</h4><h2>${db.assets.reduce((a,b)=>a+Number(b.amount||0),0)} $</h2></div>
                 </div>
-            `;
-        } else if(v === 'hr') {
+                <div class="glass-card"><canvas id="mainChart" height="120"></canvas></div>`;
+            setTimeout(initChart, 100);
+        }
+
+        if(v === 'hr') {
             area.innerHTML = `
                 <div class="glass-card">
-                    <h3>إدارة الأقسام</h3>
-                    <input id="new-dept" placeholder="اسم القسم الجديد"><button class="btn-pro" onclick="addDept()">إضافة قسم</button>
-                    <p style="margin-top:10px">الأقسام: ${db.depts.join(' - ')}</p>
+                    <h3>إضافة موظف جديد</h3>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <input id="n_name" placeholder="الاسم"> <input id="n_user" placeholder="اليوزر">
+                        <input id="n_pass" type="password" placeholder="الباسورد"> <input id="n_sal" type="number" placeholder="الراتب">
+                        <select id="n_dept">${db.depts.map(d=>`<option>${d}</option>`).join('')}</select>
+                        <button class="btn-gold" onclick="addUser()">حفظ الموظف</button>
+                    </div>
                 </div>
                 <div class="glass-card">
-                    <h3>إضافة موظف (مع صورة وراتب)</h3>
-                    <input id="n-name" placeholder="الاسم الكامل">
-                    <input id="n-user" placeholder="اسم المستخدم">
-                    <input id="n-pass" placeholder="كلمة المرور">
-                    <input id="n-sal" type="number" placeholder="الراتب الشهري">
-                    <select id="n-dept">${db.depts.map(d=>`<option>${d}</option>`)}</select>
-                    <input type="file" id="n-photo" accept="image/*">
-                    <button class="btn-pro" onclick="addUser()">حفظ الموظف</button>
-                </div>
-            `;
-        } else if(v === 'emp_punch') {
+                    <table><thead><tr><th>الاسم</th><th>القسم</th><th>الراتب</th></tr></thead>
+                    <tbody>${db.users.map(u=>`<tr><td>${u.name}</td><td>${u.dept}</td><td>${u.sal}</td></tr>`).join('')}</tbody></table>
+                </div>`;
+        }
+
+        if(v === 'emp_punch') {
             area.innerHTML = `
-                <div class="glass-card" style="text-align:center">
-                    <i class="fas fa-fingerprint" style="font-size:80px; color:var(--gold); margin-bottom:20px"></i>
-                    <h2>نظام البصمة الجغرافي</h2>
-                    <button class="btn-pro" style="height:80px; font-size:1.5rem" onclick="punch()">تسجيل الحضور (GPS)</button>
-                    <p id="gps-stat" style="margin-top:15px; color:var(--gold)"></p>
-                </div>
-            `;
-        } else if(v === 'tracking') {
-            area.innerHTML = `<div class="glass-card"><h3>خريطة تتبع الموظفين</h3><div id="map"></div></div>`;
-            setTimeout(initMap, 500);
-        } else if(v === 'finance') {
+                <div class="glass-card" style="text-align:center;">
+                    <i class="fas fa-fingerprint" style="font-size:100px; color:var(--gold); margin-bottom:20px;"></i>
+                    <h2>نظام البصمة الجغرافية</h2>
+                    <button class="btn-gold" style="width:250px; margin-top:20px;" onclick="doPunch()">تسجيل الحضور الآن</button>
+                </div>`;
+        }
+
+        if(v === 'tracking') {
+            area.innerHTML = `<div class="glass-card"><h3>خريطة الموظفين المباشرة</h3><div id="map-canvas"></div></div>`;
+            setTimeout(initLiveMap, 100);
+        }
+
+        if(v === 'assets_emp') {
             area.innerHTML = `
                 <div class="glass-card">
-                    <h3>كشف الرواتب الذكي</h3>
-                    <table><thead><tr><th>الموظف</th><th>الراتب</th><th>أيام العمل</th><th>المستحق</th></tr></thead>
-                    <tbody>${db.users.filter(u=>u.role!=='admin').map(u=>{
-                        const days = db.logs.filter(l=>l.name === u.name).length;
-                        return `<tr><td>${u.name}</td><td>${u.sal}</td><td>${days}</td><td>${(u.sal/30 * days).toFixed(2)}</td></tr>`;
-                    }).join('')}</tbody></table>
-                </div>
-            `;
+                    <h3>رفع مستند / عهدة</h3>
+                    <input id="a_title" placeholder="عنوان المستند">
+                    <input id="a_amt" type="number" placeholder="المبلغ">
+                    <input type="file" id="a_file" accept="image/*" capture="camera">
+                    <button class="btn-gold" onclick="uploadAsset()">رفع المستند</button>
+                </div>`;
+        }
+
+        if(v === 'assets_admin') {
+            area.innerHTML = `
+                <div class="glass-card">
+                    <h3>أرشيف العهدة</h3>
+                    <table><thead><tr><th>الموظف</th><th>البيان</th><th>المبلغ</th><th>عرض</th></tr></thead>
+                    <tbody>${db.assets.map(a=>`<tr><td>${a.user}</td><td>${a.title}</td><td>${a.amount}</td><td><button class="btn-gold" onclick="viewDoc('${a.img}')">فتح</button></td></tr>`).join('')}</tbody></table>
+                </div>`;
+        }
+
+        if(v === 'daily_report') {
+            area.innerHTML = `
+                <div class="glass-card" style="text-align:center;">
+                    <i class="fas fa-file-invoice" style="font-size:80px; color:var(--gold);"></i>
+                    <h2>تقرير نهاية اليوم الشامل</h2>
+                    <p>سيتم إرسال (الموقع + العهدة + الحضور) للمدير</p>
+                    <button class="btn-gold" style="margin-top:20px;" onclick="sendMasterReport()">إرسال عبر واتساب <i class="fab fa-whatsapp"></i></button>
+                </div>`;
         }
     }
 
-    function punch() {
-        document.getElementById('gps-stat').innerText = "جاري التحقق من موقعك...";
+    // --- Core Functions ---
+    function doPunch() {
         navigator.geolocation.getCurrentPosition(pos => {
-            db.logs.push({name: session.name, time: new Date().toLocaleString(), lat: pos.coords.latitude, lng: pos.coords.longitude});
-            sync(); alert("تم تسجيل حضورك بنجاح"); document.getElementById('gps-stat').innerText = "موقعك موثق ✅";
-        }, () => alert("خطأ! يجب تفعيل GPS الجوال"));
+            db.logs.push({ user: session.name, date: new Date().toLocaleDateString('ar-EG'), time: new Date().toLocaleTimeString('ar-EG'), lat: pos.coords.latitude, lng: pos.coords.longitude });
+            sync();
+            showToast("تم تسجيل حضورك بنجاح", "punch");
+        });
     }
 
-    function initMap() {
-        const map = L.map('map').setView([24.7136, 46.6753], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        db.logs.forEach(l => { L.marker([l.lat, l.lng]).addTo(map).bindPopup(`${l.name}<br>${l.time}`); });
-    }
-
-    function addUser() {
-        const name = document.getElementById('n-name').value;
-        const user = document.getElementById('n-user').value;
-        const pass = document.getElementById('n-pass').value;
-        const sal = document.getElementById('n-sal').value;
-        const dept = document.getElementById('n-dept').value;
-        db.users.push({name, user, pass, sal, dept, role:'emp'});
-        sync(); alert("تمت إضافة الموظف"); loadView('hr');
-    }
-
-    function addDept() { const d = document.getElementById('new-dept').value; if(d) { db.depts.push(d); sync(); loadView('hr'); } }
-
-    function backup() {
-        const blob = new Blob([JSON.stringify(db)], {type:'application/json'});
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'reem_erp_backup.json'; a.click();
-    }
-
-    function restore(e) {
+    function uploadAsset() {
+        const file = document.getElementById('a_file').files[0];
         const reader = new FileReader();
-        reader.onload = function(ev) { db = JSON.parse(ev.target.result); sync(); location.reload(); };
-        reader.readAsText(e.target.files[0]);
+        reader.onload = (e) => {
+            db.assets.push({ user: session.name, title: document.getElementById('a_title').value, amount: document.getElementById('a_amt').value, img: e.target.result, date: new Date().toLocaleDateString() });
+            sync();
+            showToast("تم رفع المستند بنجاح", "asset");
+            loadView('assets_emp');
+        };
+        reader.readAsDataURL(file);
     }
 
-    setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString('ar-SA'); }, 1000);
+    function sendMasterReport() {
+        navigator.geolocation.getCurrentPosition(pos => {
+            const lastAssets = db.assets.filter(a=>a.user === session.name).slice(-2).map(a=>`- ${a.title}: ${a.amount}`).join('%0A');
+            const mapLink = `https://google.com{pos.coords.latitude},${pos.coords.longitude}`;
+            const msg = `📋 *تقرير الموظف:* ${session.name}%0A📍 *الموقع:* ${mapLink}%0A💰 *العهدة:*%0A${lastAssets}`;
+            window.open(`https://wa.me{msg}`); // استبدل الرقم
+        });
+    }
+
+    function initLiveMap() {
+        const map = L.map('map-canvas').setView([24.7136, 46.6753], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        const markers = [];
+        db.logs.filter(l=>l.date === new Date().toLocaleDateString('ar-EG')).forEach(l => {
+            L.marker([l.lat, l.lng]).addTo(map).bindPopup(`<b>${l.user}</b><br>${l.time}`);
+            markers.push([l.lat, l.lng]);
+        });
+        if(markers.length) map.fitBounds(markers);
+    }
+
+    function showToast(m, s) {
+        sounds[s].play();
+        const t = document.createElement('div'); t.className = 'toast-msg'; t.innerHTML = m;
+        document.body.appendChild(t); setTimeout(()=>t.remove(), 3000);
+    }
+
+    function startClock() { setInterval(()=>document.getElementById('clock').innerText = new Date().toLocaleTimeString('ar-EG'), 1000); }
+    
+    function addUser() {
+        db.users.push({name:document.getElementById('n_name').value, user:document.getElementById('n_user').value, pass:document.getElementById('n_pass').value, sal:document.getElementById('n_sal').value, dept:document.getElementById('n_dept').value, role:'user'});
+        sync(); loadView('hr');
+    }
+
+    function viewDoc(data) { const w = window.open(""); w.document.write(`<img src="${data}" style="width:100%">`); }
+
+    function initChart() {
+        new Chart(document.getElementById('mainChart'), {
+            type: 'line',
+            data: { labels: ['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس'], datasets: [{ label:'نشاط الميدان', data:[2, 5, 3, 9, 4, 7], borderColor:'#d4af37', tension:0.4 }] },
+            options: { plugins:{ legend:{ labels:{color:'#fff'} } }, scales:{ y:{ticks:{color:'#fff'}} } }
+        });
+    }
 </script>
 </body>
 </html>
