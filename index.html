@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="tab-title">ريم تيم | نظام الإدارة والرواتب الذكي</title>
+    <title id="tab-title">REEM TEAM | نظام ريم المتكامل</title>
     
-    <!-- Libraries -->
+    <!-- تعريفات التطبيق للتثبيت (PWA Manifest) -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlJF RU0gVEVBTSIsCiAgInNob3J0X25hbWUiOiAiUkVFTSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMDQwYzFiIiwKICAidGhlbWVfY29sb3IiOiAiIzdkMzNmZiIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vY2RuLWljb25zLXBuZy5mbGF0aWNvbi5jb20vNTEyLzI5MDAvMjkwMDYwOS5wbmciLAogICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH1KICBdCn0=">
+
+    <!-- المكاتب التقنية -->
     <script src="https://jsdelivr.net"></script>
     <link rel="stylesheet" href="https://cloudflare.com">
     <link rel="stylesheet" href="https://unpkg.com" />
@@ -14,191 +17,200 @@
 
     <style>
         :root {
-            --gold: #d4af37; --bg-dark: #020c1b; --glass: rgba(16, 33, 65, 0.98);
-            --success: #27ae60; --danger: #e74c3c; --text-muted: #8892b0;
+            --primary: #7d33ff; --gold: #d4af37; --bg-light: #f8faff;
+            --dark: #111827; --success: #27ae60; --danger: #e74c3c;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'IBM Plex Sans Arabic', sans-serif; }
-        body { background: #fff; color: #1a202c; overflow-x: hidden; scroll-behavior: smooth; }
+        body { background: var(--bg-light); color: var(--dark); overflow-x: hidden; scroll-behavior: smooth; }
 
         /* --- 1. الموقع التعريفي (Landing Page) --- */
         nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background: #fff; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #f1f5f9; }
-        .logo { font-size: 28px; font-weight: 700; color: var(--gold); }
-        .hero { padding: 120px 10% 80px; text-align: center; background: radial-gradient(circle at top right, #fff9e6, #fff); }
-        .hero h1 { font-size: 50px; font-weight: 700; line-height: 1.2; margin-bottom: 20px; }
-        .hero h1 span { color: var(--gold); }
-        .btn-main { background: var(--gold); color: #fff; padding: 15px 40px; border-radius: 14px; font-weight: 600; border: none; cursor: pointer; transition: 0.3s; font-size: 18px; }
-        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(212,175,55,0.3); }
+        .logo { font-size: 26px; font-weight: 700; color: var(--primary); }
+        .hero { padding: 100px 10% 60px; text-align: center; background: radial-gradient(circle at top right, #fff9e6, #fff); }
+        .btn-p { background: var(--primary); color: #fff; padding: 14px 35px; border-radius: 12px; font-weight: 600; border: none; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
+        .btn-p:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(125,51,255,0.3); }
 
-        /* --- 2. لوحة التحكم (Dashboard UI) --- */
-        #reem-app { display: none; background: var(--bg-dark); min-height: 100vh; color: #fff; }
-        .sidebar { width: 280px; background: #000; border-left: 1px solid var(--gold); height: 100vh; position: fixed; right: 0; padding: 30px 20px; display: flex; flex-direction: column; z-index: 2000; }
-        .main-view { margin-right: 280px; padding: 40px; width: calc(100% - 280px); transition: 0.3s; }
-        .nav-link { padding: 15px; margin-bottom: 10px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 15px; color: #aaa; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { background: rgba(212, 175, 55, 0.1); color: var(--gold); border-right: 5px solid var(--gold); }
-        .glass-panel { background: var(--glass); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
+        .install-banner { display: none; background: #fff9e6; padding: 10px; text-align: center; border-bottom: 1px solid var(--gold); font-size: 14px; }
 
-        /* --- 3. محرك التقارير الذكي (Report Engine) --- */
-        .reem-table { width: 100%; border-collapse: collapse; background: #fff; color: #333; border-radius: 15px; overflow: hidden; margin-top: 20px; }
-        .reem-table th { background: #f8faff; padding: 18px; text-align: right; color: var(--gold); border-bottom: 2px solid #eee; }
-        .reem-table td { padding: 15px; border-bottom: 1px solid #f1f1f1; }
-        .status-safe { background: rgba(39, 174, 96, 0.1) !important; color: var(--success); font-weight: bold; }
-        .status-warn { background: rgba(231, 76, 60, 0.1) !important; color: var(--danger); font-weight: bold; }
+        /* --- 2. نظام الإدارة (Dashboard - Bayzat Style) --- */
+        #app-ui { display: none; min-height: 100vh; display: flex; }
+        .sidebar { width: 260px; background: #000; color: #fff; height: 100vh; position: fixed; right: 0; padding: 25px; z-index: 2000; }
+        .main-app { margin-right: 260px; width: calc(100% - 260px); padding: 35px; transition: 0.3s; }
+        
+        .card-view { background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden; margin-top: 25px; }
+        .table-row { display: grid; grid-template-columns: 2.5fr 1fr 1.5fr 1.5fr 1fr; padding: 18px 25px; align-items: center; border-bottom: 1px solid #f3f4f6; }
+        .table-row.head { background: #fafafa; font-weight: 600; color: #6b7280; }
+        
+        .emp-meta { display: flex; align-items: center; gap: 12px; }
+        .emp-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: #eee; }
+        
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .status-ok { background: #e6fffa; color: #047481; }
+        .status-late { background: #fff5f5; color: #c53030; }
 
-        /* --- 4. شاشة الدخول (Login Modal) --- */
-        #auth-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .auth-card { background: #fff; padding: 45px; border-radius: 30px; width: 420px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
-        input { width: 100%; padding: 15px; margin: 12px 0; border: 1px solid #eee; border-radius: 12px; background: #f9f9f9; font-size: 16px; outline: none; }
+        /* --- 3. نافذة الدخول --- */
+        #login-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 5000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .login-box { background: #fff; padding: 40px; border-radius: 25px; width: 400px; text-align: center; }
+        input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #eee; border-radius: 12px; background: #f9f9f9; outline: none; }
 
-        #map-box { height: 450px; border-radius: 20px; border: 1px solid var(--gold); margin-top: 20px; }
-
-        @media print { .sidebar, .btn-main, nav, header { display: none !important; } .main-view { margin: 0; width: 100%; } .reem-table { color: #000; border: 1px solid #000; } }
-        @media (max-width: 768px) { .sidebar { display: none; } .main-view { margin-right: 0; width: 100%; } }
+        @media (max-width: 768px) { .sidebar { display: none; } .main-app { margin-right: 0; width: 100%; } }
     </style>
 </head>
 <body>
 
-<!-- واجهة ريم تيم التعريفية -->
-<section id="landing">
-    <nav>
-        <div class="logo">REEM TEAM™</div>
-        <button class="btn-main" style="padding: 10px 25px; font-size: 15px;" onclick="openLogin()">دخول النظام</button>
-    </nav>
-    <div class="hero">
-        <h1>إدارة <span>ذكية</span> للموظفين<br>بلا تلاعب أو تعقيد</h1>
-        <p>نظام ريم تيم يوفر لك مراقبة حية، تقارير رواتب دقيقة، وحماية كاملة عبر تكنولوجيا الـ GPS Geofencing.</p>
-        <button class="btn-main" onclick="openLogin()">ابدأ الآن مجاناً</button>
-    </div>
-</section>
+<div id="install-banner" class="install-banner">
+    هل تريد تثبيت ريم تيم على جهازك؟ <button onclick="installApp()" class="btn-p" style="padding: 5px 15px; font-size: 12px;">تثبيت الآن</button>
+</div>
 
-<!-- شاشة تسجيل الدخول -->
-<div id="auth-modal">
-    <div class="auth-card">
-        <h2 style="color:var(--gold); margin-bottom:10px;">تسجيل الدخول</h2>
-        <p style="color:#666; margin-bottom:25px;">أدخل بياناتك للوصول للوحة تحكم ريم</p>
+<!-- 1. واجهة الموقع التعريفي -->
+<div id="landing">
+    <nav>
+        <div class="logo">REEM TEAM</div>
+        <button class="btn-p" onclick="showLogin()">دخول النظام</button>
+    </nav>
+    <section class="hero">
+        <h1>إدارة <span>إنسانية</span> ومؤتمتة<br>لكل فروع شركتك</h1>
+        <p>نظام ريم تيم هو الحل الأمثل لتثبيت الحضور الميداني عبر GPS، إدارة الرواتب، وتصدير التقارير الملونة بضغطة زر.</p>
+        <button class="btn-p" style="padding: 18px 50px;" onclick="showLogin()">ابدأ الآن</button>
+    </section>
+</div>
+
+<!-- 2. نافذة تسجيل الدخول -->
+<div id="login-modal">
+    <div class="login-box">
+        <h2 style="color:var(--primary); margin-bottom:10px;">أهلاً بك مجدداً</h2>
         <input type="text" id="u_name" placeholder="اسم المستخدم (admin)">
         <input type="password" id="u_pass" placeholder="كلمة المرور (123)">
-        <button class="btn-main" style="width:100%; margin-top:10px;" onclick="doLogin()">دخول آمن</button>
-        <p onclick="closeLogin()" style="margin-top:20px; color:#999; cursor:pointer;">إلغاء</p>
+        <button class="btn-p" style="width: 100%;" onclick="attemptLogin()">دخول آمن</button>
+        <p onclick="hideLogin()" style="margin-top:20px; color:#888; cursor:pointer;">إلغاء</p>
     </div>
 </div>
 
-<!-- لوحة التحكم الاحترافية (Dashboard) -->
-<div id="reem-app">
+<!-- 3. نظام الإدارة الفعلي (REEM App) -->
+<div id="app-ui">
     <aside class="sidebar">
-        <div class="logo" style="text-align:center; margin-bottom:50px; font-size:30px;">REEM™</div>
-        <div id="app-menu"></div>
-        <button class="btn-main" style="margin-top:auto; background:var(--danger); color:#fff;" onclick="location.reload()">تسجيل خروج</button>
+        <div class="logo" style="margin-bottom:40px; color:#fff;">REEM</div>
+        <div id="nav-list"></div>
+        <button class="btn-p" style="margin-top:auto; background:var(--danger);" onclick="location.reload()">خروج</button>
     </aside>
-
-    <main class="main-view">
-        <header class="glass-panel" style="display:flex; justify-content:space-between; align-items:center; padding:15px 30px;">
-            <div id="live-time" style="font-size:20px; color:var(--gold); font-weight:bold;">00:00:00</div>
-            <div id="user-display" style="font-weight:600; color:var(--gold);"></div>
+    <main class="main-app">
+        <header style="display:flex; justify-content:space-between; align-items:center;">
+            <h2 id="page-title">الحضور المباشر</h2>
+            <div id="clock" style="font-weight:bold; color:var(--primary);"></div>
         </header>
-        <div id="dynamic-content"></div>
+        <div id="view-content"></div>
     </main>
 </div>
 
 <script>
-    // --- المحرك البرمجي المتكامل ---
-    const DB_KEY = 'REEM_FINAL_ULTIMATE_V5';
+    // --- المحرك التقني (Core Logic) ---
+    const DB_KEY = 'REEM_TEAM_FINAL_PRO_V5';
     let db = JSON.parse(localStorage.getItem(DB_KEY)) || {
-        config: { company: "ريم تيم", grace: 15, currency: "SAR" },
-        users: [
-            {id: 101, user: "admin", pass: "123", role: "admin", name: "المدير العام", dept: "الإدارة", attend: 22, late: 0, absence: 0, note: "منتظم"},
-            {id: 102, user: "mahmoud", pass: "123", role: "user", name: "محمود علي", dept: "الميدان", attend: 20, late: 135, absence: 1, note: "تأخير متكرر"},
-            {id: 103, user: "sara", pass: "123", role: "user", name: "سارة حسن", dept: "المبيعات", attend: 21, late: 10, absence: 0, note: "نشطة"}
-        ],
+        users: [{user: "admin", pass: "123", role: "admin", name: "المدير العام", img: "https://pravatar.cc"}],
         logs: []
     };
 
-    function sync() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+    function save() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
 
-    function openLogin() { document.getElementById('auth-modal').style.display='flex'; }
-    function closeLogin() { document.getElementById('auth-modal').style.display='none'; }
+    function showLogin() { document.getElementById('login-modal').style.display='flex'; }
+    function hideLogin() { document.getElementById('login-modal').style.display='none'; }
 
     let session = null;
-    function doLogin() {
-        const u = document.getElementById('u_name').value.trim();
-        const p = document.getElementById('u_pass').value.trim();
+    function attemptLogin() {
+        const u = document.getElementById('u_name').value;
+        const p = document.getElementById('u_pass').value;
         const found = db.users.find(x => x.user === u && x.pass === p);
-        
         if(found) {
             session = found;
             document.getElementById('landing').style.display='none';
-            document.getElementById('auth-modal').style.display='none';
-            document.getElementById('reem-app').style.display='block';
-            document.getElementById('user-display').innerText = session.name;
-            renderMenu();
-            loadModule(session.role === 'admin' ? 'payroll' : 'punch');
-            setInterval(() => document.getElementById('live-time').innerText = new Date().toLocaleTimeString('ar-EG'), 1000);
-        } else alert("بيانات خاطئة!");
+            document.getElementById('login-modal').style.display='none';
+            document.getElementById('app-ui').style.display='flex';
+            renderNav();
+            loadView(session.role === 'admin' ? 'monitor' : 'punch');
+            setInterval(() => document.getElementById('clock').innerText = new Date().toLocaleTimeString('ar-EG'), 1000);
+        } else alert("بيانات خاطئة");
     }
 
-    function renderMenu() {
-        const menu = document.getElementById('app-menu');
-        const links = session.role === 'admin' ? 
-            [{id:'payroll', i:'fa-file-invoice-dollar', n:'مسير الرواتب'}, {id:'live', i:'fa-satellite-dish', n:'المراقبة الحية'}, {id:'hr', i:'fa-users-gear', n:'إدارة الموظفين'}] :
-            [{id:'punch', i:'fa-fingerprint', n:'بصمة GPS'}, {id:'my-stats', i:'fa-user-clock', n:'سجلاتي'}];
-        
-        menu.innerHTML = links.map(l => `<div class="nav-link" onclick="loadModule('${l.id}')"><i class="fas ${l.i}"></i> ${l.n}</div>`).join('');
+    function renderNav() {
+        const nav = document.getElementById('nav-list');
+        const items = session.role === 'admin' ? 
+            [{id:'monitor', i:'fa-satellite-dish', n:'المراقبة الحية'}, {id:'payroll', i:'fa-wallet', n:'مسير الرواتب'}] :
+            [{id:'punch', i:'fa-fingerprint', n:'بصمة GPS'}];
+        nav.innerHTML = items.map(l => `<div style="padding:15px; cursor:pointer;" onclick="loadView('${l.id}')"><i class="fas ${l.i}"></i> ${l.n}</div>`).join('');
     }
 
-    function loadModule(m) {
-        const area = document.getElementById('dynamic-content');
+    function loadView(v) {
+        const area = document.getElementById('view-content');
         area.innerHTML = "";
-
-        if(m === 'payroll') {
+        
+        if(v === 'monitor') {
             area.innerHTML = `
-                <div class="glass-panel" style="background:#fff; color:#333;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                        <h3 style="color:var(--gold);">📊 تقرير الرواتب والحضور (النسخة النهائية)</h3>
-                        <button class="btn-main" style="font-size:14px; padding:10px 20px;" onclick="window.print()"><i class="fas fa-print"></i> تصدير التقرير (PDF)</button>
-                    </div>
-                    <table class="reem-table">
-                        <thead>
-                            <tr><th>كود</th><th>الموظف</th><th>أيام العمل</th><th>التأخير (د)</th><th>الغياب</th><th>ملاحظات</th></tr>
-                        </thead>
-                        <tbody>
-                            ${db.users.map(u => `
-                                <tr class="${u.late > 120 ? 'status-warn' : (u.late === 0 ? 'status-safe' : '')}">
-                                    <td>${u.id}</td><td>${u.name}</td><td>${u.attend}</td><td>${u.late}</td><td>${u.absence}</td><td>${u.note}</td>
-                                </tr>`).join('')}
-                        </tbody>
-                    </table>
+                <div class="card-view">
+                    <div class="table-row head"><div>الموظف</div><div>ساعات العمل</div><div>الدخول</div><div>الموقع</div><div>الحالة</div></div>
+                    <div id="live-list"></div>
                 </div>`;
-        } else if(m === 'punch') {
+            updateLiveList();
+        } else if(v === 'punch') {
             area.innerHTML = `
-                <div class="glass-panel" style="text-align:center; padding:50px;">
-                    <i class="fas fa-fingerprint" style="font-size:80px; color:var(--gold); margin-bottom:20px;"></i>
-                    <h2>بصمة الحضور الذكية (GPS)</h2>
-                    <p style="color:#888; margin-bottom:30px;">سيتم التحقق من موقعك الفعلي وتوقيت السيرفر وربط جهازك</p>
-                    <button class="btn-main" style="width:250px;" onclick="handlePunch()">سجل حضورك</button>
+                <div class="card-view" style="text-align:center; padding:50px;">
+                    <i class="fas fa-fingerprint" style="font-size:80px; color:var(--primary); margin-bottom:20px;"></i>
+                    <h2>سجل حضورك الآن</h2>
+                    <button class="btn-p" style="margin-top:20px;" onclick="doPunch()">بصمة GPS</button>
                 </div>`;
-        } else if(m === 'live') {
-            area.innerHTML = `<div class="glass-panel"><h3>رادار المواقع الحية</h3><div id="map-box" style="height:450px;"></div></div>`;
-            setTimeout(initMap, 200);
         }
     }
 
-    function handlePunch() {
-        if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(pos => {
-                db.logs.push({user: session.name, lat: pos.coords.latitude, lng: pos.coords.longitude, time: new Date().toLocaleString('ar-EG')});
-                sync();
-                alert(`تم تسجيل حضورك بنجاح!\nالموقع: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
-            }, () => alert("فشل تحديد الموقع. يرجى تفعيل الـ GPS"));
-        }
-    }
-
-    function initMap() {
-        const map = L.map('map-box').setView([24.7136, 46.6753], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        db.logs.forEach(l => {
-            L.marker([l.lat, l.lng]).addTo(map).bindPopup(`<b>${l.user}</b><br>${l.time}`);
+    function doPunch() {
+        navigator.geolocation.getCurrentPosition(pos => {
+            const entry = {
+                name: session.name, 
+                img: session.img,
+                time: new Date().toLocaleTimeString('ar-EG'),
+                lat: pos.coords.latitude.toFixed(4),
+                lng: pos.coords.longitude.toFixed(4)
+            };
+            db.logs.unshift(entry);
+            save();
+            alert("✅ تم تسجيل الحضور ومزامنته مع المدير!");
+            loadView('punch');
         });
     }
+
+    function updateLiveList() {
+        const list = document.getElementById('live-list');
+        if(!list) return;
+        list.innerHTML = db.logs.map(l => `
+            <div class="table-row">
+                <div class="emp-meta"><img class="emp-img" src="${l.img}"> <b>${l.name}</b></div>
+                <div>08:00</div>
+                <div style="color:var(--primary); font-weight:bold;">${l.time}</div>
+                <div style="font-size:12px;">📍 ${l.lat}, ${l.lng}</div>
+                <div><span class="status-badge status-ok">متصل</span></div>
+            </div>`).join('');
+    }
+
+    // --- محرك التثبيت PWA ---
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('install-banner').style.display = 'block';
+    });
+
+    async function installApp() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt = null;
+            document.getElementById('install-banner').style.display = 'none';
+        }
+    }
+
+    // تسجيل الخدمة للعمل كتطبيق
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('data:text/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdmZXRjaCcsIGV2ID0+IGV2LnJlc3BvbmRXaXRoKGZldGNoKGV2LnJlcXVlc3QpKSk7');
+    }
 </script>
+
 </body>
 </html>
