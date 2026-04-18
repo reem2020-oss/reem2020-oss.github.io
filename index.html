@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="tab-title">نظام ريم (REEM) | الإدارة الذكية المتكاملة</title>
+    <title id="tab-title">ريم تيم | نظام الإدارة والرواتب الذكي</title>
     
-    <!-- المكاتب البرمجية -->
+    <!-- Libraries -->
     <script src="https://jsdelivr.net"></script>
     <link rel="stylesheet" href="https://cloudflare.com">
     <link rel="stylesheet" href="https://unpkg.com" />
@@ -14,7 +14,7 @@
 
     <style>
         :root {
-            --primary: #d4af37; --bg-dark: #020c1b; --glass: rgba(16, 33, 65, 0.98);
+            --gold: #d4af37; --bg-dark: #020c1b; --glass: rgba(16, 33, 65, 0.98);
             --success: #27ae60; --danger: #e74c3c; --text-muted: #8892b0;
         }
 
@@ -23,24 +23,24 @@
 
         /* --- 1. الموقع التعريفي (Landing Page) --- */
         nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background: #fff; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #f1f5f9; }
-        .logo { font-size: 28px; font-weight: 700; color: var(--primary); }
-        .hero { padding: 100px 10% 80px; text-align: center; background: radial-gradient(circle at top right, #fff9e6, #fff); }
-        .hero h1 { font-size: 50px; font-weight: 700; margin-bottom: 20px; line-height: 1.2; }
-        .hero h1 span { color: var(--primary); }
-        .btn-main { background: var(--primary); color: #fff; padding: 15px 40px; border-radius: 14px; font-weight: 600; border: none; cursor: pointer; transition: 0.3s; font-size: 18px; }
+        .logo { font-size: 28px; font-weight: 700; color: var(--gold); }
+        .hero { padding: 120px 10% 80px; text-align: center; background: radial-gradient(circle at top right, #fff9e6, #fff); }
+        .hero h1 { font-size: 50px; font-weight: 700; line-height: 1.2; margin-bottom: 20px; }
+        .hero h1 span { color: var(--gold); }
+        .btn-main { background: var(--gold); color: #fff; padding: 15px 40px; border-radius: 14px; font-weight: 600; border: none; cursor: pointer; transition: 0.3s; font-size: 18px; }
         .btn-main:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(212,175,55,0.3); }
 
         /* --- 2. لوحة التحكم (Dashboard UI) --- */
         #reem-app { display: none; background: var(--bg-dark); min-height: 100vh; color: #fff; }
-        .sidebar { width: 280px; background: #000; border-left: 1px solid var(--primary); height: 100vh; position: fixed; right: 0; padding: 30px 20px; display: flex; flex-direction: column; z-index: 2000; }
+        .sidebar { width: 280px; background: #000; border-left: 1px solid var(--gold); height: 100vh; position: fixed; right: 0; padding: 30px 20px; display: flex; flex-direction: column; z-index: 2000; }
         .main-view { margin-right: 280px; padding: 40px; width: calc(100% - 280px); transition: 0.3s; }
         .nav-link { padding: 15px; margin-bottom: 10px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 15px; color: #aaa; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { background: rgba(212, 175, 55, 0.1); color: var(--primary); border-right: 5px solid var(--primary); }
+        .nav-link:hover, .nav-link.active { background: rgba(212, 175, 55, 0.1); color: var(--gold); border-right: 5px solid var(--gold); }
         .glass-panel { background: var(--glass); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
 
-        /* --- 3. محرك التقارير المطور (Report Engine) --- */
+        /* --- 3. محرك التقارير الذكي (Report Engine) --- */
         .reem-table { width: 100%; border-collapse: collapse; background: #fff; color: #333; border-radius: 15px; overflow: hidden; margin-top: 20px; }
-        .reem-table th { background: #f8faff; padding: 18px; text-align: right; color: var(--primary); border-bottom: 2px solid #eee; }
+        .reem-table th { background: #f8faff; padding: 18px; text-align: right; color: var(--gold); border-bottom: 2px solid #eee; }
         .reem-table td { padding: 15px; border-bottom: 1px solid #f1f1f1; }
         .status-safe { background: rgba(39, 174, 96, 0.1) !important; color: var(--success); font-weight: bold; }
         .status-warn { background: rgba(231, 76, 60, 0.1) !important; color: var(--danger); font-weight: bold; }
@@ -50,40 +50,40 @@
         .auth-card { background: #fff; padding: 45px; border-radius: 30px; width: 420px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
         input { width: 100%; padding: 15px; margin: 12px 0; border: 1px solid #eee; border-radius: 12px; background: #f9f9f9; font-size: 16px; outline: none; }
 
-        #map-box { height: 450px; border-radius: 20px; border: 1px solid var(--primary); margin-top: 20px; }
+        #map-box { height: 450px; border-radius: 20px; border: 1px solid var(--gold); margin-top: 20px; }
 
         @media print { .sidebar, .btn-main, nav, header { display: none !important; } .main-view { margin: 0; width: 100%; } .reem-table { color: #000; border: 1px solid #000; } }
-        @media (max-width: 768px) { .sidebar { display: none; } .main-view { margin-right: 0; width: 100%; } .hero h1 { font-size: 32px; } }
+        @media (max-width: 768px) { .sidebar { display: none; } .main-view { margin-right: 0; width: 100%; } }
     </style>
 </head>
 <body>
 
-<!-- 1. واجهة ريم التعريفية (Landing Page) -->
+<!-- واجهة ريم تيم التعريفية -->
 <section id="landing">
     <nav>
-        <div class="logo">REEM SYSTEM</div>
+        <div class="logo">REEM TEAM™</div>
         <button class="btn-main" style="padding: 10px 25px; font-size: 15px;" onclick="openLogin()">دخول النظام</button>
     </nav>
     <div class="hero">
-        <h1>إدارة <span>ذكية</span> للموظفين<br>بأعلى معايير الدقة</h1>
-        <p>نظام ريم (REEM) يوفر لك مراقبة حية، تقارير رواتب ملونة، وحماية كاملة من تلاعب المواقع الجغرافية.</p>
+        <h1>إدارة <span>ذكية</span> للموظفين<br>بلا تلاعب أو تعقيد</h1>
+        <p>نظام ريم تيم يوفر لك مراقبة حية، تقارير رواتب دقيقة، وحماية كاملة عبر تكنولوجيا الـ GPS Geofencing.</p>
         <button class="btn-main" onclick="openLogin()">ابدأ الآن مجاناً</button>
     </div>
 </section>
 
-<!-- 2. شاشة تسجيل الدخول -->
+<!-- شاشة تسجيل الدخول -->
 <div id="auth-modal">
     <div class="auth-card">
-        <h2 style="color:var(--primary); margin-bottom:10px;">تسجيل الدخول</h2>
-        <p style="color:#666; margin-bottom:25px;">يرجى إدخال بياناتك للوصول للوحة التحكم</p>
-        <input type="text" id="u_name" placeholder="اسم المستخدم">
-        <input type="password" id="u_pass" placeholder="كلمة المرور">
+        <h2 style="color:var(--gold); margin-bottom:10px;">تسجيل الدخول</h2>
+        <p style="color:#666; margin-bottom:25px;">أدخل بياناتك للوصول للوحة تحكم ريم</p>
+        <input type="text" id="u_name" placeholder="اسم المستخدم (admin)">
+        <input type="password" id="u_pass" placeholder="كلمة المرور (123)">
         <button class="btn-main" style="width:100%; margin-top:10px;" onclick="doLogin()">دخول آمن</button>
         <p onclick="closeLogin()" style="margin-top:20px; color:#999; cursor:pointer;">إلغاء</p>
     </div>
 </div>
 
-<!-- 3. لوحة تحكم نظام ريم (The App) -->
+<!-- لوحة التحكم الاحترافية (Dashboard) -->
 <div id="reem-app">
     <aside class="sidebar">
         <div class="logo" style="text-align:center; margin-bottom:50px; font-size:30px;">REEM™</div>
@@ -93,22 +93,22 @@
 
     <main class="main-view">
         <header class="glass-panel" style="display:flex; justify-content:space-between; align-items:center; padding:15px 30px;">
-            <div id="live-time" style="font-size:20px; color:var(--primary); font-weight:bold;">00:00:00</div>
-            <div id="user-display" style="font-weight:600; color:var(--primary); border-right:3px solid var(--primary); padding-right:15px;"></div>
+            <div id="live-time" style="font-size:20px; color:var(--gold); font-weight:bold;">00:00:00</div>
+            <div id="user-display" style="font-weight:600; color:var(--gold);"></div>
         </header>
         <div id="dynamic-content"></div>
     </main>
 </div>
 
 <script>
-    // --- المحرك البرمجي (Core Logic) ---
-    const DB_KEY = 'REEM_ULTIMATE_SaaS_V5';
+    // --- المحرك البرمجي المتكامل ---
+    const DB_KEY = 'REEM_FINAL_ULTIMATE_V5';
     let db = JSON.parse(localStorage.getItem(DB_KEY)) || {
-        config: { company: "ريم تيم", currency: "SAR", grace: 15 },
+        config: { company: "ريم تيم", grace: 15, currency: "SAR" },
         users: [
             {id: 101, user: "admin", pass: "123", role: "admin", name: "المدير العام", dept: "الإدارة", attend: 22, late: 0, absence: 0, note: "منتظم"},
             {id: 102, user: "mahmoud", pass: "123", role: "user", name: "محمود علي", dept: "الميدان", attend: 20, late: 135, absence: 1, note: "تأخير متكرر"},
-            {id: 103, user: "sara", pass: "123", role: "user", name: "سارة حسن", dept: "المبيعات", attend: 21, late: 10, absence: 0, note: "نشط"}
+            {id: 103, user: "sara", pass: "123", role: "user", name: "سارة حسن", dept: "المبيعات", attend: 21, late: 10, absence: 0, note: "نشطة"}
         ],
         logs: []
     };
@@ -131,16 +131,16 @@
             document.getElementById('reem-app').style.display='block';
             document.getElementById('user-display').innerText = session.name;
             renderMenu();
-            loadModule(session.role === 'admin' ? 'reports' : 'punch');
+            loadModule(session.role === 'admin' ? 'payroll' : 'punch');
             setInterval(() => document.getElementById('live-time').innerText = new Date().toLocaleTimeString('ar-EG'), 1000);
-        } else alert("بيانات الدخول غير صحيحة!");
+        } else alert("بيانات خاطئة!");
     }
 
     function renderMenu() {
         const menu = document.getElementById('app-menu');
         const links = session.role === 'admin' ? 
-            [{id:'reports', i:'fa-file-invoice-dollar', n:'مسير الرواتب'}, {id:'live', i:'fa-satellite-dish', n:'المراقبة الحية'}, {id:'hr', i:'fa-user-group', n:'إدارة الموظفين'}] :
-            [{id:'punch', i:'fa-fingerprint', n:'بصمة GPS'}, {id:'my-stats', i:'fa-chart-user', n:'سجلاتي الشخصية'}];
+            [{id:'payroll', i:'fa-file-invoice-dollar', n:'مسير الرواتب'}, {id:'live', i:'fa-satellite-dish', n:'المراقبة الحية'}, {id:'hr', i:'fa-users-gear', n:'إدارة الموظفين'}] :
+            [{id:'punch', i:'fa-fingerprint', n:'بصمة GPS'}, {id:'my-stats', i:'fa-user-clock', n:'سجلاتي'}];
         
         menu.innerHTML = links.map(l => `<div class="nav-link" onclick="loadModule('${l.id}')"><i class="fas ${l.i}"></i> ${l.n}</div>`).join('');
     }
@@ -149,12 +149,12 @@
         const area = document.getElementById('dynamic-content');
         area.innerHTML = "";
 
-        if(m === 'reports') {
+        if(m === 'payroll') {
             area.innerHTML = `
                 <div class="glass-panel" style="background:#fff; color:#333;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                        <h3 style="color:var(--primary);">📊 تقرير الرواتب والحضور الشهري</h3>
-                        <button class="btn-main" style="font-size:14px; padding:10px 20px;" onclick="window.print()"><i class="fas fa-print"></i> تصدير (PDF)</button>
+                        <h3 style="color:var(--gold);">📊 تقرير الرواتب والحضور (النسخة النهائية)</h3>
+                        <button class="btn-main" style="font-size:14px; padding:10px 20px;" onclick="window.print()"><i class="fas fa-print"></i> تصدير التقرير (PDF)</button>
                     </div>
                     <table class="reem-table">
                         <thead>
@@ -171,34 +171,23 @@
         } else if(m === 'punch') {
             area.innerHTML = `
                 <div class="glass-panel" style="text-align:center; padding:50px;">
-                    <i class="fas fa-fingerprint" style="font-size:80px; color:var(--primary); margin-bottom:20px;"></i>
+                    <i class="fas fa-fingerprint" style="font-size:80px; color:var(--gold); margin-bottom:20px;"></i>
                     <h2>بصمة الحضور الذكية (GPS)</h2>
-                    <p style="color:#888; margin-bottom:30px;">سيتم التحقق من موقعك الفعلي وتوقيت السيرفر الموحد</p>
-                    <button class="btn-gold" style="width:250px;" onclick="handlePunch()">تسجيل الحضور</button>
+                    <p style="color:#888; margin-bottom:30px;">سيتم التحقق من موقعك الفعلي وتوقيت السيرفر وربط جهازك</p>
+                    <button class="btn-main" style="width:250px;" onclick="handlePunch()">سجل حضورك</button>
                 </div>`;
         } else if(m === 'live') {
-            area.innerHTML = `<div class="glass-panel"><h3>رادار الميدان</h3><div id="map-box"></div></div>`;
+            area.innerHTML = `<div class="glass-panel"><h3>رادار المواقع الحية</h3><div id="map-box" style="height:450px;"></div></div>`;
             setTimeout(initMap, 200);
-        } else if(m === 'hr') {
-            area.innerHTML = `
-                <div class="glass-panel">
-                    <h3>إضافة موظف جديد للنظام</h3>
-                    <input id="n_name" placeholder="الاسم الكامل"> <input id="n_user" placeholder="اسم المستخدم">
-                    <input id="n_pass" placeholder="كلمة المرور">
-                    <button class="btn-main" style="width:100%; margin-top:10px;" onclick="addEmployee()">حفظ البيانات</button>
-                </div>`;
         }
     }
 
-    // --- العمليات التقنية ---
     function handlePunch() {
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(pos => {
-                const lat = pos.coords.latitude;
-                const lng = pos.coords.longitude;
-                db.logs.push({user: session.name, lat: lat, lng: lng, time: new Date().toLocaleString('ar-EG')});
+                db.logs.push({user: session.name, lat: pos.coords.latitude, lng: pos.coords.longitude, time: new Date().toLocaleString('ar-EG')});
                 sync();
-                alert(`تم تسجيل حضورك بنجاح!\nالموقع: ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+                alert(`تم تسجيل حضورك بنجاح!\nالموقع: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
             }, () => alert("فشل تحديد الموقع. يرجى تفعيل الـ GPS"));
         }
     }
@@ -209,16 +198,6 @@
         db.logs.forEach(l => {
             L.marker([l.lat, l.lng]).addTo(map).bindPopup(`<b>${l.user}</b><br>${l.time}`);
         });
-    }
-
-    function addEmployee() {
-        const n = document.getElementById('n_name').value;
-        const u = document.getElementById('n_user').value;
-        const p = document.getElementById('n_pass').value;
-        if(n && u && p) {
-            db.users.push({id: Math.floor(Math.random()*900)+100, name: n, user: u, pass: p, role: 'user', attend: 0, late: 0, absence: 0, note: "جديد"});
-            sync(); alert("تمت الإضافة!"); loadModule('reports');
-        }
     }
 </script>
 </body>
