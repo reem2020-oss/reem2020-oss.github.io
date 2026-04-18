@@ -3,202 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="tab-title">REEM TEAM | النظام المتكامل</title>
+    <title id="tab-title">ريم تيم | نظام الإدارة المتكامل</title>
     
-    <!-- المكاتب البرمجية -->
+    <!-- المكاتب والخطوط -->
     <script src="https://jsdelivr.net"></script>
     <link rel="stylesheet" href="https://cloudflare.com">
     <link rel="stylesheet" href="https://unpkg.com" />
     <script src="https://unpkg.com"></script>
+    <link href="https://googleapis.com" rel="stylesheet">
 
     <style>
-        :root { --gold: #d4af37; --bg: #020c1b; --glass: rgba(16, 33, 65, 0.95); }
+        :root { --gold: #d4af37; --bg: #020c1b; --glass: rgba(16, 33, 65, 0.98); --pink-gradient: linear-gradient(135deg, #ff4b2b, #ff416c); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background: var(--bg); color: #fff; overflow-x: hidden; min-height: 100vh; }
+        body { background: var(--bg); color: #fff; overflow-x: hidden; scroll-behavior: smooth; }
 
-        /* --- واجهة الهبوط (Landing) --- */
-        #landing-site { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 10%; background: radial-gradient(circle at center, #112240, #020c1b); }
-        .nav-top { position: absolute; top: 0; width: 100%; padding: 25px 8%; display: flex; justify-content: space-between; align-items: center; }
-        .hero-h1 { font-size: 50px; margin-bottom: 20px; }
-        .hero-h1 span { color: var(--gold); }
-        .hero-p { color: #8892b0; font-size: 18px; max-width: 600px; line-height: 1.6; margin-bottom: 30px; }
+        /* --- Landing Page Sections --- */
+        .landing-section { padding: 80px 10%; text-align: center; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background: rgba(0,0,0,0.8); position: sticky; top: 0; z-index: 2000; border-bottom: 1px solid var(--gold); }
         
-        /* --- أزرار احترافية --- */
-        .btn-gold { background: var(--gold); color: #000; padding: 12px 35px; border-radius: 50px; font-weight: bold; border: none; cursor: pointer; transition: 0.3s; font-size: 16px; }
-        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(212,175,55,0.4); }
+        .hero { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle, #112240, #020c1b); }
+        .hero h1 { font-size: 50px; margin-bottom: 15px; }
+        .hero h1 span { color: var(--gold); }
 
-        /* --- نافذة الدخول (Login Modal) --- */
-        #login-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; display: none; align-items: center; justify-content: center; }
-        .login-card { background: var(--glass); padding: 40px; border-radius: 25px; border: 1px solid var(--gold); width: 400px; text-align: center; }
+        /* --- Features Section (مثل موقع حضور) --- */
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
+        .feature-card { padding: 40px; border-radius: 20px; background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.1); transition: 0.3s; }
+        .feature-card:hover { transform: translateY(-10px); border-color: var(--gold); background: rgba(212,175,55,0.05); }
+        .feature-card i { font-size: 45px; color: var(--gold); margin-bottom: 20px; }
+        .feature-card h3 { margin-bottom: 15px; color: var(--gold); }
+        .feature-card p { font-size: 14px; color: #8892b0; line-height: 1.6; }
 
-        /* --- لوحة التحكم العملاقة (Dashboard) --- */
-        #app-ui { display: none; }
-        .sidebar { width: 280px; background: #000; border-left: 1px solid var(--gold); height: 100vh; position: fixed; right: 0; padding: 30px 20px; display: flex; flex-direction: column; z-index: 1000; }
-        .main { margin-right: 280px; padding: 40px; transition: 0.3s; width: calc(100% - 280px); }
+        /* --- Buttons --- */
+        .btn-gold { background: var(--gold); color: #000; padding: 12px 30px; border-radius: 50px; font-weight: bold; border: none; cursor: pointer; transition: 0.3s; text-decoration: none; }
+        .btn-gold:hover { box-shadow: 0 10px 20px rgba(212,175,55,0.3); transform: scale(1.05); }
 
-        .brand-section { text-align: center; margin-bottom: 40px; }
-        .brand-section img { width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--gold); object-fit: cover; margin-bottom: 15px; }
+        /* --- Login Modal --- */
+        #auth-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; display: none; align-items: center; justify-content: center; }
+        .login-box { background: var(--glass); padding: 40px; border-radius: 25px; border: 2px solid var(--gold); width: 400px; text-align: center; }
 
-        .nav-link { padding: 15px; margin-bottom: 12px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 15px; color: #aaa; transition: 0.3s; }
+        /* --- ERP Dashboard UI --- */
+        #erp-ui { display: none; }
+        .sidebar { width: 280px; background: #000; border-left: 1px solid var(--gold); height: 100vh; position: fixed; right: 0; padding: 25px; display: flex; flex-direction: column; z-index: 3000; }
+        .main { margin-right: 280px; padding: 40px; width: calc(100% - 280px); }
+        .nav-link { padding: 15px; margin-bottom: 10px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 15px; color: #aaa; transition: 0.3s; }
         .nav-link:hover, .nav-link.active { background: rgba(212, 175, 55, 0.1); color: var(--gold); border-right: 5px solid var(--gold); }
-
+        
         .glass-panel { background: var(--glass); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
         input, select { width: 100%; padding: 12px; margin: 10px 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; color: white; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { color: var(--gold); padding: 15px; text-align: right; border-bottom: 2px solid var(--gold); }
-        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-
-        #map-canvas { height: 450px; border-radius: 20px; border: 1px solid var(--gold); margin-top: 20px; }
+        #map-canvas { height: 450px; border-radius: 20px; border: 1px solid var(--gold); }
 
         @media (max-width: 768px) { .sidebar { display: none; } .main { margin-right: 0; width: 100%; } }
     </style>
-    <link href="https://googleapis.com" rel="stylesheet">
 </head>
 <body>
 
-<!-- 1. موقع الهبوط الرئيسي -->
-<div id="landing-site">
-    <div class="nav-top">
+<!-- الموقع التعريفي -->
+<div id="landing-page">
+    <nav>
         <div style="font-size: 24px; font-weight: 800; color: var(--gold);">REEM TEAM™</div>
-        <button class="btn-gold" onclick="showLogin()">دخول الموظفين</button>
-    </div>
-    <h1 class="hero-h1">إدارة <span>ذكية</span> للموظفين<br>بضغطة زر واحدة</h1>
-    <p class="hero-p">ريم تيم هو النظام المتكامل لإدارة الحضور والإنصراف عبر GPS، متابعة الرواتب، وإصدار التقارير الميدانية لشركتك باحترافية كاملة.</p>
-    <button class="btn-gold" style="padding: 18px 50px; font-size: 20px;" onclick="showLogin()">ابدأ الآن مجاناً</button>
+        <div style="display: flex; gap: 20px;">
+            <a href="#features" style="color: #fff; text-decoration: none;">المميزات</a>
+            <a href="javascript:void(0)" onclick="openLogin()" class="btn-gold" style="padding: 8px 20px;">دخول</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>إدارة <span>ذكية</span> للموظفين</h1>
+        <p style="color: #8892b0; margin-bottom: 30px;">النظام الأكثر تطوراً لمتابعة الحضور الميداني والتقارير</p>
+        <button class="btn-gold" onclick="openLogin()">ابدأ تجربتك الآن</button>
+    </header>
+
+    <section class="landing-section" id="features">
+        <h2 style="font-size: 36px; color: var(--gold);">مميزات ريم تيم™</h2>
+        <p style="color: #8892b0;">كل ما تحتاجه لإدارة شركتك في مكان واحد</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-file-invoice"></i>
+                <h3>التقارير</h3>
+                <p>إصدار تقارير دورية وفورية لنشاط الموظفين الميداني مع إمكانية الطباعة.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>بصمة GPS</h3>
+                <p>تسجيل الحضور والإنصراف عبر المواقع الجغرافية لضمان دقة التواجد.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>لوحة معلومات</h3>
+                <p>تحليل البيانات وعرض الإحصائيات الحية لنمو العمل وأداء الفريق.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-bell"></i>
+                <h3>إشعارات</h3>
+                <p>تنبيهات فورية للمدير والموظفين عبر النظام والواتساب بأي نشاط جديد.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>موبايل</h3>
+                <p>واجهة متوافقة تماماً مع أجهزة الجوال لسهولة الاستخدام في الميدان.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>صلاحيات متعددة</h3>
+                <p>نظام أمان متطور لتوزيع الصلاحيات بين المدير، المشرف، والموظف.</p>
+            </div>
+        </div>
+    </section>
 </div>
 
-<!-- 2. نافذة تسجيل الدخول -->
-<div id="login-modal">
-    <div class="login-card">
+<!-- نافذة الدخول -->
+<div id="auth-modal">
+    <div class="login-box">
         <h2 style="color: var(--gold); margin-bottom: 25px;">تسجيل الدخول</h2>
         <input type="text" id="u_in" placeholder="اسم المستخدم">
         <input type="password" id="p_in" placeholder="كلمة المرور">
-        <button class="btn-gold" style="width: 100%;" onclick="attemptLogin()">دخول آمن</button>
-        <p style="margin-top: 20px; cursor: pointer; color: #666;" onclick="hideLogin()">إلغاء</p>
+        <button class="btn-gold" style="width: 100%; margin-top: 10px;" onclick="doLogin()">دخول آمن</button>
+        <p style="margin-top: 20px; color: #555; cursor: pointer;" onclick="closeLogin()">إلغاء والعودة</p>
     </div>
 </div>
 
-<!-- 3. النظام العملاق (لوحة التحكم) -->
-<div id="app-ui">
+<!-- نظام الإدارة الداخلي (ERP) -->
+<div id="erp-ui">
     <aside class="sidebar">
-        <div class="brand-section">
-            <img id="app-logo" src="https://flaticon.com">
-            <h3 id="app-name" style="color: var(--gold);">ريم تيم</h3>
+        <div style="text-align: center; margin-bottom: 40px;">
+            <img id="app-logo" src="https://flaticon.com" style="width: 80px; border-radius: 50%; border: 2px solid var(--gold);">
+            <h3 id="app-name" style="color: var(--gold); margin-top: 15px;">ريم تيم</h3>
         </div>
-        <div id="side-nav"></div>
+        <div id="side-menu"></div>
         <button class="btn-gold" style="margin-top: auto; background: #c0392b; color: white;" onclick="location.reload()">خروج</button>
     </aside>
 
     <main class="main">
         <header class="glass-panel" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px;">
-            <div id="clock" style="font-size: 20px; color: var(--gold); font-weight: bold;"></div>
-            <div id="user-info" style="font-weight: bold; border-right: 3px solid var(--gold); padding-right: 15px;"></div>
+            <div id="clock" style="font-size: 18px; color: var(--gold); font-weight: bold;"></div>
+            <div id="user-info" style="font-weight: bold; color: var(--gold);"></div>
         </header>
-        <div id="dynamic-content"></div>
+        <div id="view-area"></div>
     </main>
 </div>
 
 <script>
-    // --- المحرك السحابي المحاكي ---
-    const DB_KEY = 'REEM_TEAM_ULTIMATE_V1';
+    // --- قاعدة البيانات والتهيئة ---
+    const DB_KEY = 'REEM_TEAM_V12_FINAL';
     let db = JSON.parse(localStorage.getItem(DB_KEY)) || {
         settings: { name: "ريم تيم", logo: "", currency: "EGP" },
         users: [{user: "admin", pass: "123", role: "admin", name: "المدير العام", dept: "الإدارة", sal: 0}],
-        logs: [], depts: ["الإدارة", "الميدان"]
+        logs: []
     };
 
-    function sync() { 
-        localStorage.setItem(DB_KEY, JSON.stringify(db)); 
-        applyBranding();
-    }
-
+    function sync() { localStorage.setItem(DB_KEY, JSON.stringify(db)); applyBranding(); }
     function applyBranding() {
         const logo = db.settings.logo || "https://flaticon.com";
         document.getElementById('app-logo').src = logo;
         document.getElementById('app-name').innerText = db.settings.name;
-        document.getElementById('tab-title').innerText = db.settings.name;
     }
 
     // --- نظام الدخول ---
-    function showLogin() { document.getElementById('login-modal').style.display = 'flex'; }
-    function hideLogin() { document.getElementById('login-modal').style.display = 'none'; }
+    function openLogin() { document.getElementById('auth-modal').style.display = 'flex'; }
+    function closeLogin() { document.getElementById('auth-modal').style.display = 'none'; }
 
     let session = null;
-    function attemptLogin() {
+    function doLogin() {
         const u = document.getElementById('u_in').value.trim();
         const p = document.getElementById('p_in').value.trim();
         const user = db.users.find(x => x.user === u && x.pass === p);
         if(user) {
             session = user;
-            document.getElementById('landing-site').style.display = 'none';
-            document.getElementById('login-modal').style.display = 'none';
-            document.getElementById('app-ui').style.display = 'block';
-            document.getElementById('user-info').innerText = session.name;
+            document.getElementById('landing-page').style.display = 'none';
+            document.getElementById('auth-modal').style.display = 'none';
+            document.getElementById('erp-ui').style.display = 'block';
+            document.getElementById('user-info').innerText = `المستخدم: ${session.name}`;
             renderMenu();
-            loadPage(session.role === 'admin' ? 'dash' : 'punch');
+            loadView(session.role === 'admin' ? 'dash' : 'punch');
             setInterval(() => document.getElementById('clock').innerText = new Date().toLocaleTimeString('ar-EG'), 1000);
             applyBranding();
-        } else alert("بيانات الدخول خاطئة!");
+        } else alert("خطأ في البيانات!");
     }
 
     function renderMenu() {
-        const nav = document.getElementById('side-nav');
+        const menu = document.getElementById('side-menu');
         const items = session.role === 'admin' ? 
-            [{id:'dash', i:'fa-chart-pie', n:'الإحصائيات'}, {id:'hr', i:'fa-user-group', n:'الموظفين'}, {id:'track', i:'fa-map-location-dot', n:'التتبع'}, {id:'set', i:'fa-gear', n:'الإعدادات'}] :
-            [{id:'punch', i:'fa-fingerprint', n:'البصمة'}, {id:'report', i:'fa-file-invoice', n:'تقريري'}];
-        nav.innerHTML = items.map(l => `<div class="nav-link" onclick="loadPage('${l.id}')"><i class="fas ${l.i}"></i> ${l.n}</div>`).join('');
+            [{id:'dash', i:'fa-chart-pie', n:'الرئيسية'}, {id:'hr', i:'fa-user-cog', n:'الموظفين'}, {id:'track', i:'fa-map-marked-alt', n:'رادار المواقع'}, {id:'set', i:'fa-cog', n:'الإعدادات'}] :
+            [{id:'punch', i:'fa-fingerprint', n:'البصمة'}, {id:'report', i:'fa-file-alt', n:'تقريري'}];
+        menu.innerHTML = items.map(l => `<div class="nav-link" onclick="loadView('${l.id}')"><i class="fas ${l.i}"></i> ${l.n}</div>`).join('');
     }
 
     // --- واجهات النظام ---
-    function loadPage(p) {
-        const area = document.getElementById('dynamic-content');
+    function loadView(v) {
+        const area = document.getElementById('view-area');
         area.innerHTML = "";
 
-        if(p === 'dash') {
+        if(v === 'dash') {
             area.innerHTML = `
-                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
                     <div class="glass-panel"><h4>الموظفين</h4><h2>${db.users.length}</h2></div>
-                    <div class="glass-panel"><h4>النشاط اليومي</h4><h2>${db.logs.length}</h2></div>
-                    <div class="glass-panel"><h4>العملة</h4><h2>${db.settings.currency}</h2></div>
+                    <div class="glass-panel"><h4>حضور اليوم</h4><h2>${db.logs.filter(l=>l.date===new Date().toLocaleDateString()).length}</h2></div>
+                    <div class="glass-panel"><h4>إجمالي السجلات</h4><h2>${db.logs.length}</h2></div>
                 </div>`;
-        } else if(p === 'hr') {
+        } else if(v === 'hr') {
             area.innerHTML = `
                 <div class="glass-panel">
                     <h3>إدارة شئون الموظفين</h3>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:15px;">
                         <input id="n_name" placeholder="الاسم"> <input id="n_user" placeholder="يوزر">
                         <input id="n_pass" placeholder="باسورد"> <input id="n_sal" placeholder="الراتب">
-                        <button class="btn-gold" style="grid-column: span 2;" onclick="addStaff()">حفظ وإضافة</button>
+                        <button class="btn-gold" style="grid-column: span 2;" onclick="addEmp()">حفظ وإضافة</button>
                     </div>
                 </div>
                 <div class="glass-panel">
-                    <table><thead><tr><th>الاسم</th><th>القسم</th><th>الإجراء</th></tr></thead>
-                    <tbody>${db.users.map((u,i)=>`<tr><td>${u.name}</td><td>${u.dept}</td><td><i class="fas fa-trash" style="color:red; cursor:pointer" onclick="delStaff(${i})"></i></td></tr>`).join('')}</tbody></table>
+                    <table style="width:100%"><thead><tr><th>الموظف</th><th>اليوزر</th><th>الإجراء</th></tr></thead>
+                    <tbody>${db.users.map((u,i)=>`<tr><td>${u.name}</td><td>${u.user}</td><td>${u.role!=='admin'?`<i class="fas fa-trash" style="color:red; cursor:pointer" onclick="delEmp(${i})"></i>`:''}</td></tr>`).join('')}</tbody></table>
                 </div>`;
-        } else if(p === 'set') {
+        } else if(v === 'track') {
+            area.innerHTML = `<div class="glass-panel"><h3>رادار المواقع الميداني</h3><div id="map-canvas"></div></div>`;
+            setTimeout(initMap, 200);
+        } else if(v === 'punch') {
+            area.innerHTML = `<div class="glass-panel" style="text-align:center;"><i class="fas fa-fingerprint" style="font-size:70px; color:var(--gold); margin-bottom:20px;"></i><h2>بصمة GPS</h2><button class="btn-gold" onclick="doPunch()">تسجيل الحضور</button></div>`;
+        } else if(v === 'set') {
             area.innerHTML = `
                 <div class="glass-panel">
-                    <h3>تخصيص النظام للعميل</h3>
+                    <h3>إعدادات نسخة العميل</h3>
                     <label>اسم الشركة</label><input id="s_name" value="${db.settings.name}">
-                    <label>العملة</label><input id="s_cur" value="${db.settings.currency}">
-                    <label>شعار الشركة (صورة)</label><input type="file" onchange="upLogo(event)">
-                    <button class="btn-gold" style="width:100%; margin-top:20px;" onclick="saveSet()">حفظ الإعدادات</button>
+                    <label>شعار الشركة (URL)</label><input id="s_logo" value="${db.settings.logo}">
+                    <button class="btn-gold" style="width:100%; margin-top:15px;" onclick="saveSet()">حفظ الإعدادات</button>
                 </div>`;
-        } else if(p === 'punch') {
-            area.innerHTML = `<div class="glass-panel" style="text-align:center;"><i class="fas fa-location-crosshairs" style="font-size:80px; color:var(--gold); margin-bottom:20px;"></i><h2>بصمة GPS الميدانية</h2><button class="btn-gold" onclick="punch()">تسجيل الحضور</button></div>`;
-        } else if(p === 'track') {
-            area.innerHTML = `<div class="glass-panel"><h3>رادار الميدان</h3><div id="map-canvas"></div></div>`;
-            setTimeout(initMap, 200);
         }
     }
 
     // --- العمليات ---
-    function upLogo(e) { const r = new FileReader(); r.onload=()=>{db.settings.logo=r.result;sync();}; r.readAsDataURL(e.target.files); }
-    function saveSet() { db.settings.name=document.getElementById('s_name').value; db.settings.currency=document.getElementById('s_cur').value; sync(); alert("تم التحديث!"); }
-    function addStaff() { db.users.push({name:document.getElementById('n_name').value, user:document.getElementById('n_user').value, pass:document.getElementById('n_pass').value, sal:document.getElementById('n_sal').value, role:'user', dept:'الميدان'}); sync(); loadPage('hr'); }
-    function delStaff(i) { if(db.users[i].role!=='admin') { db.users.splice(i,1); sync(); loadPage('hr'); } }
-    function punch() { navigator.geolocation.getCurrentPosition(pos => { db.logs.push({user:session.name, lat:pos.coords.latitude, lng:pos.coords.longitude, time:new Date().toLocaleString()}); sync(); alert("تم تسجيل حضورك!"); }); }
+    function addEmp() { db.users.push({name:document.getElementById('n_name').value, user:document.getElementById('n_user').value, pass:document.getElementById('n_pass').value, sal:document.getElementById('n_sal').value, role:'user'}); sync(); loadView('hr'); }
+    function delEmp(i) { db.users.splice(i,1); sync(); loadView('hr'); }
+    function saveSet() { db.settings.name=document.getElementById('s_name').value; db.settings.logo=document.getElementById('s_logo').value; sync(); alert("تم التحديث!"); }
+    function doPunch() { navigator.geolocation.getCurrentPosition(pos => { db.logs.push({user:session.name, lat:pos.coords.latitude, lng:pos.coords.longitude, date:new Date().toLocaleDateString(), time:new Date().toLocaleTimeString()}); sync(); alert("تم تسجيل حضورك!"); }); }
     function initMap() { const m=L.map('map-canvas').setView([24,46],5); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(m); db.logs.forEach(l=>L.marker([l.lat,l.lng]).addTo(m).bindPopup(l.user)); }
 
     applyBranding();
