@@ -12,12 +12,198 @@
   <style>
     *{box-sizing:border-box}
     body{
-      font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial;
       background:#020617;
       color:#e5e7eb;
       margin:0;
       direction:rtl;
     }
+    a{text-decoration:none;color:inherit}
+
+    /* ===== Login Layout ===== */
+    .login-wrapper{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:radial-gradient(circle at top,#1e293b 0,#020617 55%);
+      padding:20px;
+    }
+    .login-shell{
+      display:grid;
+      gap:20px;
+      width:100%;
+      max-width:900px;
+    }
+    @media(min-width:900px){
+      .login-shell{
+        grid-template-columns:1.1fr 0.9fr;
+      }
+    }
+    .login-hero{
+      position:relative;
+      border-radius:22px;
+      overflow:hidden;
+      border:1px solid #111827;
+      background:#020617;
+      min-height:260px;
+    }
+    .login-hero img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:brightness(0.9);
+    }
+    .login-hero-overlay{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to top,#020617dd 0,#02061755 40%,transparent 100%);
+    }
+    .login-hero-text{
+      position:absolute;
+      bottom:16px;
+      right:16px;
+      left:16px;
+      color:#f9fafb;
+    }
+    .hero-title{
+      font-size:20px;
+      font-weight:700;
+      margin-bottom:4px;
+    }
+    .hero-sub{
+      font-size:12px;
+      color:#e5e7eb;
+      margin-bottom:6px;
+    }
+    .hero-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:11px;
+      padding:4px 9px;
+      border-radius:999px;
+      background:#020617cc;
+      border:1px solid #111827;
+      color:#e5e7eb;
+    }
+    .hero-dot{
+      width:7px;
+      height:7px;
+      border-radius:999px;
+      background:#22c55e;
+    }
+
+    .login-card{
+      background:#020617;
+      border-radius:22px;
+      padding:20px 22px 18px;
+      border:1px solid #111827;
+      box-shadow:0 22px 50px rgba(15,23,42,0.9);
+    }
+    .login-logo{
+      width:56px;
+      height:56px;
+      border-radius:18px;
+      background:conic-gradient(from 160deg,#7c3aed,#ec4899,#f97316,#22c55e,#7c3aed);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:10px;
+      padding:2px;
+    }
+    .login-logo-inner{
+      width:100%;
+      height:100%;
+      border-radius:16px;
+      background:#020617;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#f9fafb;
+      font-weight:700;
+      font-size:22px;
+    }
+    .login-title{
+      font-size:20px;
+      font-weight:700;
+      color:#f9fafb;
+      margin-bottom:4px;
+    }
+    .login-sub{
+      font-size:12px;
+      color:#9ca3af;
+      margin-bottom:16px;
+    }
+    .field{
+      margin-bottom:10px;
+    }
+    .field label{
+      display:block;
+      font-size:11px;
+      color:#9ca3af;
+      margin-bottom:3px;
+    }
+    .field input{
+      width:100%;
+      padding:9px 11px;
+      border-radius:10px;
+      border:1px solid #111827;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:13px;
+    }
+    .field input:focus{
+      outline:none;
+      border-color:#7c3aed;
+      box-shadow:0 0 0 1px #7c3aed55;
+    }
+    .btn{
+      padding:9px 14px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-size:13px;
+      font-weight:500;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      transition:background .15s, transform .1s, box-shadow .15s;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,#7c3aed,#ec4899);
+      color:#fff;
+      box-shadow:0 10px 25px rgba(124,58,237,0.35);
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 16px 35px rgba(124,58,237,0.45);
+    }
+    .login-footer{
+      margin-top:10px;
+      font-size:10px;
+      color:#6b7280;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      font-size:10px;
+      padding:3px 7px;
+      border-radius:999px;
+      background:#020617;
+      border:1px solid #111827;
+      color:#9ca3af;
+    }
+    .tag-dot{
+      width:6px;
+      height:6px;
+      border-radius:999px;
+      background:#22c55e;
+    }
+
+    /* ===== App Layout ===== */
     .app-shell{
       display:flex;
       min-height:100vh;
@@ -161,12 +347,8 @@
       gap:16px;
     }
     @media(min-width:900px){
-      .grid-3{
-        grid-template-columns:repeat(3,minmax(0,1fr));
-      }
-      .grid-2{
-        grid-template-columns:repeat(2,minmax(0,1fr));
-      }
+      .grid-3{grid-template-columns:repeat(3,minmax(0,1fr));}
+      .grid-2{grid-template-columns:repeat(2,minmax(0,1fr));}
     }
 
     .card{
@@ -209,64 +391,6 @@
       color:#9ca3af;
     }
 
-    .btn{
-      padding:9px 14px;
-      border-radius:10px;
-      border:none;
-      cursor:pointer;
-      font-size:13px;
-      font-weight:500;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      transition:background .15s, transform .1s, box-shadow .15s;
-    }
-    .btn-primary{
-      background:linear-gradient(135deg,#7c3aed,#ec4899);
-      color:#fff;
-      box-shadow:0 10px 25px rgba(124,58,237,0.35);
-    }
-    .btn-primary:hover{
-      transform:translateY(-1px);
-      box-shadow:0 16px 35px rgba(124,58,237,0.45);
-    }
-    .btn-ghost{
-      background:#020617;
-      color:#e5e7eb;
-      border:1px solid #111827;
-    }
-    .btn-ghost:hover{
-      background:#111827;
-    }
-    .btn-sm{
-      padding:6px 10px;
-      font-size:12px;
-    }
-
-    .field{
-      margin-bottom:10px;
-    }
-    .field label{
-      display:block;
-      font-size:11px;
-      color:#9ca3af;
-      margin-bottom:3px;
-    }
-    .field input, .field select{
-      width:100%;
-      padding:8px 10px;
-      border-radius:9px;
-      border:1px solid #111827;
-      background:#020617;
-      color:#e5e7eb;
-      font-size:13px;
-    }
-    .field input:focus, .field select:focus{
-      outline:none;
-      border-color:#7c3aed;
-      box-shadow:0 0 0 1px #7c3aed55;
-    }
-
     table{
       width:100%;
       border-collapse:collapse;
@@ -294,132 +418,65 @@
       font-size:11px;
       gap:4px;
     }
-    .pill-green{
-      background:#022c22;
-      color:#6ee7b7;
-    }
-    .pill-red{
-      background:#450a0a;
-      color:#fecaca;
-    }
     .pill-blue{
       background:#0b1120;
       color:#93c5fd;
-    }
-
-    .login-wrapper{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:radial-gradient(circle at top,#1e293b 0,#020617 55%);
-      padding:20px;
-    }
-    .login-card{
-      width:320px;
-      background:#020617;
-      border-radius:18px;
-      padding:20px 22px 18px;
-      border:1px solid #111827;
-      box-shadow:0 22px 50px rgba(15,23,42,0.9);
-    }
-    .login-title{
-      font-size:18px;
-      font-weight:700;
-      color:#f9fafb;
-      margin-bottom:4px;
-      text-align:center;
-    }
-    .login-sub{
-      font-size:11px;
-      color:#9ca3af;
-      text-align:center;
-      margin-bottom:16px;
-    }
-    .login-logo{
-      width:52px;
-      height:52px;
-      border-radius:16px;
-      background:conic-gradient(from 160deg,#7c3aed,#ec4899,#f97316,#22c55e,#7c3aed);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      margin:0 auto 10px;
-      padding:2px;
-    }
-    .login-logo-inner{
-      width:100%;
-      height:100%;
-      border-radius:14px;
-      background:#020617;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#f9fafb;
-      font-weight:700;
-      font-size:20px;
-    }
-    .login-footer{
-      margin-top:10px;
-      font-size:10px;
-      color:#6b7280;
-      text-align:center;
-    }
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      gap:4px;
-      font-size:10px;
-      padding:3px 7px;
-      border-radius:999px;
-      background:#020617;
-      border:1px solid #111827;
-      color:#9ca3af;
-    }
-    .tag-dot{
-      width:6px;
-      height:6px;
-      border-radius:999px;
-      background:#22c55e;
     }
   </style>
 </head>
 <body>
 
-<!-- شاشة الدخول -->
+<!-- ===== Login View ===== -->
 <div id="login-view" class="login-wrapper">
-  <div class="login-card">
-    <div class="login-logo">
-      <div class="login-logo-inner">R</div>
+  <div class="login-shell">
+    <!-- صورة الواجهة الخارجية (حط ملف reem-wall.jpg في نفس المستودع) -->
+    <div class="login-hero">
+      <img src="reem-wall.jpg" alt="REEM TIME Wall" />
+      <div class="login-hero-overlay"></div>
+      <div class="login-hero-text">
+        <div class="hero-title">ريم تايم – نظام البصمة</div>
+        <div class="hero-sub">Time attendance tracking system</div>
+        <div class="hero-tag">
+          <span class="hero-dot"></span>
+          واجهة استقبال احترافية لعلامة ريم تايم
+        </div>
+      </div>
     </div>
-    <div class="login-title">REEM TIME PRO</div>
-    <div class="login-sub">نظام حضور ورواتب احترافي للشركات</div>
 
-    <div class="field">
-      <label>البريد الإلكتروني</label>
-      <input id="login-email" type="email" placeholder="example@company.com" />
-    </div>
-    <div class="field">
-      <label>كلمة المرور</label>
-      <input id="login-password" type="password" placeholder="••••••••" />
-    </div>
-    <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="handleLogin()">
-      دخول إلى لوحة التحكم
-    </button>
+    <!-- كارت الدخول -->
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="login-logo-inner">R</div>
+      </div>
+      <div class="login-title">REEM TIME PRO</div>
+      <div class="login-sub">نظام حضور ورواتب احترافي للشركات</div>
 
-    <div class="login-footer">
-      <span class="tag">
-        <span class="tag-dot"></span>
-        نسخة تجريبية – مخصصة لشركة واحدة
-      </span>
+      <div class="field">
+        <label>البريد الإلكتروني</label>
+        <input id="login-email" type="email" placeholder="example@company.com" />
+      </div>
+      <div class="field">
+        <label>كلمة المرور</label>
+        <input id="login-password" type="password" placeholder="••••••••" />
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="handleLogin()">
+        دخول إلى لوحة التحكم
+      </button>
+
+      <div class="login-footer">
+        <span class="tag">
+          <span class="tag-dot"></span>
+          نسخة تجريبية – مخصصة لشركة واحدة
+        </span>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- التطبيق -->
+<!-- ===== App View ===== -->
 <div id="app-view" style="display:none">
   <div class="app-shell">
-    <!-- الشريط الجانبي -->
+    <!-- Sidebar -->
     <aside class="sidebar">
       <div class="logo-box">
         <div class="logo-circle">R</div>
@@ -463,7 +520,7 @@
       </div>
     </aside>
 
-    <!-- المحتوى الرئيسي -->
+    <!-- Main -->
     <main class="main">
       <div class="topbar">
         <div>
@@ -486,12 +543,12 @@
 </div>
 
 <script>
-  // ================== إعداد Firebase ==================
+  // ========== Firebase Config ==========
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    // لو عندك باقي الإعدادات أضفها هنا
+    projectId: "YOUR_PROJECT_ID"
+    // أضف باقي الإعدادات لو حابب (storageBucket, messagingSenderId, appId...)
   };
 
   firebase.initializeApp(firebaseConfig);
@@ -501,29 +558,21 @@
   let currentUser = null;
   let currentCompany = null;
 
-  // ================== أدوات مساعدة ==================
   function $(id){return document.getElementById(id);}
-
-  function setPageHeader(title, subtitle){
-    $("page-title").textContent = title;
-    $("page-subtitle").textContent = subtitle;
-  }
-
+  function setPageHeader(t,s){$("page-title").textContent=t;$("page-subtitle").textContent=s;}
   function setActiveNav(el){
     document.querySelectorAll(".nav-item").forEach(i=>i.classList.remove("active"));
     if(el) el.classList.add("active");
   }
-
   function formatDate(d){
     if(!(d instanceof Date)) d = d.toDate ? d.toDate() : new Date(d);
     return d.toLocaleDateString("ar-EG",{year:"numeric",month:"2-digit",day:"2-digit"});
   }
-
   function formatNumber(n){
     return (n||0).toLocaleString("ar-EG",{maximumFractionDigits:2});
   }
 
-  // ================== تسجيل الدخول / الخروج ==================
+  // ========== Auth ==========
   async function handleLogin(){
     const email = $("login-email").value.trim();
     const pass  = $("login-password").value.trim();
@@ -573,7 +622,7 @@
     $("login-view").style.display = "flex";
   }
 
-  // ================== التنقل بين الصفحات ==================
+  // ========== Navigation ==========
   function changePage(page, el){
     setActiveNav(el);
     if(page === "dash") loadDashboard();
@@ -583,7 +632,7 @@
     if(page === "punch")loadPunchPage();
   }
 
-  // ================== صفحة لوحة التحكم ==================
+  // ========== Dashboard ==========
   async function loadDashboard(){
     setPageHeader("لوحة التحكم","نظرة عامة على الحضور والرواتب");
 
@@ -677,10 +726,10 @@
             👤 إضافة موظف جديد
           </button>
           <br/>
-          <button class="btn btn-ghost btn-sm" onclick="changePage('att', document.querySelector('[data-page=att]'))">
+          <button class="btn btn-primary" style="background:#020617;border:1px solid #111827;box-shadow:none" onclick="changePage('att', document.querySelector('[data-page=att]'))">
             ⏱ عرض سجلات الحضور
           </button>
-          <button class="btn btn-ghost btn-sm" onclick="changePage('pay', document.querySelector('[data-page=pay]'))">
+          <button class="btn btn-primary" style="background:#020617;border:1px solid #111827;box-shadow:none;margin-right:6px" onclick="changePage('pay', document.querySelector('[data-page=pay]'))">
             💰 مراجعة الرواتب
           </button>
         </div>
@@ -712,7 +761,7 @@
     $("dash-latest-logs").innerHTML = html;
   }
 
-  // ================== صفحة الموظفين ==================
+  // ========== Employees ==========
   async function loadEmployeesPage(){
     setPageHeader("الموظفون","إدارة بيانات الموظفين والرواتب الأساسية");
 
@@ -798,4 +847,310 @@
       alert("لا توجد شركة مرتبطة بالحساب.");
       return;
     }
-    const name
+    const name   = $("emp-name").value.trim();
+    const email  = $("emp-email").value.trim();
+    const pass   = $("emp-pass").value.trim();
+    const salary = parseFloat($("emp-salary").value || "0");
+
+    if(!name || !email || !pass){
+      alert("من فضلك أكمل جميع الحقول.");
+      return;
+    }
+
+    try{
+      const cred = await auth.createUserWithEmailAndPassword(email, pass);
+      const uid  = cred.user.uid;
+
+      await db.collection("users").doc(uid).set({
+        name,
+        email,
+        username: email,
+        role: "employee",
+        salary: salary || 0,
+        companyId: currentUser.companyId
+      });
+
+      alert("تم إضافة الموظف بنجاح");
+      loadEmployeesPage();
+    }catch(e){
+      console.error(e);
+      alert("حدث خطأ أثناء إضافة الموظف (ربما البريد مستخدم من قبل).");
+    }
+  }
+
+  // ========== Attendance ==========
+  async function loadAttendancePage(){
+    setPageHeader("سجلات الحضور","عرض وتحليل سجلات الحضور والانصراف");
+
+    if(!currentUser || !currentUser.companyId){
+      $("page-content").innerHTML = "<div class='card'>لا توجد شركة مرتبطة بهذا الحساب.</div>";
+      return;
+    }
+
+    const companyId = currentUser.companyId;
+    const logsSnap = await db.collection("logs")
+      .where("companyId","==",companyId)
+      .orderBy("date","desc")
+      .limit(100).get();
+
+    let rows = "";
+    logsSnap.forEach(doc=>{
+      const l = doc.data();
+      rows += `
+        <tr>
+          <td>${l.name || "-"}</td>
+          <td>${l.date}</td>
+          <td>${l.checkIn ? formatDate(l.checkIn) : "-"}</td>
+          <td>${l.checkOut ? formatDate(l.checkOut) : "-"}</td>
+          <td>${l.totalHours ? formatNumber(l.totalHours) : "-"}</td>
+        </tr>
+      `;
+    });
+
+    $("page-content").innerHTML = `
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">سجلات الحضور</div>
+            <div class="card-sub">آخر 100 سجل حضور وانصراف</div>
+          </div>
+          <button class="btn btn-primary" style="background:#020617;border:1px solid #111827;box-shadow:none;font-size:12px;padding:6px 10px" onclick="exportAttendanceCSV()">📥 تصدير CSV</button>
+        </div>
+        <div style="max-height:420px;overflow:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>الموظف</th>
+                <th>التاريخ</th>
+                <th>وقت الحضور</th>
+                <th>وقت الانصراف</th>
+                <th>الساعات</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows || "<tr><td colspan='5'>لا توجد سجلات بعد.</td></tr>"}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  async function exportAttendanceCSV(){
+    if(!currentUser || !currentUser.companyId){
+      alert("لا توجد شركة مرتبطة بالحساب.");
+      return;
+    }
+    const companyId = currentUser.companyId;
+    const logsSnap = await db.collection("logs")
+      .where("companyId","==",companyId).get();
+
+    let csv = "name,date,checkIn,checkOut,totalHours\n";
+    logsSnap.forEach(doc=>{
+      const l = doc.data();
+      csv += `"${l.name||""}",${l.date||""},${l.checkIn?l.checkIn.toDate().toISOString():""},${l.checkOut?l.checkOut.toDate().toISOString():""},${l.totalHours||0}\n`;
+    });
+
+    const a = document.createElement("a");
+    a.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+    a.download = "attendance.csv";
+    a.click();
+  }
+
+  // ========== Payroll ==========
+  async function loadPayrollPage(){
+    setPageHeader("الرواتب","حساب الرواتب بناءً على الساعات المسجلة");
+
+    if(!currentUser || !currentUser.companyId){
+      $("page-content").innerHTML = "<div class='card'>لا توجد شركة مرتبطة بهذا الحساب.</div>";
+      return;
+    }
+
+    const companyId = currentUser.companyId;
+
+    const usersSnap = await db.collection("users")
+      .where("companyId","==",companyId).get();
+
+    const logsSnap = await db.collection("logs")
+      .where("companyId","==",companyId).get();
+
+    const map = {};
+    usersSnap.forEach(doc=>{
+      const u = doc.data();
+      map[u.name] = {
+        salary: u.salary || 0,
+        hours: 0,
+        bonus: 0,
+        deduct: 0
+      };
+    });
+
+    logsSnap.forEach(doc=>{
+      const l = doc.data();
+      if(l.name && map[l.name] && l.totalHours){
+        map[l.name].hours += l.totalHours;
+      }
+    });
+
+    let cards = "";
+    for(const name in map){
+      const r = map[name];
+      const final = (r.salary || 0) + (r.bonus || 0) - (r.deduct || 0);
+      cards += `
+        <div style="background:#020617;border:1px solid #111827;padding:12px 12px;margin-bottom:10px;border-radius:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <div style="font-size:13px;color:#e5e7eb">👤 ${name}</div>
+            <span class="pill pill-blue">راتب أساسي: ${formatNumber(r.salary)}</span>
+          </div>
+          <div style="font-size:11px;color:#9ca3af;margin-bottom:6px">
+            ⏱ إجمالي الساعات المسجلة: <strong style="color:#e5e7eb">${formatNumber(r.hours)}</strong>
+          </div>
+          <div style="font-size:11px;color:#9ca3af;margin-bottom:6px">
+            ➕ إضافي: <strong style="color:#bbf7d0">${formatNumber(r.bonus)}</strong> – 
+            ➖ خصم: <strong style="color:#fecaca">${formatNumber(r.deduct)}</strong>
+          </div>
+          <div style="font-size:12px;color:#f9fafb">
+            💰 صافي مستحق: <strong>${formatNumber(final)}</strong>
+          </div>
+        </div>
+      `;
+    }
+
+    $("page-content").innerHTML = `
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">ملخص الرواتب</div>
+            <div class="card-sub">حساب مبسط يعتمد على الراتب الأساسي والساعات المسجلة</div>
+          </div>
+          <button class="btn btn-primary" style="background:#020617;border:1px solid #111827;box-shadow:none;font-size:12px;padding:6px 10px" onclick="exportPayrollCSV()">📥 تصدير CSV</button>
+        </div>
+        ${cards || "<div>لا توجد بيانات رواتب بعد.</div>"}
+      </div>
+    `;
+  }
+
+  async function exportPayrollCSV(){
+    if(!currentUser || !currentUser.companyId){
+      alert("لا توجد شركة مرتبطة بالحساب.");
+      return;
+    }
+
+    const companyId = currentUser.companyId;
+    const usersSnap = await db.collection("users")
+      .where("companyId","==",companyId).get();
+    const logsSnap = await db.collection("logs")
+      .where("companyId","==",companyId).get();
+
+    const map = {};
+    usersSnap.forEach(doc=>{
+      const u = doc.data();
+      map[u.name] = {
+        salary: u.salary || 0,
+        hours: 0,
+        bonus: 0,
+        deduct: 0
+      };
+    });
+
+    logsSnap.forEach(doc=>{
+      const l = doc.data();
+      if(l.name && map[l.name] && l.totalHours){
+        map[l.name].hours += l.totalHours;
+      }
+    });
+
+    let csv = "name,salary,hours,bonus,deduct,net\n";
+    for(const name in map){
+      const r = map[name];
+      const final = (r.salary || 0) + (r.bonus || 0) - (r.deduct || 0);
+      csv += `"${name}",${r.salary||0},${r.hours||0},${r.bonus||0},${r.deduct||0},${final}\n`;
+    }
+
+    const a = document.createElement("a");
+    a.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+    a.download = "payroll.csv";
+    a.click();
+  }
+
+  // ========== Punch ==========
+  function loadPunchPage(){
+    setPageHeader("شاشة البصمة","تسجيل الحضور والانصراف مع الموقع الجغرافي");
+
+    $("page-content").innerHTML = `
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">تسجيل الحضور والانصراف</div>
+            <div class="card-sub">سيتم استخدام موقعك الجغرافي عند التسجيل</div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:#9ca3af;margin-bottom:10px">
+          تأكد من تفعيل خدمة الموقع (GPS) في المتصفح والجهاز.
+        </p>
+        <button class="btn btn-primary" onclick="handlePunch('in')">📍 تسجيل حضور</button>
+        <button class="btn btn-primary" style="background:#020617;border:1px solid #111827;box-shadow:none;margin-right:6px" onclick="handlePunch('out')">📍 تسجيل انصراف</button>
+      </div>
+    `;
+  }
+
+  function handlePunch(type){
+    if(!currentUser){
+      alert("يجب تسجيل الدخول أولاً.");
+      return;
+    }
+    if(!navigator.geolocation){
+      alert("المتصفح لا يدعم تحديد الموقع.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(async(pos)=>{
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      const today = new Date().toISOString().slice(0,10);
+
+      const logsSnap = await db.collection("logs")
+        .where("userId","==",currentUser.id)
+        .where("date","==",today).get();
+
+      if(type === "in"){
+        if(!logsSnap.empty){
+          alert("تم تسجيل الحضور مسبقًا اليوم.");
+          return;
+        }
+        await db.collection("logs").add({
+          userId: currentUser.id,
+          name: currentUser.name || "موظف",
+          companyId: currentUser.companyId || null,
+          date: today,
+          checkIn: new Date(),
+          gpsIn: { lat, lng }
+        });
+        alert("تم تسجيل الحضور بنجاح.");
+      }
+
+      if(type === "out"){
+        if(logsSnap.empty){
+          alert("لا يوجد حضور مسجل اليوم.");
+          return;
+        }
+        const docRef = logsSnap.docs[0];
+        const data   = docRef.data();
+        const hours  = (new Date() - data.checkIn.toDate()) / 3600000;
+
+        await db.collection("logs").doc(docRef.id).update({
+          checkOut: new Date(),
+          totalHours: hours,
+          gpsOut: { lat, lng }
+        });
+        alert("تم تسجيل الانصراف بنجاح.");
+      }
+    },()=>{
+      alert("تعذر الحصول على الموقع. من فضلك فعّل صلاحية الموقع.");
+    });
+  }
+</script>
+
+</body>
+</html>
