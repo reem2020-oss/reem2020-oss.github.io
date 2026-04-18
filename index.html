@@ -1,212 +1,801 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>REEM TIME PRO</title>
+  <meta charset="UTF-8" />
+  <title>REEM TIME PRO</title>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
 
-<style>
-body{font-family:Arial;background:#0b1220;color:#fff;margin:0}
-.sidebar{width:250px;height:100vh;background:#111;position:fixed;right:0;padding:20px}
-.main{margin-right:260px;padding:20px}
-.card{background:#1f2937;padding:20px;border-radius:10px;margin-bottom:20px}
-button{padding:10px;background:#7d33ff;color:#fff;border:none;border-radius:8px;cursor:pointer}
-input{width:100%;padding:8px;margin:5px 0;border-radius:6px;border:none}
-</style>
+  <style>
+    *{box-sizing:border-box}
+    body{
+      font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial;
+      background:#020617;
+      color:#e5e7eb;
+      margin:0;
+      direction:rtl;
+    }
+    .app-shell{
+      display:flex;
+      min-height:100vh;
+    }
+    .sidebar{
+      width:260px;
+      background:#020617;
+      border-left:1px solid #111827;
+      padding:20px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      position:fixed;
+      right:0;
+      top:0;
+      bottom:0;
+    }
+    .logo-box{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .logo-circle{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:linear-gradient(135deg,#7c3aed,#ec4899);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:bold;
+      color:#fff;
+      font-size:18px;
+    }
+    .logo-text-title{
+      font-size:16px;
+      font-weight:600;
+      color:#f9fafb;
+    }
+    .logo-text-sub{
+      font-size:11px;
+      color:#9ca3af;
+    }
+    .nav-section-title{
+      font-size:11px;
+      letter-spacing:1px;
+      color:#6b7280;
+      margin-top:8px;
+      margin-bottom:4px;
+    }
+    .nav-item{
+      padding:10px 12px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:14px;
+      color:#e5e7eb;
+      cursor:pointer;
+      transition:background .15s, color .15s, transform .1s;
+    }
+    .nav-item span.icon{
+      width:24px;
+      text-align:center;
+    }
+    .nav-item:hover{
+      background:#111827;
+      transform:translateX(-2px);
+    }
+    .nav-item.active{
+      background:linear-gradient(135deg,#7c3aed33,#ec489933);
+      color:#f9fafb;
+      border:1px solid #7c3aed55;
+    }
+    .nav-footer{
+      margin-top:auto;
+      font-size:11px;
+      color:#6b7280;
+    }
+    .nav-footer strong{
+      color:#e5e7eb;
+    }
+
+    .main{
+      flex:1;
+      margin-right:260px;
+      padding:20px 24px 40px;
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:20px;
+    }
+    .topbar-title{
+      font-size:18px;
+      font-weight:600;
+      color:#f9fafb;
+    }
+    .topbar-sub{
+      font-size:12px;
+      color:#9ca3af;
+    }
+    .user-pill{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:#020617;
+      border-radius:999px;
+      padding:6px 12px;
+      border:1px solid #111827;
+      font-size:13px;
+    }
+    .user-avatar{
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      background:linear-gradient(135deg,#7c3aed,#ec4899);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      color:#fff;
+      font-weight:600;
+    }
+    .user-role{
+      font-size:11px;
+      color:#9ca3af;
+    }
+    .logout-btn{
+      border:none;
+      background:transparent;
+      color:#f97373;
+      font-size:11px;
+      cursor:pointer;
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+    @media(min-width:900px){
+      .grid-3{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+      .grid-2{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    .card{
+      background:#020617;
+      border-radius:16px;
+      padding:16px 18px;
+      border:1px solid #111827;
+      box-shadow:0 18px 40px rgba(15,23,42,0.8);
+    }
+    .card-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:10px;
+    }
+    .card-title{
+      font-size:14px;
+      font-weight:600;
+      color:#e5e7eb;
+    }
+    .card-sub{
+      font-size:11px;
+      color:#6b7280;
+    }
+    .badge{
+      font-size:11px;
+      padding:3px 8px;
+      border-radius:999px;
+      background:#111827;
+      color:#9ca3af;
+    }
+    .stat-value{
+      font-size:22px;
+      font-weight:700;
+      margin-top:4px;
+      color:#f9fafb;
+    }
+    .stat-label{
+      font-size:11px;
+      color:#9ca3af;
+    }
+
+    .btn{
+      padding:9px 14px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-size:13px;
+      font-weight:500;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      transition:background .15s, transform .1s, box-shadow .15s;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,#7c3aed,#ec4899);
+      color:#fff;
+      box-shadow:0 10px 25px rgba(124,58,237,0.35);
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 16px 35px rgba(124,58,237,0.45);
+    }
+    .btn-ghost{
+      background:#020617;
+      color:#e5e7eb;
+      border:1px solid #111827;
+    }
+    .btn-ghost:hover{
+      background:#111827;
+    }
+    .btn-sm{
+      padding:6px 10px;
+      font-size:12px;
+    }
+
+    .field{
+      margin-bottom:10px;
+    }
+    .field label{
+      display:block;
+      font-size:11px;
+      color:#9ca3af;
+      margin-bottom:3px;
+    }
+    .field input, .field select{
+      width:100%;
+      padding:8px 10px;
+      border-radius:9px;
+      border:1px solid #111827;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:13px;
+    }
+    .field input:focus, .field select:focus{
+      outline:none;
+      border-color:#7c3aed;
+      box-shadow:0 0 0 1px #7c3aed55;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+    }
+    th,td{
+      padding:8px 6px;
+      border-bottom:1px solid #111827;
+      text-align:right;
+    }
+    th{
+      font-size:11px;
+      color:#9ca3af;
+      font-weight:500;
+    }
+    tr:hover td{
+      background:#020617;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      padding:3px 8px;
+      border-radius:999px;
+      font-size:11px;
+      gap:4px;
+    }
+    .pill-green{
+      background:#022c22;
+      color:#6ee7b7;
+    }
+    .pill-red{
+      background:#450a0a;
+      color:#fecaca;
+    }
+    .pill-blue{
+      background:#0b1120;
+      color:#93c5fd;
+    }
+
+    .login-wrapper{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:radial-gradient(circle at top,#1e293b 0,#020617 55%);
+      padding:20px;
+    }
+    .login-card{
+      width:320px;
+      background:#020617;
+      border-radius:18px;
+      padding:20px 22px 18px;
+      border:1px solid #111827;
+      box-shadow:0 22px 50px rgba(15,23,42,0.9);
+    }
+    .login-title{
+      font-size:18px;
+      font-weight:700;
+      color:#f9fafb;
+      margin-bottom:4px;
+      text-align:center;
+    }
+    .login-sub{
+      font-size:11px;
+      color:#9ca3af;
+      text-align:center;
+      margin-bottom:16px;
+    }
+    .login-logo{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      background:conic-gradient(from 160deg,#7c3aed,#ec4899,#f97316,#22c55e,#7c3aed);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin:0 auto 10px;
+      padding:2px;
+    }
+    .login-logo-inner{
+      width:100%;
+      height:100%;
+      border-radius:14px;
+      background:#020617;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#f9fafb;
+      font-weight:700;
+      font-size:20px;
+    }
+    .login-footer{
+      margin-top:10px;
+      font-size:10px;
+      color:#6b7280;
+      text-align:center;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      font-size:10px;
+      padding:3px 7px;
+      border-radius:999px;
+      background:#020617;
+      border:1px solid #111827;
+      color:#9ca3af;
+    }
+    .tag-dot{
+      width:6px;
+      height:6px;
+      border-radius:999px;
+      background:#22c55e;
+    }
+  </style>
 </head>
-
 <body>
 
-<div id="login">
-<div class="card" style="width:300px;margin:100px auto">
-<h3>دخول</h3>
-<input id="u">
-<input id="p" type="password">
-<button onclick="login()">دخول</button>
-</div>
+<!-- شاشة الدخول -->
+<div id="login-view" class="login-wrapper">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-inner">R</div>
+    </div>
+    <div class="login-title">REEM TIME PRO</div>
+    <div class="login-sub">نظام حضور ورواتب احترافي للشركات</div>
+
+    <div class="field">
+      <label>البريد الإلكتروني</label>
+      <input id="login-email" type="email" placeholder="example@company.com" />
+    </div>
+    <div class="field">
+      <label>كلمة المرور</label>
+      <input id="login-password" type="password" placeholder="••••••••" />
+    </div>
+    <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="handleLogin()">
+      دخول إلى لوحة التحكم
+    </button>
+
+    <div class="login-footer">
+      <span class="tag">
+        <span class="tag-dot"></span>
+        نسخة تجريبية – مخصصة لشركة واحدة
+      </span>
+    </div>
+  </div>
 </div>
 
-<div id="app" style="display:none">
-<div class="sidebar">
-<div id="logo"></div>
-<div onclick="page('dash')">🏠 الرئيسية</div>
-<div onclick="page('emp')">👥 الموظفين</div>
-<div onclick="page('att')">⏱ الحضور</div>
-<div onclick="page('pay')">💰 الرواتب</div>
-<div onclick="page('punch')">📍 البصمة</div>
-</div>
+<!-- التطبيق -->
+<div id="app-view" style="display:none">
+  <div class="app-shell">
+    <!-- الشريط الجانبي -->
+    <aside class="sidebar">
+      <div class="logo-box">
+        <div class="logo-circle">R</div>
+        <div>
+          <div class="logo-text-title">REEM TIME PRO</div>
+          <div class="logo-text-sub" id="company-name">شركة بدون اسم</div>
+        </div>
+      </div>
 
-<div class="main" id="c"></div>
+      <div>
+        <div class="nav-section-title">الرئيسية</div>
+        <div class="nav-item active" data-page="dash" onclick="changePage('dash', this)">
+          <span class="icon">🏠</span>
+          <span>لوحة التحكم</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="nav-section-title">الموارد البشرية</div>
+        <div class="nav-item" data-page="emp" onclick="changePage('emp', this)">
+          <span class="icon">👥</span>
+          <span>الموظفون</span>
+        </div>
+        <div class="nav-item" data-page="att" onclick="changePage('att', this)">
+          <span class="icon">⏱</span>
+          <span>الحضور</span>
+        </div>
+        <div class="nav-item" data-page="pay" onclick="changePage('pay', this)">
+          <span class="icon">💰</span>
+          <span>الرواتب</span>
+        </div>
+        <div class="nav-item" data-page="punch" onclick="changePage('punch', this)">
+          <span class="icon">📍</span>
+          <span>شاشة البصمة</span>
+        </div>
+      </div>
+
+      <div class="nav-footer">
+        <div>إصدار <strong>1.0.0</strong></div>
+        <div>مصمم خصيصًا لـ <strong>REEM TIME</strong></div>
+      </div>
+    </aside>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <div class="topbar-title" id="page-title">لوحة التحكم</div>
+          <div class="topbar-sub" id="page-subtitle">نظرة عامة على الحضور والرواتب</div>
+        </div>
+        <div class="user-pill" id="user-pill" style="display:none">
+          <div class="user-avatar" id="user-avatar">U</div>
+          <div>
+            <div id="user-name">مستخدم</div>
+            <div class="user-role" id="user-role">مدير النظام</div>
+          </div>
+          <button class="logout-btn" onclick="handleLogout()">تسجيل خروج</button>
+        </div>
+      </div>
+
+      <div id="page-content"></div>
+    </main>
+  </div>
 </div>
 
 <script>
-const firebaseConfig={apiKey:"YOUR_CONFIG"};
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
+  // ================== إعداد Firebase ==================
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    // لو عندك باقي الإعدادات أضفها هنا
+  };
 
-let user,company;
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db   = firebase.firestore();
 
-async function login(){
-let r=await db.collection("users")
-.where("username","==",u.value)
-.where("password","==",p.value).get();
+  let currentUser = null;
+  let currentCompany = null;
 
-if(r.empty)return alert("خطأ");
+  // ================== أدوات مساعدة ==================
+  function $(id){return document.getElementById(id);}
 
-user=r.docs[0].data();
-let comp=await db.collection("companies").doc(user.companyId).get();
-company=comp.data();
+  function setPageHeader(title, subtitle){
+    $("page-title").textContent = title;
+    $("page-subtitle").textContent = subtitle;
+  }
 
-login.style.display="none";
-app.style.display="block";
-logo.innerHTML=`<img src="${company.logo}" width="120">`;
+  function setActiveNav(el){
+    document.querySelectorAll(".nav-item").forEach(i=>i.classList.remove("active"));
+    if(el) el.classList.add("active");
+  }
 
-page('dash');
-}
+  function formatDate(d){
+    if(!(d instanceof Date)) d = d.toDate ? d.toDate() : new Date(d);
+    return d.toLocaleDateString("ar-EG",{year:"numeric",month:"2-digit",day:"2-digit"});
+  }
 
-function page(p){
-if(p=="dash"){
-c.innerHTML=`<div class="card">مرحبا ${user.name}</div>`;
-}
+  function formatNumber(n){
+    return (n||0).toLocaleString("ar-EG",{maximumFractionDigits:2});
+  }
 
-if(p=="emp"){
-c.innerHTML=`
-<div class="card">
-<h3>إضافة موظف</h3>
-<input id="n" placeholder="اسم">
-<input id="un" placeholder="يوزر">
-<input id="pw" placeholder="باس">
-<input id="sal" placeholder="راتب شهري">
-<button onclick="addEmp()">إضافة</button>
-</div>`;
-}
+  // ================== تسجيل الدخول / الخروج ==================
+  async function handleLogin(){
+    const email = $("login-email").value.trim();
+    const pass  = $("login-password").value.trim();
+    if(!email || !pass){
+      alert("من فضلك أدخل البريد الإلكتروني وكلمة المرور");
+      return;
+    }
+    try{
+      const cred = await auth.signInWithEmailAndPassword(email, pass);
+      const uid  = cred.user.uid;
 
-if(p=="att"){loadLogs();}
+      const userDoc = await db.collection("users").doc(uid).get();
+      if(!userDoc.exists){
+        alert("لا يوجد بيانات مستخدم مرتبطة بهذا الحساب");
+        return;
+      }
+      currentUser = { id: uid, ...userDoc.data() };
 
-if(p=="pay"){loadPayroll();}
+      if(currentUser.companyId){
+        const compDoc = await db.collection("companies").doc(currentUser.companyId).get();
+        if(compDoc.exists){
+          currentCompany = { id: compDoc.id, ...compDoc.data() };
+          $("company-name").textContent = currentCompany.name || "شركة بدون اسم";
+        }
+      }
 
-if(p=="punch"){
-c.innerHTML=`
-<div class="card">
-<button onclick="punch('in')">حضور</button>
-<button onclick="punch('out')">انصراف</button>
-</div>`;
-}
-}
+      $("user-pill").style.display = "flex";
+      $("user-name").textContent = currentUser.name || "مستخدم";
+      $("user-role").textContent = currentUser.role === "admin" ? "مدير النظام" : "موظف";
+      $("user-avatar").textContent = (currentUser.name || "U").charAt(0).toUpperCase();
 
-async function addEmp(){
-await db.collection("users").add({
-name:n.value,
-username:un.value,
-password:pw.value,
-salary:parseFloat(sal.value||0),
-companyId:user.companyId
-});
-alert("تم");
-}
+      $("login-view").style.display = "none";
+      $("app-view").style.display   = "block";
 
-function punch(type){
-navigator.geolocation.getCurrentPosition(async(pos)=>{
+      loadDashboard();
+    }catch(e){
+      console.error(e);
+      alert("فشل تسجيل الدخول، تأكد من البيانات");
+    }
+  }
 
-let today=new Date().toISOString().slice(0,10);
+  async function handleLogout(){
+    await auth.signOut();
+    currentUser = null;
+    currentCompany = null;
+    $("app-view").style.display   = "none";
+    $("login-view").style.display = "flex";
+  }
 
-let logs=await db.collection("logs")
-.where("userId","==",user.id)
-.where("date","==",today).get();
+  // ================== التنقل بين الصفحات ==================
+  function changePage(page, el){
+    setActiveNav(el);
+    if(page === "dash") loadDashboard();
+    if(page === "emp")  loadEmployeesPage();
+    if(page === "att")  loadAttendancePage();
+    if(page === "pay")  loadPayrollPage();
+    if(page === "punch")loadPunchPage();
+  }
 
-if(type=="in"){
-if(!logs.empty)return alert("مسجل");
+  // ================== صفحة لوحة التحكم ==================
+  async function loadDashboard(){
+    setPageHeader("لوحة التحكم","نظرة عامة على الحضور والرواتب");
 
-await db.collection("logs").add({
-userId:user.id,
-name:user.name,
-companyId:user.companyId,
-date:today,
-checkIn:new Date()
-});
-alert("تم الحضور");
-}
+    if(!currentUser || !currentUser.companyId){
+      $("page-content").innerHTML = "<div class='card'>لا توجد شركة مرتبطة بهذا الحساب.</div>";
+      return;
+    }
 
-if(type=="out"){
-if(logs.empty)return alert("لا يوجد حضور");
+    const companyId = currentUser.companyId;
 
-let doc=logs.docs[0];
-let data=doc.data();
+    const usersSnap = await db.collection("users")
+      .where("companyId","==",companyId).get();
 
-let hours=(new Date()-data.checkIn.toDate())/3600000;
+    const today = new Date().toISOString().slice(0,10);
+    const attSnap = await db.collection("logs")
+      .where("companyId","==",companyId)
+      .where("date","==",today).get();
 
-await db.collection("logs").doc(doc.id).update({
-checkOut:new Date(),
-totalHours:hours
-});
-alert("تم الانصراف");
-}
-});
-}
+    const payrollSnap = await db.collection("logs")
+      .where("companyId","==",companyId).get();
 
-async function loadLogs(){
-let logs=await db.collection("logs")
-.where("companyId","==",user.companyId).get();
+    const employeesCount = usersSnap.size;
+    const todayAttendance = attSnap.size;
 
-let html="<div class='card'><h3>السجلات</h3>";
-logs.forEach(d=>{
-let l=d.data();
-html+=`<p>${l.name} | ${l.date} | ${l.totalHours||0}</p>`;
-});
-html+="</div>";
-c.innerHTML=html;
-}
+    let totalHours = 0;
+    payrollSnap.forEach(d=>{
+      const data = d.data();
+      if(data.totalHours) totalHours += data.totalHours;
+    });
 
-async function loadPayroll(){
-let logs=await db.collection("logs")
-.where("companyId","==",user.companyId).get();
+    $("page-content").innerHTML = `
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">عدد الموظفين</div>
+              <div class="card-sub">إجمالي الموظفين المسجلين في الشركة</div>
+            </div>
+            <span class="badge">الموظفون</span>
+          </div>
+          <div class="stat-value">${employeesCount}</div>
+          <div class="stat-label">موظف</div>
+        </div>
 
-let users=await db.collection("users")
-.where("companyId","==",user.companyId).get();
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">الحضور اليوم</div>
+              <div class="card-sub">عدد الموظفين الذين سجلوا حضور اليوم</div>
+            </div>
+            <span class="badge">اليوم</span>
+          </div>
+          <div class="stat-value">${todayAttendance}</div>
+          <div class="stat-label">موظف حاضر</div>
+        </div>
 
-let res={};
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">إجمالي الساعات المسجلة</div>
+              <div class="card-sub">منذ بداية استخدام النظام</div>
+            </div>
+            <span class="badge">الساعات</span>
+          </div>
+          <div class="stat-value">${formatNumber(totalHours)}</div>
+          <div class="stat-label">ساعة عمل</div>
+        </div>
+      </div>
 
-users.forEach(u=>{
-let d=u.data();
-res[d.name]={salary:d.salary||0,hours:0,bonus:0,deduct:0};
-});
+      <div style="height:16px"></div>
 
-logs.forEach(l=>{
-let d=l.data();
-if(d.totalHours)res[d.name].hours+=d.totalHours;
-});
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">أحدث سجلات الحضور</div>
+              <div class="card-sub">آخر 10 سجلات</div>
+            </div>
+          </div>
+          <div id="dash-latest-logs" style="font-size:12px;color:#9ca3af">جاري التحميل...</div>
+        </div>
 
-let html="<div class='card'><h2>الرواتب</h2>";
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">إجراءات سريعة</div>
+              <div class="card-sub">إدارة سريعة للموظفين والحضور</div>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-bottom:8px" onclick="changePage('emp', document.querySelector('[data-page=emp]'))">
+            👤 إضافة موظف جديد
+          </button>
+          <br/>
+          <button class="btn btn-ghost btn-sm" onclick="changePage('att', document.querySelector('[data-page=att]'))">
+            ⏱ عرض سجلات الحضور
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="changePage('pay', document.querySelector('[data-page=pay]'))">
+            💰 مراجعة الرواتب
+          </button>
+        </div>
+      </div>
+    `;
 
-for(let n in res){
-let r=res[n];
-let final=r.salary + r.bonus - r.deduct;
+    const latestSnap = await db.collection("logs")
+      .where("companyId","==",companyId)
+      .orderBy("date","desc")
+      .limit(10).get();
 
-html+=`
-<div style="background:#111;padding:10px;margin:10px;border-radius:10px">
-👤 ${n}<br>
-💼 راتب: ${r.salary}<br>
-⏱ ساعات: ${r.hours.toFixed(2)}<br>
-➕ إضافي: ${r.bonus}<br>
-➖ خصم: ${r.deduct}<br>
-💰 صافي: ${final}
-</div>`;
-}
+    let html = "";
+    if(latestSnap.empty){
+      html = "<div>لا توجد سجلات بعد.</div>";
+    }else{
+      latestSnap.forEach(doc=>{
+        const d = doc.data();
+        html += `
+          <div style="padding:6px 0;border-bottom:1px solid #020617">
+            <div style="font-size:12px;color:#e5e7eb">${d.name || "موظف"}</div>
+            <div style="font-size:11px;color:#9ca3af">
+              ${d.date} – 
+              ${d.totalHours ? formatNumber(d.totalHours) + " ساعة" : "لم يتم تسجيل انصراف"}
+            </div>
+          </div>
+        `;
+      });
+    }
+    $("dash-latest-logs").innerHTML = html;
+  }
 
-html+=`<button onclick="exportCSV()">📥 تحميل</button></div>`;
-c.innerHTML=html;
-}
+  // ================== صفحة الموظفين ==================
+  async function loadEmployeesPage(){
+    setPageHeader("الموظفون","إدارة بيانات الموظفين والرواتب الأساسية");
 
-function exportCSV(){
-let csv="name,salary\n";
-let a=document.createElement("a");
-a.href='data:text/csv;charset=utf-8,'+csv;
-a.download="payroll.csv";
-a.click();
-}
-</script>
+    if(!currentUser || !currentUser.companyId){
+      $("page-content").innerHTML = "<div class='card'>لا توجد شركة مرتبطة بهذا الحساب.</div>";
+      return;
+    }
 
-</body>
-</html>
+    const companyId = currentUser.companyId;
+    const usersSnap = await db.collection("users")
+      .where("companyId","==",companyId).get();
+
+    let rows = "";
+    usersSnap.forEach(doc=>{
+      const u = doc.data();
+      rows += `
+        <tr>
+          <td>${u.name || "-"}</td>
+          <td>${u.username || u.email || "-"}</td>
+          <td>${u.role || "employee"}</td>
+          <td>${formatNumber(u.salary || 0)}</td>
+        </tr>
+      `;
+    });
+
+    $("page-content").innerHTML = `
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">إضافة موظف جديد</div>
+              <div class="card-sub">إنشاء حساب موظف وربطه بالشركة</div>
+            </div>
+          </div>
+          <div class="field">
+            <label>اسم الموظف</label>
+            <input id="emp-name" placeholder="الاسم الكامل" />
+          </div>
+          <div class="field">
+            <label>البريد الإلكتروني (يستخدم للدخول)</label>
+            <input id="emp-email" type="email" placeholder="employee@company.com" />
+          </div>
+          <div class="field">
+            <label>كلمة المرور</label>
+            <input id="emp-pass" type="password" placeholder="••••••••" />
+          </div>
+          <div class="field">
+            <label>الراتب الشهري الأساسي</label>
+            <input id="emp-salary" type="number" placeholder="مثال: 3000" />
+          </div>
+          <button class="btn btn-primary" onclick="handleAddEmployee()">إضافة الموظف</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">قائمة الموظفين</div>
+              <div class="card-sub">جميع الموظفين المرتبطين بهذه الشركة</div>
+            </div>
+          </div>
+          <div style="max-height:320px;overflow:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>الاسم</th>
+                  <th>المستخدم</th>
+                  <th>الدور</th>
+                  <th>الراتب</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows || "<tr><td colspan='4'>لا يوجد موظفون بعد.</td></tr>"}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  async function handleAddEmployee(){
+    if(!currentUser || !currentUser.companyId){
+      alert("لا توجد شركة مرتبطة بالحساب.");
+      return;
+    }
+    const name
