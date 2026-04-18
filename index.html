@@ -1,208 +1,212 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="tab-title">REEM SYSTEM | نظام الإدارة المتكامل</title>
-    
-    <!-- المكاتب التقنية -->
-    <script src="https://jsdelivr.net"></script>
-    <link rel="stylesheet" href="https://cloudflare.com">
-    <link rel="stylesheet" href="https://unpkg.com" />
-    <script src="https://unpkg.com"></script>
-    <link href="https://googleapis.com" rel="stylesheet">
+<meta charset="UTF-8">
+<title>REEM TIME PRO</title>
 
-    <style>
-        :root {
-            --primary: #7d33ff; /* بنفسجي احترافي */
-            --gold: #d4af37;
-            --bg-dark: #020c1b;
-            --success: #27ae60; /* الأخضر */
-            --danger: #e74c3c;  /* الأحمر */
-            --warning: #f1c40f; /* الأصفر */
-            --info: #3498db;    /* الأزرق */
-            --glass: rgba(16, 33, 65, 0.98);
-        }
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'IBM Plex Sans Arabic', sans-serif; }
-        body { background: #f8faff; color: #1a202c; overflow-x: hidden; scroll-behavior: smooth; }
-
-        /* --- 1. الموقع التعريفي (Landing Page) --- */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background: #fff; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #eee; }
-        .logo { font-size: 28px; font-weight: 700; color: var(--primary); }
-        .hero { padding: 100px 10% 80px; text-align: center; background: radial-gradient(circle at top right, #f4f0ff, #fff); }
-        .btn-main { background: var(--primary); color: #fff; padding: 14px 35px; border-radius: 14px; font-weight: 600; border: none; cursor: pointer; transition: 0.3s; font-size: 16px; }
-        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(125,51,255,0.3); }
-
-        /* --- 2. لوحة التحكم (REEM Dashboard) --- */
-        #reem-app { display: none; background: var(--bg-dark); min-height: 100vh; color: #fff; display: flex; }
-        .sidebar { width: 280px; background: #000; border-left: 1px solid var(--primary); height: 100vh; position: fixed; right: 0; padding: 30px 20px; display: flex; flex-direction: column; z-index: 2000; }
-        .main-view { margin-right: 280px; padding: 40px; width: calc(100% - 280px); transition: 0.3s; }
-        
-        .brand-header { text-align: center; margin-bottom: 40px; }
-        .brand-header h2 { color: #fff; font-size: 32px; letter-spacing: 2px; }
-
-        .nav-link { padding: 15px; margin-bottom: 10px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 15px; color: #aaa; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { background: rgba(125, 51, 255, 0.1); color: #fff; border-right: 5px solid var(--primary); }
-        
-        .glass-panel { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
-
-        /* --- 3. مصفوفة الألوان (Color Coding System) --- */
-        .badge { padding: 5px 12px; border-radius: 50px; font-size: 12px; font-weight: bold; }
-        .bg-success { background: rgba(39, 174, 96, 0.2); color: var(--success); }
-        .bg-danger { background: rgba(231, 76, 60, 0.2); color: var(--danger); }
-        .bg-warning { background: rgba(241, 196, 15, 0.2); color: var(--warning); }
-        .bg-info { background: rgba(52, 152, 219, 0.2); color: var(--info); }
-
-        /* --- 4. شاشة الدخول --- */
-        #login-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .login-card { background: #fff; padding: 45px; border-radius: 30px; width: 420px; text-align: center; color: #333; }
-        input { width: 100%; padding: 15px; margin: 12px 0; border: 1px solid #eee; border-radius: 12px; background: #f9f9f9; font-size: 16px; outline: none; }
-
-        #map-canvas { height: 450px; border-radius: 20px; border: 1px solid var(--primary); margin-top: 20px; }
-
-        @media (max-width: 768px) { .sidebar { display: none; } .main-view { margin-right: 0; width: 100%; } }
-    </style>
+<style>
+body{font-family:Arial;background:#0b1220;color:#fff;margin:0}
+.sidebar{width:250px;height:100vh;background:#111;position:fixed;right:0;padding:20px}
+.main{margin-right:260px;padding:20px}
+.card{background:#1f2937;padding:20px;border-radius:10px;margin-bottom:20px}
+button{padding:10px;background:#7d33ff;color:#fff;border:none;border-radius:8px;cursor:pointer}
+input{width:100%;padding:8px;margin:5px 0;border-radius:6px;border:none}
+</style>
 </head>
+
 <body>
 
-<!-- واجهة الهبوط (الموقع التعريفي) -->
-<div id="landing">
-    <nav>
-        <div class="logo">REEM™</div>
-        <button class="btn-main" onclick="showLogin()">دخول النظام</button>
-    </nav>
-    <div class="hero">
-        <h1>مستقبل <span>إدارة الحضور</span> بين يديك</h1>
-        <p>نظام ريم (REEM) يوفر لك مراقبة لحظية، تتبع ميداني، وتقارير رواتب دقيقة تعتمد على الذكاء الجغرافي والتحقق الحيوي.</p>
-        <button class="btn-main" style="padding: 18px 50px; font-size: 18px;" onclick="showLogin()">ابدأ الآن مجاناً</button>
-    </div>
+<div id="login">
+<div class="card" style="width:300px;margin:100px auto">
+<h3>دخول</h3>
+<input id="u">
+<input id="p" type="password">
+<button onclick="login()">دخول</button>
+</div>
 </div>
 
-<!-- شاشة تسجيل الدخول -->
-<div id="login-modal">
-    <div class="login-card">
-        <h2 style="color:var(--primary); margin-bottom:10px;">أهلاً بك في REEM</h2>
-        <p style="color:#666; margin-bottom:25px;">قم بتسجيل الدخول للوصول للوحة التحكم</p>
-        <input type="text" id="u_name" placeholder="اسم المستخدم">
-        <input type="password" id="u_pass" placeholder="كلمة المرور">
-        <button class="btn-main" style="width:100%; margin-top:10px;" onclick="doLogin()">دخول آمن</button>
-        <p onclick="hideLogin()" style="margin-top:20px; color:#999; cursor:pointer;">إلغاء والعودة</p>
-    </div>
+<div id="app" style="display:none">
+<div class="sidebar">
+<div id="logo"></div>
+<div onclick="page('dash')">🏠 الرئيسية</div>
+<div onclick="page('emp')">👥 الموظفين</div>
+<div onclick="page('att')">⏱ الحضور</div>
+<div onclick="page('pay')">💰 الرواتب</div>
+<div onclick="page('punch')">📍 البصمة</div>
 </div>
 
-<!-- تطبيق ريم (Dashboard) -->
-<div id="reem-app" style="display:none;">
-    <aside class="sidebar">
-        <div class="brand-header"><h2>REEM</h2></div>
-        <div id="app-menu"></div>
-        <button class="btn-main" style="margin-top:auto; background:var(--danger); color:#fff;" onclick="location.reload()">تسجيل خروج</button>
-    </aside>
-
-    <main class="main-view">
-        <header class="glass-panel" style="display:flex; justify-content:space-between; align-items:center; padding:15px 30px;">
-            <div id="clock" style="font-size:20px; color:var(--primary); font-weight:bold;">00:00:00</div>
-            <div id="user-info" style="font-weight:600; color:var(--primary); border-right:3px solid var(--primary); padding-right:15px;"></div>
-        </header>
-        <div id="view-content"></div>
-    </main>
+<div class="main" id="c"></div>
 </div>
 
 <script>
-    // --- المحرك البرمجي المتكامل (REEM CORE) ---
-    const DB_KEY = 'REEM_ULTIMATE_SaaS_V6';
-    let db = JSON.parse(localStorage.getItem(DB_KEY)) || {
-        settings: { company: "ريم تيم", grace: 15, radius: 100 },
-        users: [
-            {id: 101, user: "admin", pass: "123", role: "admin", name: "المدير العام", dept: "الإدارة"},
-            {id: 102, user: "mahmoud", pass: "123", role: "user", name: "محمود علي", dept: "الميدان"}
-        ],
-        logs: [
-            {user: "محمود علي", date: "2026-04-18", time: "08:05 AM", status: "منتظم", type: "success"},
-            {user: "سارة حسن", date: "2026-04-18", time: "09:30 AM", status: "تأخير", type: "warning"},
-            {user: "خالد فهد", date: "2026-04-18", time: "--:--", status: "غياب", type: "danger"}
-        ]
-    };
+const firebaseConfig={apiKey:"YOUR_CONFIG"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
 
-    function save() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+let user,company;
 
-    function showLogin() { document.getElementById('login-modal').style.display='flex'; }
-    function hideLogin() { document.getElementById('login-modal').style.display='none'; }
+async function login(){
+let r=await db.collection("users")
+.where("username","==",u.value)
+.where("password","==",p.value).get();
 
-    let session = null;
-    function doLogin() {
-        const u = document.getElementById('u_name').value.trim();
-        const p = document.getElementById('u_pass').value.trim();
-        const found = db.users.find(x => x.user === u && x.pass === p);
-        
-        if(found) {
-            session = found;
-            document.getElementById('landing').style.display='none';
-            document.getElementById('login-modal').style.display='none';
-            document.getElementById('reem-app').style.display='flex';
-            document.getElementById('user-info').innerText = session.name;
-            renderMenu();
-            loadModule(session.role === 'admin' ? 'monitor' : 'punch');
-            setInterval(() => document.getElementById('clock').innerText = new Date().toLocaleTimeString('ar-EG'), 1000);
-        } else alert("بيانات خاطئة!");
-    }
+if(r.empty)return alert("خطأ");
 
-    function renderMenu() {
-        const menu = document.getElementById('app-menu');
-        const links = session.role === 'admin' ? 
-            [{id:'monitor', i:'fa-satellite-dish', n:'المراقبة الحية'}, {id:'payroll', i:'fa-file-invoice-dollar', n:'مسير الرواتب'}, {id:'hr', i:'fa-users-gear', n:'إدارة الموظفين'}] :
-            [{id:'punch', i:'fa-fingerprint', n:'بصمة GPS'}, {id:'history', i:'fa-clock-rotate-left', n:'سجلاتي'}];
-        
-        menu.innerHTML = links.map(l => `<div class="nav-link" onclick="loadModule('${l.id}')"><i class="fas ${l.i}"></i> ${l.n}</div>`).join('');
-    }
+user=r.docs[0].data();
+let comp=await db.collection("companies").doc(user.companyId).get();
+company=comp.data();
 
-    function loadModule(m) {
-        const area = document.getElementById('view-content');
-        area.innerHTML = "";
+login.style.display="none";
+app.style.display="block";
+logo.innerHTML=`<img src="${company.logo}" width="120">`;
 
-        if(m === 'monitor') {
-            area.innerHTML = `
-                <div class="glass-panel" style="background:#fff; color:#333;">
-                    <h3 style="color:var(--primary); margin-bottom:20px;">📊 حالة الحضور اللحظية (كود الألوان الذكي)</h3>
-                    <table style="width:100%; border-collapse:collapse;">
-                        <thead><tr style="border-bottom:2px solid #eee; text-align:right;"><th>الموظف</th><th>الوقت</th><th>الحالة</th></tr></thead>
-                        <tbody>
-                            ${db.logs.map(l => `
-                                <tr style="border-bottom:1px solid #f1f1f1;">
-                                    <td style="padding:15px;">${l.user}</td>
-                                    <td>${l.time}</td>
-                                    <td><span class="badge bg-${l.type}">${l.status}</span></td>
-                                </tr>`).join('')}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="glass-panel"><h3>📍 خريطة تتبع موظفي الميدان</h3><div id="map-canvas"></div></div>`;
-            setTimeout(initMap, 200);
-        } else if(m === 'punch') {
-            area.innerHTML = `
-                <div class="glass-panel" style="text-align:center; padding:60px;">
-                    <i class="fas fa-fingerprint" style="font-size:90px; color:var(--primary); margin-bottom:25px;"></i>
-                    <h2>بصمة الحضور الذكية</h2>
-                    <p style="color:#888; margin-bottom:30px;">سيتم التحقق من الـ GPS والتوثيق الحيوي للجهاز</p>
-                    <button class="btn-main" style="width:250px;" onclick="handlePunch()">تسجيل الحضور</button>
-                </div>`;
-        }
-    }
+page('dash');
+}
 
-    function handlePunch() {
-        if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(pos => {
-                alert(`✅ تم التحقق من الموقع الجغرافي بنجاح!\nالإحداثيات: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
-            }, () => alert("فشل تحديد الموقع. يرجى تفعيل الـ GPS"));
-        }
-    }
+function page(p){
+if(p=="dash"){
+c.innerHTML=`<div class="card">مرحبا ${user.name}</div>`;
+}
 
-    function initMap() {
-        const map = L.map('map-canvas').setView([24.7136, 46.6753], 5);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        // إضافة دبابيس محاكية
-        L.marker([24.71, 46.67]).addTo(map).bindPopup("محمود علي - في الموقع");
-    }
+if(p=="emp"){
+c.innerHTML=`
+<div class="card">
+<h3>إضافة موظف</h3>
+<input id="n" placeholder="اسم">
+<input id="un" placeholder="يوزر">
+<input id="pw" placeholder="باس">
+<input id="sal" placeholder="راتب شهري">
+<button onclick="addEmp()">إضافة</button>
+</div>`;
+}
+
+if(p=="att"){loadLogs();}
+
+if(p=="pay"){loadPayroll();}
+
+if(p=="punch"){
+c.innerHTML=`
+<div class="card">
+<button onclick="punch('in')">حضور</button>
+<button onclick="punch('out')">انصراف</button>
+</div>`;
+}
+}
+
+async function addEmp(){
+await db.collection("users").add({
+name:n.value,
+username:un.value,
+password:pw.value,
+salary:parseFloat(sal.value||0),
+companyId:user.companyId
+});
+alert("تم");
+}
+
+function punch(type){
+navigator.geolocation.getCurrentPosition(async(pos)=>{
+
+let today=new Date().toISOString().slice(0,10);
+
+let logs=await db.collection("logs")
+.where("userId","==",user.id)
+.where("date","==",today).get();
+
+if(type=="in"){
+if(!logs.empty)return alert("مسجل");
+
+await db.collection("logs").add({
+userId:user.id,
+name:user.name,
+companyId:user.companyId,
+date:today,
+checkIn:new Date()
+});
+alert("تم الحضور");
+}
+
+if(type=="out"){
+if(logs.empty)return alert("لا يوجد حضور");
+
+let doc=logs.docs[0];
+let data=doc.data();
+
+let hours=(new Date()-data.checkIn.toDate())/3600000;
+
+await db.collection("logs").doc(doc.id).update({
+checkOut:new Date(),
+totalHours:hours
+});
+alert("تم الانصراف");
+}
+});
+}
+
+async function loadLogs(){
+let logs=await db.collection("logs")
+.where("companyId","==",user.companyId).get();
+
+let html="<div class='card'><h3>السجلات</h3>";
+logs.forEach(d=>{
+let l=d.data();
+html+=`<p>${l.name} | ${l.date} | ${l.totalHours||0}</p>`;
+});
+html+="</div>";
+c.innerHTML=html;
+}
+
+async function loadPayroll(){
+let logs=await db.collection("logs")
+.where("companyId","==",user.companyId).get();
+
+let users=await db.collection("users")
+.where("companyId","==",user.companyId).get();
+
+let res={};
+
+users.forEach(u=>{
+let d=u.data();
+res[d.name]={salary:d.salary||0,hours:0,bonus:0,deduct:0};
+});
+
+logs.forEach(l=>{
+let d=l.data();
+if(d.totalHours)res[d.name].hours+=d.totalHours;
+});
+
+let html="<div class='card'><h2>الرواتب</h2>";
+
+for(let n in res){
+let r=res[n];
+let final=r.salary + r.bonus - r.deduct;
+
+html+=`
+<div style="background:#111;padding:10px;margin:10px;border-radius:10px">
+👤 ${n}<br>
+💼 راتب: ${r.salary}<br>
+⏱ ساعات: ${r.hours.toFixed(2)}<br>
+➕ إضافي: ${r.bonus}<br>
+➖ خصم: ${r.deduct}<br>
+💰 صافي: ${final}
+</div>`;
+}
+
+html+=`<button onclick="exportCSV()">📥 تحميل</button></div>`;
+c.innerHTML=html;
+}
+
+function exportCSV(){
+let csv="name,salary\n";
+let a=document.createElement("a");
+a.href='data:text/csv;charset=utf-8,'+csv;
+a.download="payroll.csv";
+a.click();
+}
 </script>
+
 </body>
 </html>
