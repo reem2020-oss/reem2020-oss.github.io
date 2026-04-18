@@ -3,162 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام ريم المطور | REEM Elite</title>
+    <title id="tab-title">REEM SYSTEM | نظام الإدارة المتكامل</title>
     
-    <!-- المكاتب والخطوط الفاخرة -->
+    <!-- المكاتب التقنية -->
+    <script src="https://jsdelivr.net"></script>
     <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="https://unpkg.com" />
+    <script src="https://unpkg.com"></script>
     <link href="https://googleapis.com" rel="stylesheet">
 
     <style>
         :root {
-            --primary: #7d33ff; /* بنفسجي Bayzat */
-            --bg-gray: #f9fafb;
-            --sidebar-dark: #111827;
-            --text-main: #1f2937;
-            --text-sub: #6b7280;
-            --white: #ffffff;
+            --primary: #7d33ff; /* بنفسجي احترافي */
+            --gold: #d4af37;
+            --bg-dark: #020c1b;
+            --success: #27ae60; /* الأخضر */
+            --danger: #e74c3c;  /* الأحمر */
+            --warning: #f1c40f; /* الأصفر */
+            --info: #3498db;    /* الأزرق */
+            --glass: rgba(16, 33, 65, 0.98);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'IBM Plex Sans Arabic', sans-serif; }
-        body { background-color: var(--bg-gray); display: flex; min-height: 100vh; overflow-x: hidden; }
+        body { background: #f8faff; color: #1a202c; overflow-x: hidden; scroll-behavior: smooth; }
 
-        /* --- القائمة الجانبية (تصميم عصري) --- */
-        .sidebar { 
-            width: 260px; background: var(--sidebar-dark); color: #fff; 
-            position: fixed; right: 0; height: 100vh; padding: 30px 0; 
-            z-index: 1000; box-shadow: -4px 0 15px rgba(0,0,0,0.1);
-        }
-        .sidebar .brand { padding: 0 30px 40px; font-size: 28px; font-weight: 800; color: var(--primary); letter-spacing: 1px; }
-        
-        .nav-item { 
-            padding: 14px 30px; display: flex; align-items: center; gap: 15px; 
-            cursor: pointer; color: #9ca3af; transition: 0.3s; font-size: 15px;
-        }
-        .nav-item.active { background: rgba(125, 51, 255, 0.1); color: #fff; border-right: 5px solid var(--primary); }
-        .nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+        /* --- 1. الموقع التعريفي (Landing Page) --- */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background: #fff; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #eee; }
+        .logo { font-size: 28px; font-weight: 700; color: var(--primary); }
+        .hero { padding: 100px 10% 80px; text-align: center; background: radial-gradient(circle at top right, #f4f0ff, #fff); }
+        .btn-main { background: var(--primary); color: #fff; padding: 14px 35px; border-radius: 14px; font-weight: 600; border: none; cursor: pointer; transition: 0.3s; font-size: 16px; }
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(125,51,255,0.3); }
 
-        /* --- المحتوى الرئيسي --- */
-        .main-content { margin-right: 260px; width: calc(100% - 260px); padding: 40px; transition: 0.3s; }
+        /* --- 2. لوحة التحكم (REEM Dashboard) --- */
+        #reem-app { display: none; background: var(--bg-dark); min-height: 100vh; color: #fff; display: flex; }
+        .sidebar { width: 280px; background: #000; border-left: 1px solid var(--primary); height: 100vh; position: fixed; right: 0; padding: 30px 20px; display: flex; flex-direction: column; z-index: 2000; }
+        .main-view { margin-right: 280px; padding: 40px; width: calc(100% - 280px); transition: 0.3s; }
         
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-        .page-title { font-size: 30px; font-weight: 700; color: var(--text-main); }
-        .page-title span { font-size: 14px; color: var(--text-sub); font-weight: normal; margin-right: 10px; }
+        .brand-header { text-align: center; margin-bottom: 40px; }
+        .brand-header h2 { color: #fff; font-size: 32px; letter-spacing: 2px; }
 
-        /* --- تصميم البطاقات (Bayzat Inspired) --- */
-        .attendance-table { background: var(--white); border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); overflow: hidden; }
+        .nav-link { padding: 15px; margin-bottom: 10px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 15px; color: #aaa; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { background: rgba(125, 51, 255, 0.1); color: #fff; border-right: 5px solid var(--primary); }
         
-        .table-header { 
-            display: grid; grid-template-columns: 2.5fr 1fr 1.5fr 1.5fr 1.5fr; 
-            padding: 20px 35px; background: #fff; border-bottom: 2px solid #f3f4f6; 
-            color: var(--text-sub); font-weight: 600; font-size: 14px;
-        }
-        
-        .employee-row { 
-            display: grid; grid-template-columns: 2.5fr 1fr 1.5fr 1.5fr 1.5fr; 
-            padding: 20px 35px; align-items: center; border-bottom: 1px solid #f3f4f6; transition: 0.2s;
-        }
-        .employee-row:hover { background: #f8fafc; }
-        
-        .emp-profile { display: flex; align-items: center; gap: 15px; }
-        .emp-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; background: #f0f0f0; border: 1px solid #eee; }
-        .emp-name { font-weight: 600; color: var(--text-main); font-size: 15px; }
-        
-        .status-badge { 
-            padding: 6px 14px; border-radius: 50px; font-size: 12px; font-weight: 600; 
-            background: #e6fffa; color: #047481; display: inline-flex; align-items: center; gap: 6px;
-        }
-        .pulse-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        .glass-panel { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
 
-        .time-label { font-size: 14px; color: #4b5563; font-weight: 500; }
-        
-        .btn-plus { 
-            background: var(--primary); color: #fff; padding: 12px 25px; 
-            border: none; border-radius: 12px; cursor: pointer; 
-            font-weight: 700; transition: 0.3s; display: flex; align-items: center; gap: 10px;
-        }
-        .btn-plus:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(125, 51, 255, 0.3); }
+        /* --- 3. مصفوفة الألوان (Color Coding System) --- */
+        .badge { padding: 5px 12px; border-radius: 50px; font-size: 12px; font-weight: bold; }
+        .bg-success { background: rgba(39, 174, 96, 0.2); color: var(--success); }
+        .bg-danger { background: rgba(231, 76, 60, 0.2); color: var(--danger); }
+        .bg-warning { background: rgba(241, 196, 15, 0.2); color: var(--warning); }
+        .bg-info { background: rgba(52, 152, 219, 0.2); color: var(--info); }
 
-        @media (max-width: 768px) { 
-            .sidebar { width: 0; padding: 0; overflow: hidden; } 
-            .main-content { margin-right: 0; width: 100%; padding: 20px; } 
-        }
+        /* --- 4. شاشة الدخول --- */
+        #login-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .login-card { background: #fff; padding: 45px; border-radius: 30px; width: 420px; text-align: center; color: #333; }
+        input { width: 100%; padding: 15px; margin: 12px 0; border: 1px solid #eee; border-radius: 12px; background: #f9f9f9; font-size: 16px; outline: none; }
+
+        #map-canvas { height: 450px; border-radius: 20px; border: 1px solid var(--primary); margin-top: 20px; }
+
+        @media (max-width: 768px) { .sidebar { display: none; } .main-view { margin-right: 0; width: 100%; } }
     </style>
 </head>
 <body>
 
-<aside class="sidebar">
-    <div class="brand">REEM™</div>
-    <div class="nav-item"><i class="fas fa-grid-2"></i> <span>اللوحة الرئيسية</span></div>
-    <div class="nav-item active"><i class="fas fa-clock"></i> <span>الحضور المباشر</span></div>
-    <div class="nav-item"><i class="fas fa-users"></i> <span>إدارة الموظفين</span></div>
-    <div class="nav-item"><i class="fas fa-wallet"></i> <span>مسير الرواتب</span></div>
-    <div class="nav-item" style="margin-top: auto;" onclick="location.reload()">
-        <i class="fas fa-sign-out-alt"></i> <span>تسجيل خروج</span>
+<!-- واجهة الهبوط (الموقع التعريفي) -->
+<div id="landing">
+    <nav>
+        <div class="logo">REEM™</div>
+        <button class="btn-main" onclick="showLogin()">دخول النظام</button>
+    </nav>
+    <div class="hero">
+        <h1>مستقبل <span>إدارة الحضور</span> بين يديك</h1>
+        <p>نظام ريم (REEM) يوفر لك مراقبة لحظية، تتبع ميداني، وتقارير رواتب دقيقة تعتمد على الذكاء الجغرافي والتحقق الحيوي.</p>
+        <button class="btn-main" style="padding: 18px 50px; font-size: 18px;" onclick="showLogin()">ابدأ الآن مجاناً</button>
     </div>
-</aside>
+</div>
 
-<main class="main-content">
-    <header>
-        <div class="page-title">الحضور المباشر <span>الأحد، 18 أبريل 2026</span></div>
-        <button class="btn-plus"><i class="fas fa-plus"></i> إضافة موظف</button>
-    </header>
-
-    <div class="attendance-table">
-        <!-- رأس الجدول -->
-        <div class="table-header">
-            <div>الموظف</div>
-            <div>ساعات العمل</div>
-            <div>تسجيل الدخول</div>
-            <div>تسجيل الخروج</div>
-            <div>الحالة</div>
-        </div>
-
-        <!-- أسطر الموظفين (المحاكاة الاحترافية) -->
-        <div id="live-data">
-            <div class="employee-row">
-                <div class="emp-profile">
-                    <img class="emp-img" src="https://pravatar.cc" alt="avatar">
-                    <div class="emp-name">علي الشمراني</div>
-                </div>
-                <div class="time-label">07:45</div>
-                <div class="time-label">08:15 AM</div>
-                <div class="time-label">04:00 PM</div>
-                <div><span class="status-badge"><div class="pulse-dot"></div> متصل الآن</span></div>
-            </div>
-
-            <div class="employee-row">
-                <div class="emp-profile">
-                    <img class="emp-img" src="https://pravatar.cc" alt="avatar">
-                    <div class="emp-name">فاطمة عبدالله</div>
-                </div>
-                <div class="time-label">08:00</div>
-                <div class="time-label">08:00 AM</div>
-                <div class="time-label">04:00 PM</div>
-                <div><span class="status-badge" style="background:#fef3c7; color:#92400e;">خارج النطاق</span></div>
-            </div>
-
-            <div class="employee-row">
-                <div class="emp-profile">
-                    <img class="emp-img" src="https://pravatar.cc" alt="avatar">
-                    <div class="emp-name">فهد العيسى</div>
-                </div>
-                <div class="time-label">05:30</div>
-                <div class="time-label">09:15 AM</div>
-                <div class="time-label">--:--</div>
-                <div><span class="status-badge"><div class="pulse-dot"></div> في الموقع</span></div>
-            </div>
-        </div>
+<!-- شاشة تسجيل الدخول -->
+<div id="login-modal">
+    <div class="login-card">
+        <h2 style="color:var(--primary); margin-bottom:10px;">أهلاً بك في REEM</h2>
+        <p style="color:#666; margin-bottom:25px;">قم بتسجيل الدخول للوصول للوحة التحكم</p>
+        <input type="text" id="u_name" placeholder="اسم المستخدم">
+        <input type="password" id="u_pass" placeholder="كلمة المرور">
+        <button class="btn-main" style="width:100%; margin-top:10px;" onclick="doLogin()">دخول آمن</button>
+        <p onclick="hideLogin()" style="margin-top:20px; color:#999; cursor:pointer;">إلغاء والعودة</p>
     </div>
-</main>
+</div>
+
+<!-- تطبيق ريم (Dashboard) -->
+<div id="reem-app" style="display:none;">
+    <aside class="sidebar">
+        <div class="brand-header"><h2>REEM</h2></div>
+        <div id="app-menu"></div>
+        <button class="btn-main" style="margin-top:auto; background:var(--danger); color:#fff;" onclick="location.reload()">تسجيل خروج</button>
+    </aside>
+
+    <main class="main-view">
+        <header class="glass-panel" style="display:flex; justify-content:space-between; align-items:center; padding:15px 30px;">
+            <div id="clock" style="font-size:20px; color:var(--primary); font-weight:bold;">00:00:00</div>
+            <div id="user-info" style="font-weight:600; color:var(--primary); border-right:3px solid var(--primary); padding-right:15px;"></div>
+        </header>
+        <div id="view-content"></div>
+    </main>
+</div>
 
 <script>
-    // تحديث الوقت المباشر
-    setInterval(() => {
-        const now = new Date();
-        // هنا يمكن إضافة كود المزامنة السحابية الفعلي
-    }, 1000);
-</script>
+    // --- المحرك البرمجي المتكامل (REEM CORE) ---
+    const DB_KEY = 'REEM_ULTIMATE_SaaS_V6';
+    let db = JSON.parse(localStorage.getItem(DB_KEY)) || {
+        settings: { company: "ريم تيم", grace: 15, radius: 100 },
+        users: [
+            {id: 101, user: "admin", pass: "123", role: "admin", name: "المدير العام", dept: "الإدارة"},
+            {id: 102, user: "mahmoud", pass: "123", role: "user", name: "محمود علي", dept: "الميدان"}
+        ],
+        logs: [
+            {user: "محمود علي", date: "2026-04-18", time: "08:05 AM", status: "منتظم", type: "success"},
+            {user: "سارة حسن", date: "2026-04-18", time: "09:30 AM", status: "تأخير", type: "warning"},
+            {user: "خالد فهد", date: "2026-04-18", time: "--:--", status: "غياب", type: "danger"}
+        ]
+    };
 
+    function save() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+    function showLogin() { document.getElementById('login-modal').style.display='flex'; }
+    function hideLogin() { document.getElementById('login-modal').style.display='none'; }
+
+    let session = null;
+    function doLogin() {
+        const u = document.getElementById('u_name').value.trim();
+        const p = document.getElementById('u_pass').value.trim();
+        const found = db.users.find(x => x.user === u && x.pass === p);
+        
+        if(found) {
+            session = found;
+            document.getElementById('landing').style.display='none';
+            document.getElementById('login-modal').style.display='none';
+            document.getElementById('reem-app').style.display='flex';
+            document.getElementById('user-info').innerText = session.name;
+            renderMenu();
+            loadModule(session.role === 'admin' ? 'monitor' : 'punch');
+            setInterval(() => document.getElementById('clock').innerText = new Date().toLocaleTimeString('ar-EG'), 1000);
+        } else alert("بيانات خاطئة!");
+    }
+
+    function renderMenu() {
+        const menu = document.getElementById('app-menu');
+        const links = session.role === 'admin' ? 
+            [{id:'monitor', i:'fa-satellite-dish', n:'المراقبة الحية'}, {id:'payroll', i:'fa-file-invoice-dollar', n:'مسير الرواتب'}, {id:'hr', i:'fa-users-gear', n:'إدارة الموظفين'}] :
+            [{id:'punch', i:'fa-fingerprint', n:'بصمة GPS'}, {id:'history', i:'fa-clock-rotate-left', n:'سجلاتي'}];
+        
+        menu.innerHTML = links.map(l => `<div class="nav-link" onclick="loadModule('${l.id}')"><i class="fas ${l.i}"></i> ${l.n}</div>`).join('');
+    }
+
+    function loadModule(m) {
+        const area = document.getElementById('view-content');
+        area.innerHTML = "";
+
+        if(m === 'monitor') {
+            area.innerHTML = `
+                <div class="glass-panel" style="background:#fff; color:#333;">
+                    <h3 style="color:var(--primary); margin-bottom:20px;">📊 حالة الحضور اللحظية (كود الألوان الذكي)</h3>
+                    <table style="width:100%; border-collapse:collapse;">
+                        <thead><tr style="border-bottom:2px solid #eee; text-align:right;"><th>الموظف</th><th>الوقت</th><th>الحالة</th></tr></thead>
+                        <tbody>
+                            ${db.logs.map(l => `
+                                <tr style="border-bottom:1px solid #f1f1f1;">
+                                    <td style="padding:15px;">${l.user}</td>
+                                    <td>${l.time}</td>
+                                    <td><span class="badge bg-${l.type}">${l.status}</span></td>
+                                </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="glass-panel"><h3>📍 خريطة تتبع موظفي الميدان</h3><div id="map-canvas"></div></div>`;
+            setTimeout(initMap, 200);
+        } else if(m === 'punch') {
+            area.innerHTML = `
+                <div class="glass-panel" style="text-align:center; padding:60px;">
+                    <i class="fas fa-fingerprint" style="font-size:90px; color:var(--primary); margin-bottom:25px;"></i>
+                    <h2>بصمة الحضور الذكية</h2>
+                    <p style="color:#888; margin-bottom:30px;">سيتم التحقق من الـ GPS والتوثيق الحيوي للجهاز</p>
+                    <button class="btn-main" style="width:250px;" onclick="handlePunch()">تسجيل الحضور</button>
+                </div>`;
+        }
+    }
+
+    function handlePunch() {
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(pos => {
+                alert(`✅ تم التحقق من الموقع الجغرافي بنجاح!\nالإحداثيات: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
+            }, () => alert("فشل تحديد الموقع. يرجى تفعيل الـ GPS"));
+        }
+    }
+
+    function initMap() {
+        const map = L.map('map-canvas').setView([24.7136, 46.6753], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        // إضافة دبابيس محاكية
+        L.marker([24.71, 46.67]).addTo(map).bindPopup("محمود علي - في الموقع");
+    }
+</script>
 </body>
 </html>
