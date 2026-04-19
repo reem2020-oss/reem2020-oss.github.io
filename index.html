@@ -1,983 +1,1101 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>REEM TIME PRO – Cloud Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    *{box-sizing:border-box}
-    :root{
-      --bg:#0f172a;
-      --bg-soft:#111827;
-      --bg-card:#111827;
-      --border:#1f2937;
-      --text:#e5e7eb;
-      --muted:#9ca3af;
-      --accent:#6366f1;
-      --accent-soft:#8b5cf6;
-      --accent-strong:#22c55e;
-    }
-    body.light{
-      --bg:#e5e7eb;
-      --bg-soft:#f3f4f6;
-      --bg-card:#ffffff;
-      --border:#d1d5db;
-      --text:#111827;
-      --muted:#6b7280;
-      --accent:#6366f1;
-      --accent-soft:#8b5cf6;
-      --accent-strong:#16a34a;
-    }
-    body{
-      margin:0;
-      font-family:Arial, Tahoma;
-      background:radial-gradient(circle at top,#1f2937 0,#020617 50%,#000 100%);
-      color:var(--text);
-      font-size:15px;
-      transition:background 0.4s ease,color 0.4s ease;
-    }
-    a{text-decoration:none;color:inherit}
-    #login,#app{min-height:100vh;}
+    <meta charset="UTF-8" />
+    <title>REEM TIME PRO - Multi Branch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <!-- مكتبات PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #e53935;
+            --primary-soft: #ff6f60;
+            --dark-bg: #0b0b0d;
+            --dark-bg-alt: #18181c;
+            --dark-card: #202028;
+            --dark-border: #33333d;
+            --light-bg: #f5f5f7;
+            --light-bg-alt: #ffffff;
+            --light-card: #ffffff;
+            --light-border: #dddddd;
+            --text-dark: #111111;
+            --text-light: #f9f9f9;
+            --muted: #888888;
+            --radius-lg: 14px;
+            --radius-md: 10px;
+            --radius-sm: 6px;
+            --shadow-soft: 0 14px 35px rgba(0, 0, 0, 0.35);
+            --transition-fast: 0.2s ease;
+            --transition-med: 0.3s ease;
+        }
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{
+            font-family:"Cairo",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+            background:var(--dark-bg);
+            color:var(--text-light);
+            min-height:100vh;
+        }
+        body.light{background:var(--light-bg);color:var(--text-dark)}
 
-    .center{
-      width:360px;
-      margin:80px auto;
-      background:linear-gradient(145deg,#020617,#020617,#111827);
-      padding:24px;
-      border-radius:22px;
-      text-align:center;
-      box-shadow:0 25px 80px rgba(0,0,0,0.9);
-      border:1px solid var(--border);
-      transform:translateY(0);
-      transition:transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .center:hover{
-      transform:translateY(-4px);
-      box-shadow:0 35px 90px rgba(0,0,0,1);
-    }
-    .logo{
-      font-weight:bold;
-      font-size:22px;
-      letter-spacing:1px;
-      margin-bottom:4px;
-    }
-    .logo span{color:var(--accent);}
-    .subtitle{
-      font-size:13px;
-      color:var(--muted);
-      margin-bottom:16px;
-    }
-    input,select,textarea{
-      width:100%;
-      padding:11px;
-      margin:6px 0;
-      border-radius:12px;
-      border:none;
-      outline:none;
-      background:#020617;
-      color:var(--text);
-      border:1px solid var(--border);
-      font-size:14px;
-    }
-    textarea{min-height:70px;resize:vertical;}
-    body.light input,body.light select,body.light textarea{
-      background:#f9fafb;
-    }
-    button{
-      padding:10px 18px;
-      background:linear-gradient(135deg,var(--accent),var(--accent-soft));
-      color:#fff;
-      border:none;
-      border-radius:999px;
-      cursor:pointer;
-      font-weight:bold;
-      font-size:14px;
-      box-shadow:0 10px 25px rgba(99,102,241,0.5);
-      transition:transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-    }
-    button:hover{
-      transform:translateY(-1px);
-      box-shadow:0 16px 35px rgba(99,102,241,0.7);
-      filter:brightness(1.05);
-    }
-    button.secondary{
-      background:#111827;
-      box-shadow:none;
-    }
-    button.danger{
-      background:linear-gradient(135deg,#ef4444,#b91c1c);
-      box-shadow:0 10px 25px rgba(239,68,68,0.5);
-    }
-    button.small{
-      padding:6px 10px;
-      font-size:12px;
-      border-radius:10px;
-    }
+        /* شاشة الدخول */
+        .login-wrapper{
+            position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+            overflow:hidden;z-index:999;
+        }
+        .login-bg{
+            position:absolute;inset:0;
+            background-image:url("reem-time-bg.jpg"); /* ← غيّر هذا لمسار الصورة عندك */
+            background-size:cover;background-position:center;
+            filter:brightness(0.45);
+            transform:scale(1);
+            animation:bgZoom 18s ease-in-out infinite alternate;
+        }
+        @keyframes bgZoom{0%{transform:scale(1)}100%{transform:scale(1.08)}}
+        .login-overlay{
+            position:absolute;inset:0;
+            background:radial-gradient(circle at top,rgba(229,57,53,.35),transparent 55%),
+                       linear-gradient(to bottom,rgba(0,0,0,.75),rgba(0,0,0,.9));
+        }
+        .login-card{
+            position:relative;z-index:2;width:100%;max-width:440px;
+            background:rgba(12,12,16,.92);border-radius:20px;
+            padding:26px 24px 22px;box-shadow:var(--shadow-soft);
+            border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(18px);color:#fff;
+        }
+        .login-header{text-align:center;margin-bottom:16px}
+        .login-logo{
+            width:70px;height:70px;border-radius:50%;
+            border:2px solid rgba(229,57,53,.7);
+            display:flex;align-items:center;justify-content:center;
+            margin:0 auto 10px;
+            background:radial-gradient(circle at 30% 30%,#ff8a80,#b71c1c);
+            box-shadow:0 0 22px rgba(229,57,53,.7);
+        }
+        .login-logo span{font-size:26px;font-weight:700;letter-spacing:1px}
+        .login-title{font-size:22px;font-weight:700;letter-spacing:1px}
+        .login-subtitle{font-size:13px;color:#ccc}
+        .login-form{margin-top:16px}
+        .form-group{margin-bottom:10px}
+        .form-label{font-size:13px;margin-bottom:4px;display:block;color:#ddd}
+        .form-input{
+            width:100%;padding:9px 11px;border-radius:10px;
+            border:1px solid rgba(255,255,255,.18);
+            background:rgba(10,10,14,.9);color:#fff;font-size:14px;outline:none;
+            transition:border var(--transition-fast),box-shadow var(--transition-fast),background var(--transition-fast);
+        }
+        .form-input:focus{
+            border-color:var(--primary-soft);
+            box-shadow:0 0 0 1px rgba(229,57,53,.5);
+            background:rgba(12,12,18,.95);
+        }
+        .login-error{font-size:12px;color:#ff8a80;margin-bottom:4px;min-height:16px}
+        .btn{
+            border:none;cursor:pointer;border-radius:999px;
+            padding:8px 14px;font-size:13px;font-weight:600;
+            display:inline-flex;align-items:center;justify-content:center;gap:6px;
+            transition:background var(--transition-fast),transform var(--transition-fast),box-shadow var(--transition-fast),color var(--transition-fast);
+        }
+        .btn-primary{
+            background:linear-gradient(135deg,#e53935,#ff7043);
+            color:#fff;width:100%;margin-top:4px;
+            box-shadow:0 10px 25px rgba(229,57,53,.45);
+        }
+        .btn-primary:hover{transform:translateY(-1px);box-shadow:0 14px 30px rgba(229,57,53,.6)}
+        .btn-sm{padding:6px 10px;font-size:12px}
+        .login-footer{margin-top:10px;text-align:center;font-size:11px;color:#aaa}
 
-    .app-shell{
-      display:flex;
-      min-height:100vh;
-    }
-    .sidebar{
-      width:260px;
-      background:linear-gradient(180deg,#020617,#020617,#000);
-      border-left:1px solid var(--border);
-      padding:16px 12px;
-      position:sticky;
-      top:0;
-      height:100vh;
-      box-shadow:-10px 0 40px rgba(0,0,0,0.8);
-    }
-    .sidebar-header{
-      text-align:center;
-      margin-bottom:16px;
-    }
-    .sidebar-header h3{
-      margin:0;
-      font-size:18px;
-    }
-    .sidebar-header small{
-      color:var(--muted);
-      font-size:11px;
-    }
-    .menu-item{
-      padding:11px 12px;
-      margin-bottom:8px;
-      border-radius:14px;
-      cursor:pointer;
-      font-size:14px;
-      color:var(--text);
-      display:flex;
-      align-items:center;
-      gap:10px;
-      background:rgba(15,23,42,0.7);
-      border:1px solid transparent;
-      transition:background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
-    }
-    .menu-item span.icon{
-      font-size:20px;
-    }
-    .menu-item:hover{
-      background:rgba(15,23,42,1);
-      transform:translateY(-1px);
-      box-shadow:0 10px 25px rgba(0,0,0,0.7);
-    }
-    .menu-item.active{
-      background:linear-gradient(135deg,var(--accent),var(--accent-soft));
-      box-shadow:0 12px 30px rgba(99,102,241,0.7);
-      border:1px solid rgba(255,255,255,0.08);
-    }
+        /* التطبيق */
+        .app{display:none;min-height:100vh}
+        .app.show{display:flex}
+        .sidebar{
+            width:240px;background:var(--dark-bg-alt);
+            border-left:1px solid var(--dark-border);
+            display:flex;flex-direction:column;padding:16px 14px;
+        }
+        body.light .sidebar{background:#fff;border-left:1px solid var(--light-border)}
+        .sidebar-header{
+            display:flex;align-items:center;gap:10px;
+            margin-bottom:16px;padding-bottom:10px;
+            border-bottom:1px solid rgba(255,255,255,.06);
+        }
+        body.light .sidebar-header{border-bottom-color:rgba(0,0,0,.06)}
+        .sidebar-logo{
+            width:40px;height:40px;border-radius:12px;
+            background:radial-gradient(circle at 30% 30%,#ff8a80,#b71c1c);
+            display:flex;align-items:center;justify-content:center;
+            color:#fff;font-weight:700;font-size:18px;
+        }
+        .sidebar-title{font-size:15px;font-weight:700}
+        .sidebar-subtitle{font-size:11px;color:var(--muted)}
+        .nav{list-style:none;margin-top:8px;flex:1}
+        .nav-item{margin-bottom:4px}
+        .nav-link{
+            width:100%;border-radius:10px;padding:8px 10px;font-size:13px;
+            display:flex;align-items:center;gap:8px;color:#ddd;
+            background:transparent;border:none;cursor:pointer;text-align:right;
+            transition:background var(--transition-fast),color var(--transition-fast),transform var(--transition-fast);
+        }
+        .nav-link span.icon{width:20px;text-align:center;font-size:15px}
+        .nav-link:hover{background:rgba(255,255,255,.06);transform:translateY(-1px)}
+        .nav-link.active{
+            background:linear-gradient(135deg,rgba(229,57,53,.18),rgba(229,57,53,.35));
+            color:#fff;
+        }
+        body.light .nav-link{color:#444}
+        body.light .nav-link:hover{background:rgba(0,0,0,.04)}
+        body.light .nav-link.active{
+            background:linear-gradient(135deg,rgba(229,57,53,.12),rgba(229,57,53,.25));
+            color:#b71c1c;
+        }
+        .sidebar-footer{font-size:11px;color:var(--muted);margin-top:8px}
 
-    .main{
-      flex:1;
-      padding:18px;
-    }
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:16px;
-      font-size:13px;
-      color:var(--muted);
-    }
-    .topbar-left strong{
-      color:var(--text);
-      font-size:15px;
-    }
-    .topbar-right{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .theme-toggle{
-      display:flex;
-      align-items:center;
-      gap:4px;
-      font-size:12px;
-      cursor:pointer;
-      padding:4px 8px;
-      border-radius:999px;
-      background:#020617;
-      border:1px solid var(--border);
-    }
+        .main{
+            flex:1;display:flex;flex-direction:column;
+            background:radial-gradient(circle at top left,rgba(229,57,53,.08),transparent 55%),
+                       radial-gradient(circle at bottom right,rgba(255,255,255,.03),transparent 55%);
+        }
+        body.light .main{
+            background:radial-gradient(circle at top left,rgba(229,57,53,.06),transparent 55%),
+                       radial-gradient(circle at bottom right,rgba(0,0,0,.02),transparent 55%);
+        }
+        .topbar{
+            height:56px;display:flex;align-items:center;justify-content:space-between;
+            padding:0 18px;border-bottom:1px solid rgba(255,255,255,.06);
+            backdrop-filter:blur(10px);
+            background:linear-gradient(to left,rgba(11,11,13,.96),rgba(11,11,13,.9));
+        }
+        body.light .topbar{
+            background:linear-gradient(to left,rgba(255,255,255,.96),rgba(250,250,250,.96));
+            border-bottom-color:rgba(0,0,0,.06);
+        }
+        .topbar-left{display:flex;align-items:center;gap:10px}
+        .topbar-title{font-size:15px;font-weight:600}
+        .topbar-subtitle{font-size:11px;color:var(--muted)}
+        .topbar-right{display:flex;align-items:center;gap:8px}
+        .toggle-theme{
+            border-radius:999px;padding:5px 10px;font-size:11px;
+            border:1px solid rgba(255,255,255,.18);
+            background:rgba(20,20,24,.9);color:#fff;cursor:pointer;
+            display:flex;align-items:center;gap:6px;
+        }
+        body.light .toggle-theme{
+            background:#fff;color:#333;border-color:rgba(0,0,0,.08);
+        }
+        .user-pill{
+            border-radius:999px;padding:5px 10px;font-size:11px;
+            background:rgba(255,255,255,.06);
+            display:flex;align-items:center;gap:6px;
+        }
+        body.light .user-pill{background:rgba(0,0,0,.04)}
+        .branch-select{
+            border-radius:999px;padding:4px 8px;font-size:11px;
+            border:1px solid rgba(255,255,255,.18);
+            background:rgba(20,20,24,.9);color:#fff;outline:none;
+        }
+        body.light .branch-select{
+            background:#fff;color:#333;border-color:rgba(0,0,0,.08);
+        }
 
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-      gap:14px;
-      margin-bottom:16px;
-    }
-    .card{
-      background:radial-gradient(circle at top left,#1f2937 0,var(--bg-card) 45%,#020617 100%);
-      border-radius:18px;
-      padding:16px;
-      border:1px solid var(--border);
-      box-shadow:0 22px 60px rgba(0,0,0,0.9);
-      transform:translateY(0) translateZ(0);
-      transition:transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
-    }
-    .card:hover{
-      transform:translateY(-4px);
-      box-shadow:0 30px 80px rgba(0,0,0,1);
-      border-color:rgba(99,102,241,0.6);
-    }
-    .card h2,.card h3{
-      margin-top:0;
-      margin-bottom:8px;
-      font-size:17px;
-    }
-    .card p{
-      margin:4px 0;
-      font-size:14px;
-    }
-    .badge{
-      display:inline-block;
-      padding:3px 8px;
-      border-radius:999px;
-      font-size:11px;
-      background:#111827;
-      color:var(--muted);
-    }
-    .stat-value{
-      font-size:22px;
-      font-weight:bold;
-      margin-top:4px;
-    }
-    .stat-label{
-      font-size:12px;
-      color:var(--muted);
-    }
+        .content{padding:16px 18px 20px;overflow-y:auto}
+        .page{display:none}
+        .page.active{display:block}
+        .cards{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+            gap:12px;margin-bottom:16px;
+        }
+        .card{
+            border-radius:var(--radius-lg);padding:12px 12px 10px;
+            background:var(--dark-card);
+            border:1px solid rgba(255,255,255,.06);
+            box-shadow:0 10px 25px rgba(0,0,0,.35);
+        }
+        body.light .card{
+            background:var(--light-card);
+            border-color:rgba(0,0,0,.06);
+            box-shadow:0 10px 25px rgba(0,0,0,.08);
+        }
+        .card-title{font-size:13px;color:var(--muted);margin-bottom:4px}
+        .card-value{font-size:20px;font-weight:700}
+        .card-foot{font-size:11px;color:var(--muted);margin-top:4px}
+        .section-header{
+            display:flex;align-items:center;justify-content:space-between;
+            margin-bottom:8px;margin-top:4px;
+        }
+        .section-title{font-size:15px;font-weight:600}
+        .section-actions{display:flex;gap:6px}
+        .table-wrapper{
+            border-radius:var(--radius-lg);
+            background:var(--dark-card);
+            border:1px solid rgba(255,255,255,.06);
+            padding:10px;overflow-x:auto;
+        }
+        body.light .table-wrapper{
+            background:var(--light-card);
+            border-color:rgba(0,0,0,.06);
+        }
+        table{width:100%;border-collapse:collapse;font-size:12px}
+        th,td{padding:6px 8px;text-align:right;border-bottom:1px solid rgba(255,255,255,.04)}
+        body.light th,body.light td{border-bottom-color:rgba(0,0,0,.04)}
+        th{font-weight:600;font-size:11px;color:var(--muted)}
+        tr:last-child td{border-bottom:none}
+        .badge{
+            display:inline-flex;align-items:center;justify-content:center;
+            padding:2px 8px;border-radius:999px;font-size:11px;
+        }
+        .badge-success{background:rgba(76,175,80,.12);color:#81c784}
+        .badge-warning{background:rgba(255,193,7,.12);color:#ffca28}
+        .badge-danger{background:rgba(244,67,54,.12);color:#ef9a9a}
+        .badge-info{background:rgba(33,150,243,.12);color:#90caf9}
+        .btn-ghost{
+            background:transparent;border-radius:999px;
+            border:1px solid rgba(255,255,255,.16);color:#ddd;
+        }
+        .btn-ghost:hover{background:rgba(255,255,255,.06)}
+        body.light .btn-ghost{
+            border-color:rgba(0,0,0,.12);color:#444;
+        }
+        body.light .btn-ghost:hover{background:rgba(0,0,0,.04)}
+        .btn-danger{background:rgba(244,67,54,.16);color:#ff8a80}
+        .btn-danger:hover{background:rgba(244,67,54,.26)}
+        .form-inline{
+            display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;
+        }
+        .form-inline .form-input{min-width:140px}
+        .mt-8{margin-top:8px}.mt-10{margin-top:10px}.mt-12{margin-top:12px}
 
-    .table{
-      width:100%;
-      border-collapse:collapse;
-      margin-top:10px;
-      font-size:13px;
-    }
-    .table th,.table td{
-      border-bottom:1px solid #111827;
-      padding:6px 4px;
-      text-align:right;
-    }
-    .table th{
-      color:var(--muted);
-      font-weight:normal;
-    }
-
-    .actions-row{
-      display:flex;
-      gap:8px;
-      margin:10px 0;
-      flex-wrap:wrap;
-    }
-
-    #notif{
-      position:fixed;
-      top:16px;
-      left:50%;
-      transform:translateX(-50%) translateY(-80px);
-      background:#16a34a;
-      color:#ecfdf5;
-      padding:8px 16px;
-      border-radius:999px;
-      font-size:12px;
-      box-shadow:0 15px 40px rgba(22,163,74,0.7);
-      opacity:0;
-      transition:transform 0.3s ease, opacity 0.3s ease;
-      z-index:9999;
-    }
-    #notif.error{
-      background:#b91c1c;
-      box-shadow:0 15px 40px rgba(185,28,28,0.7);
-    }
-    #notif.show{
-      opacity:1;
-      transform:translateX(-50%) translateY(0);
-    }
-
-    .tag{
-      display:inline-block;
-      padding:2px 6px;
-      border-radius:999px;
-      font-size:11px;
-      background:#111827;
-      color:var(--muted);
-    }
-    .tag.todo{background:rgba(239,68,68,0.15);color:#f87171;}
-    .tag.progress{background:rgba(59,130,246,0.15);color:#60a5fa;}
-    .tag.done{background:rgba(34,197,94,0.15);color:#4ade80;}
-
-    @media(max-width:900px){
-      .app-shell{flex-direction:column;}
-      .sidebar{
-        width:100%;
-        height:auto;
-        display:flex;
-        overflow-x:auto;
-        box-shadow:none;
-        border-left:none;
-        border-bottom:1px solid var(--border);
-      }
-      .sidebar-header{display:none;}
-      .menu-item{white-space:nowrap;}
-    }
-  </style>
+        @media(max-width:900px){
+            .sidebar{display:none}
+            .app.show{flex-direction:column}
+        }
+    </style>
 </head>
 <body>
-
-<div id="notif"></div>
-
-<!-- شاشة الدخول -->
-<div id="login">
-  <div class="center">
-    <div class="logo">REEM <span>TIME</span> PRO</div>
-    <div class="subtitle">نظام حضور وانصراف سحابي – Firebase</div>
-    <input id="email" placeholder="البريد الإلكتروني">
-    <input id="pass" type="password" placeholder="كلمة المرور">
-    <button onclick="login()">دخول</button>
-    <p style="font-size:12px;color:#9ca3af;margin-top:10px;">
-      يتم إنشاء حسابات الدخول من Firebase Auth، وإدارة بيانات الموظفين من داخل هذه اللوحة.
-    </p>
-  </div>
-</div>
-
-<!-- التطبيق -->
-<div id="app" style="display:none">
-  <div class="app-shell">
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <h3>REEM TIME PRO</h3>
-        <small>Cloud Attendance Dashboard</small>
-      </div>
-      <div class="menu-item active" onclick="showPage('dash', this)">
-        <span class="icon">🏠</span><span>الرئيسية</span>
-      </div>
-      <div class="menu-item" onclick="showPage('punch', this)">
-        <span class="icon">⏱</span><span>الحضور والانصراف</span>
-      </div>
-      <div class="menu-item" onclick="showPage('employees', this)">
-        <span class="icon">👥</span><span>الموظفون</span>
-      </div>
-      <div class="menu-item" onclick="showPage('tasks', this)">
-        <span class="icon">✅</span><span>المهام</span>
-      </div>
-      <div class="menu-item" onclick="showPage('report', this)">
-        <span class="icon">📊</span><span>التقارير</span>
-      </div>
-      <div class="menu-item" onclick="logout()">
-        <span class="icon">🚪</span><span>خروج</span>
-      </div>
+    <!-- شاشة الدخول -->
+    <div class="login-wrapper" id="loginWrapper">
+        <div class="login-bg"></div>
+        <div class="login-overlay"></div>
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo"><span>RT</span></div>
+                <div class="login-title">REEM TIME PRO</div>
+                <div class="login-subtitle">نظام حضور وانصراف متعدد الفروع والصلاحيات</div>
+            </div>
+            <div class="login-form">
+                <div class="login-error" id="loginError"></div>
+                <div class="form-group">
+                    <label class="form-label">اسم المستخدم</label>
+                    <input type="text" id="loginUser" class="form-input" placeholder="admin" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">كلمة المرور</label>
+                    <input type="password" id="loginPass" class="form-input" placeholder="123" />
+                </div>
+                <button class="btn btn-primary" id="loginBtn">دخول إلى النظام</button>
+            </div>
+            <div class="login-footer">
+                مستخدم افتراضي: admin / 123 (Super Admin)
+            </div>
+        </div>
     </div>
-    <div class="main">
-      <div class="topbar">
-        <div class="topbar-left">
-          مرحبًا، <strong id="topUser">—</strong><br>
-          <small id="topRole">مستخدم سحابي</small>
-        </div>
-        <div class="topbar-right">
-          <div id="now"></div>
-          <div class="theme-toggle" onclick="toggleTheme()">
-            <span>🌓</span><span>الوضع</span>
-          </div>
-        </div>
-      </div>
-      <div id="page"></div>
+
+    <!-- التطبيق -->
+    <div class="app" id="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">RT</div>
+                <div>
+                    <div class="sidebar-title">REEM TIME PRO</div>
+                    <div class="sidebar-subtitle">نظام حضور وانصراف</div>
+                </div>
+            </div>
+            <ul class="nav" id="nav">
+                <li class="nav-item">
+                    <button class="nav-link active" data-page="dashboard">
+                        <span class="icon">🏠</span><span>الرئيسية</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-page="employees">
+                        <span class="icon">👥</span><span>الموظفين</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-page="tasks">
+                        <span class="icon">📋</span><span>المهام</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-page="attendance">
+                        <span class="icon">⏱️</span><span>الحضور والانصراف</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-page="reports">
+                        <span class="icon">📊</span><span>التقارير</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-page="backup">
+                        <span class="icon">📁</span><span>النسخ الاحتياطي</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-page="settings">
+                        <span class="icon">⚙️</span><span>الإعدادات</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="logoutBtn">
+                        <span class="icon">🚪</span><span>تسجيل الخروج</span>
+                    </button>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                © REEM TIME • نسخة محلية متعددة الفروع
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div>
+                        <div class="topbar-title">لوحة التحكم</div>
+                        <div class="topbar-subtitle" id="branchLabel">الفرع الحالي: -</div>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <select id="branchSelect" class="branch-select" style="display:none;"></select>
+                    <button class="toggle-theme" id="themeToggle">
+                        <span id="themeIcon">🌙</span>
+                        <span id="themeText">الوضع الداكن</span>
+                    </button>
+                    <div class="user-pill">
+                        <span>👤</span>
+                        <span id="currentUserLabel">user</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="content">
+                <!-- الرئيسية -->
+                <div class="page active" id="page-dashboard">
+                    <div class="cards">
+                        <div class="card">
+                            <div class="card-title">عدد الموظفين</div>
+                            <div class="card-value" id="statEmployees">0</div>
+                            <div class="card-foot">إجمالي الموظفين في الفرع الحالي</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">المهام النشطة</div>
+                            <div class="card-value" id="statTasks">0</div>
+                            <div class="card-foot">المهام المفتوحة أو الجارية</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">سجلات الحضور</div>
+                            <div class="card-value" id="statAttendance">0</div>
+                            <div class="card-foot">إجمالي عمليات الحضور والانصراف</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">آخر نسخة احتياطية</div>
+                            <div class="card-value" id="statBackup">لا يوجد</div>
+                            <div class="card-foot">تاريخ آخر تصدير للبيانات</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- الموظفين -->
+                <div class="page" id="page-employees">
+                    <div class="section-header">
+                        <div class="section-title">الموظفين</div>
+                        <div class="section-actions">
+                            <button class="btn btn-ghost btn-sm" id="addEmployeeBtn">+ إضافة موظف</button>
+                        </div>
+                    </div>
+                    <div class="form-inline" id="employeeForm" style="display:none;">
+                        <input type="hidden" id="employeeId" />
+                        <input class="form-input" id="employeeName" placeholder="اسم الموظف" />
+                        <input class="form-input" id="employeeJob" placeholder="المسمى الوظيفي" />
+                        <input class="form-input" id="employeeDept" placeholder="القسم" />
+                        <button class="btn btn-primary btn-sm" id="saveEmployeeBtn">حفظ</button>
+                        <button class="btn btn-ghost btn-sm" id="cancelEmployeeBtn">إلغاء</button>
+                    </div>
+                    <div class="table-wrapper mt-8">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الاسم</th>
+                                    <th>الوظيفة</th>
+                                    <th>القسم</th>
+                                    <th>إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeesTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- المهام -->
+                <div class="page" id="page-tasks">
+                    <div class="section-header">
+                        <div class="section-title">المهام</div>
+                        <div class="section-actions">
+                            <button class="btn btn-ghost btn-sm" id="addTaskBtn">+ إضافة مهمة</button>
+                        </div>
+                    </div>
+                    <div class="form-inline" id="taskForm" style="display:none;">
+                        <input type="hidden" id="taskId" />
+                        <input class="form-input" id="taskTitle" placeholder="عنوان المهمة" />
+                        <input class="form-input" id="taskEmployee" placeholder="اسم الموظف المسؤول" />
+                        <input class="form-input" id="taskDue" type="date" />
+                        <select class="form-input" id="taskStatus">
+                            <option value="new">لم تبدأ</option>
+                            <option value="in_progress">جارية</option>
+                            <option value="done">مكتملة</option>
+                        </select>
+                        <button class="btn btn-primary btn-sm" id="saveTaskBtn">حفظ</button>
+                        <button class="btn btn-ghost btn-sm" id="cancelTaskBtn">إلغاء</button>
+                    </div>
+                    <div class="table-wrapper mt-8">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>العنوان</th>
+                                    <th>الموظف</th>
+                                    <th>تاريخ الاستحقاق</th>
+                                    <th>الحالة</th>
+                                    <th>إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tasksTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- الحضور والانصراف -->
+                <div class="page" id="page-attendance">
+                    <div class="section-header">
+                        <div class="section-title">الحضور والانصراف</div>
+                        <div class="section-actions">
+                            <button class="btn btn-ghost btn-sm" id="addAttendanceBtn">+ تسجيل حضور/انصراف</button>
+                            <button class="btn btn-ghost btn-sm" id="printAttendancePdfBtn">🖨 PDF</button>
+                        </div>
+                    </div>
+                    <div class="form-inline" id="attendanceForm" style="display:none;">
+                        <input type="hidden" id="attendanceId" />
+                        <input class="form-input" id="attendanceEmployee" placeholder="اسم الموظف" />
+                        <input class="form-input" id="attendanceDate" type="date" />
+                        <input class="form-input" id="attendanceIn" type="time" />
+                        <input class="form-input" id="attendanceOut" type="time" />
+                        <button class="btn btn-primary btn-sm" id="saveAttendanceBtn">حفظ</button>
+                        <button class="btn btn-ghost btn-sm" id="cancelAttendanceBtn">إلغاء</button>
+                    </div>
+                    <div class="table-wrapper mt-8" id="attendanceTableWrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الموظف</th>
+                                    <th>التاريخ</th>
+                                    <th>الحضور</th>
+                                    <th>الانصراف</th>
+                                    <th>الساعات</th>
+                                    <th>إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- التقارير -->
+                <div class="page" id="page-reports">
+                    <div class="section-header">
+                        <div class="section-title">التقارير</div>
+                        <div class="section-actions">
+                            <button class="btn btn-ghost btn-sm" id="printReportsPdfBtn">🖨 PDF</button>
+                        </div>
+                    </div>
+                    <div class="cards" id="reportsCards">
+                        <div class="card">
+                            <div class="card-title">إجمالي الساعات المسجلة</div>
+                            <div class="card-value" id="reportTotalHours">0</div>
+                            <div class="card-foot">مجموع الساعات من سجلات الحضور في الفرع الحالي</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">عدد أيام العمل المسجلة</div>
+                            <div class="card-value" id="reportDays">0</div>
+                            <div class="card-foot">عدد الأيام التي تم تسجيل حضور فيها</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- النسخ الاحتياطي -->
+                <div class="page" id="page-backup">
+                    <div class="section-header">
+                        <div class="section-title">النسخ الاحتياطي الكامل</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">تصدير البيانات</div>
+                        <div class="card-foot">سيتم تصدير جميع الفروع والمستخدمين والبيانات في ملف واحد.</div>
+                        <button class="btn btn-primary btn-sm mt-10" id="exportBackupBtn">أخذ نسخة احتياطية كاملة</button>
+                    </div>
+                    <div class="card mt-12">
+                        <div class="card-title">استرجاع البيانات</div>
+                        <div class="card-foot">اختر ملف النسخة الاحتياطية (reem-backup.json) لاسترجاع النظام بالكامل.</div>
+                        <input type="file" id="importBackupInput" accept=".json" class="mt-10" />
+                    </div>
+                </div>
+
+                <!-- الإعدادات -->
+                <div class="page" id="page-settings">
+                    <div class="section-header">
+                        <div class="section-title">الإعدادات</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">معلومات النظام</div>
+                        <div class="card-foot">
+                            REEM TIME PRO - نظام حضور وانصراف محلي متعدد الفروع والصلاحيات  
+                            <br />بدون سيرفر - بدون Firebase - تخزين محلي + نسخ احتياطي كامل + PDF
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
-  </div>
-</div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-  import {
-    getAuth,
-    signInWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-  import {
-    getFirestore,
-    collection,
-    doc,
-    getDoc,
-    getDocs,
-    setDoc,
-    addDoc,
-    updateDoc,
-    deleteDoc,
-    serverTimestamp,
-    query,
-    where
-  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    <script>
+        // هيكل البيانات
+        const LS_KEY = "reem_time_multi_v1";
 
-  // ===== إعداد Firebase (عدّل هذه القيم من لوحة Firebase) =====
-  const firebaseConfig = {
-    apiKey: "ضع_القيمة_من_لوحة_Firebase",
-    authDomain: "ضع_القيمة",
-    projectId: "ضع_القيمة",
-    storageBucket: "ضع_القيمة",
-    messagingSenderId: "ضع_القيمة",
-    appId: "ضع_القيمة"
-  };
+        let state = {
+            branches: ["الفرع الرئيسي"],
+            currentBranch: "الفرع الرئيسي",
+            users: [
+                { username: "admin", password: "123", role: "super_admin", branch: "*" }
+            ],
+            data: {
+                "الفرع الرئيسي": {
+                    employees: [],
+                    tasks: [],
+                    attendance: []
+                }
+            },
+            settings: {
+                lastBackup: null
+            }
+        };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db   = getFirestore(app);
+        let currentUser = null;
 
-  // ===== أدوات عامة =====
-  function notify(msg, type='ok'){
-    const n = document.getElementById('notif');
-    n.textContent = msg;
-    n.className = '';
-    if(type === 'error') n.classList.add('error');
-    n.classList.add('show');
-    setTimeout(()=>{ n.classList.remove('show'); }, 2200);
-  }
-  function $(id){return document.getElementById(id);}
+        function loadState() {
+            const raw = localStorage.getItem(LS_KEY);
+            if (raw) {
+                try {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && parsed.branches && parsed.data) {
+                        state = parsed;
+                    }
+                } catch (e) {
+                    console.error("Error parsing state", e);
+                }
+            }
+        }
 
-  // ساعة أعلى الواجهة
-  setInterval(()=>{
-    const d = new Date();
-    const f = d.toLocaleString('ar-EG',{dateStyle:'medium', timeStyle:'short'});
-    const el = $("now");
-    if(el) el.textContent = f;
-  },1000);
+        function saveState() {
+            localStorage.setItem(LS_KEY, JSON.stringify(state));
+            updateStats();
+            updateReports();
+        }
 
-  // ===== الثيم (فاتح/غامق) =====
-  function loadTheme(){
-    const t = localStorage.getItem('reem_theme') || 'dark';
-    document.body.classList.toggle('light', t === 'light');
-  }
-  loadTheme();
-  window.toggleTheme = function(){
-    const isLight = document.body.classList.contains('light');
-    const next = isLight ? 'dark' : 'light';
-    localStorage.setItem('reem_theme', next);
-    loadTheme();
-  };
+        function getBranchData() {
+            if (!state.data[state.currentBranch]) {
+                state.data[state.currentBranch] = { employees: [], tasks: [], attendance: [] };
+            }
+            return state.data[state.currentBranch];
+        }
 
-  // ===== تسجيل الدخول =====
-  window.login = async function(){
-    const email = $("email").value.trim();
-    const pass  = $("pass").value.trim();
-    if(!email || !pass){
-      notify("أدخل البريد وكلمة المرور","error");
-      return;
-    }
-    try{
-      await signInWithEmailAndPassword(auth, email, pass);
-      notify("تم تسجيل الدخول");
-    }catch(e){
-      console.error(e);
-      notify("بيانات الدخول غير صحيحة","error");
-    }
-  };
+        function calcHours(inTime, outTime) {
+            if (!inTime || !outTime) return 0;
+            const [ih, im] = inTime.split(":").map(Number);
+            const [oh, om] = outTime.split(":").map(Number);
+            const start = ih * 60 + im;
+            const end = oh * 60 + om;
+            const diff = end - start;
+            if (diff <= 0) return 0;
+            return (diff / 60).toFixed(2);
+        }
 
-  window.logout = async function(){
-    await signOut(auth);
-  };
+        function updateStats() {
+            const b = getBranchData();
+            document.getElementById("statEmployees").textContent = b.employees.length;
+            document.getElementById("statTasks").textContent = b.tasks.filter(t => t.status !== "done").length;
+            document.getElementById("statAttendance").textContent = b.attendance.length;
+            document.getElementById("statBackup").textContent = state.settings.lastBackup || "لا يوجد";
+        }
 
-  // ===== ملف المستخدم في Firestore =====
-  async function loadUserProfile(user){
-    const ref = doc(db,"users",user.uid);
-    const snap = await getDoc(ref);
-    if(!snap.exists()) return {role:'user', name:user.email, email:user.email};
-    return snap.data();
-  }
+        function updateReports() {
+            const b = getBranchData();
+            let totalHours = 0;
+            const daysSet = new Set();
+            b.attendance.forEach(a => {
+                totalHours += Number(a.hours || 0);
+                if (a.date) daysSet.add(a.date);
+            });
+            document.getElementById("reportTotalHours").textContent = totalHours.toFixed(2);
+            document.getElementById("reportDays").textContent = daysSet.size;
+        }
 
-  // ===== حالة المستخدم =====
-  onAuthStateChanged(auth, async (user)=>{
-    if(user){
-      $("login").style.display = "none";
-      $("app").style.display   = "block";
-      const profile = await loadUserProfile(user);
-      $("topUser").textContent = profile.name || user.email;
-      $("topRole").textContent = profile.role === 'admin' ? 'مدير النظام' : 'موظف';
-      renderDash(user, profile);
-    }else{
-      $("login").style.display = "block";
-      $("app").style.display   = "none";
-    }
-  });
+        function renderEmployees() {
+            const b = getBranchData();
+            const tbody = document.getElementById("employeesTableBody");
+            tbody.innerHTML = "";
+            b.employees.forEach(emp => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${emp.name || ""}</td>
+                    <td>${emp.job || ""}</td>
+                    <td>${emp.dept || ""}</td>
+                    <td>
+                        <button class="btn btn-ghost btn-sm" data-edit="${emp.id}">تعديل</button>
+                        <button class="btn btn-danger btn-sm" data-del="${emp.id}">حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
 
-  // ===== التنقل بين الصفحات =====
-  window.showPage = async function(page, el){
-    document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
-    if(el) el.classList.add('active');
+        function renderTasks() {
+            const b = getBranchData();
+            const tbody = document.getElementById("tasksTableBody");
+            tbody.innerHTML = "";
+            b.tasks.forEach(task => {
+                let badgeClass = "badge-info";
+                let statusText = "غير معروف";
+                if (task.status === "new") { badgeClass = "badge-warning"; statusText = "لم تبدأ"; }
+                else if (task.status === "in_progress") { badgeClass = "badge-info"; statusText = "جارية"; }
+                else if (task.status === "done") { badgeClass = "badge-success"; statusText = "مكتملة"; }
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${task.title || ""}</td>
+                    <td>${task.employee || ""}</td>
+                    <td>${task.due || ""}</td>
+                    <td><span class="badge ${badgeClass}">${statusText}</span></td>
+                    <td>
+                        <button class="btn btn-ghost btn-sm" data-edit="${task.id}">تعديل</button>
+                        <button class="btn btn-danger btn-sm" data-del="${task.id}">حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
 
-    const user = auth.currentUser;
-    if(!user) return;
-    const profile = await loadUserProfile(user);
+        function renderAttendance() {
+            const b = getBranchData();
+            const tbody = document.getElementById("attendanceTableBody");
+            tbody.innerHTML = "";
+            b.attendance.forEach(a => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${a.employee || ""}</td>
+                    <td>${a.date || ""}</td>
+                    <td>${a.in || ""}</td>
+                    <td>${a.out || ""}</td>
+                    <td>${a.hours || "0"}</td>
+                    <td>
+                        <button class="btn btn-ghost btn-sm" data-edit="${a.id}">تعديل</button>
+                        <button class="btn btn-danger btn-sm" data-del="${a.id}">حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
 
-    if(page==='dash')      renderDash(user, profile);
-    if(page==='punch')     renderPunch(user, profile);
-    if(page==='employees') renderEmployees(user, profile);
-    if(page==='tasks')     renderTasks(user, profile);
-    if(page==='report')    renderReport(user, profile);
-  };
+        function showPage(pageId) {
+            document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+            document.getElementById("page-" + pageId).classList.add("active");
+            document.querySelectorAll(".nav-link").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.page === pageId);
+            });
+        }
 
-  // ===== حضور وانصراف مع GPS + حساب ساعات =====
-  function getLocation(){
-    return new Promise((resolve)=>{
-      if(!navigator.geolocation){
-        notify("المتصفح لا يدعم GPS","error");
-        resolve(null);
-        return;
-      }
-      navigator.geolocation.getCurrentPosition(
-        pos=>resolve({lat:pos.coords.latitude,lng:pos.coords.longitude}),
-        err=>{notify("تعذر الحصول على الموقع","error");resolve(null);},
-        {enableHighAccuracy:true,timeout:8000}
-      );
-    });
-  }
-  function mapLink(coords){
-    if(!coords) return '';
-    return `<a href="https://www.google.com/maps?q=${coords.lat},${coords.lng}" target="_blank">عرض على الخريطة</a>`;
-  }
-  async function getTodayDocRef(user){
-    const today = new Date().toISOString().slice(0,10); // YYYY-MM-DD
-    const ref = doc(db, "attendance", `${user.uid}_${today}`);
-    return ref;
-  }
+        // صلاحيات: إخفاء بعض الصفحات حسب الدور
+        function applyPermissions() {
+            const role = currentUser?.role || "employee";
+            const employeesItem = document.querySelector('[data-page="employees"]').parentElement;
+            const backupItem = document.querySelector('[data-page="backup"]').parentElement;
+            const settingsItem = document.querySelector('[data-page="settings"]').parentElement;
 
-  async function renderPunch(user, profile){
-    const ref = await getTodayDocRef(user);
-    const snap = await getDoc(ref);
-    let data = snap.exists()?snap.data():null;
+            // الكل ظاهر افتراضيًا
+            employeesItem.style.display = "";
+            backupItem.style.display = "";
+            settingsItem.style.display = "";
 
-    let html = `
-      <div class="card">
-        <span class="badge">الحضور اليومي</span>
-        <h3>الحضور والانصراف</h3>
-        <p>قم بتسجيل الحضور والانصراف مع حفظ الموقع (GPS) في قاعدة البيانات السحابية.</p>
-        <div class="actions-row">
-          <button onclick="checkIn()">📍 تسجيل حضور</button>
-          <button class="danger" onclick="checkOut()">📍 تسجيل انصراف</button>
-        </div>
-        <hr style="margin:10px 0;border-color:#1f2937;">
-    `;
+            if (role === "employee") {
+                employeesItem.style.display = "none";
+                backupItem.style.display = "none";
+                settingsItem.style.display = "none";
+            } else if (role === "manager") {
+                backupItem.style.display = "none";
+                settingsItem.style.display = "none";
+            } else if (role === "admin") {
+                settingsItem.style.display = "none";
+            }
+        }
 
-    if(data){
-      html += `<p>🟢 <strong>الحضور:</strong> ${data.checkInTime || '-'} ${data.locIn?'<br><small>'+mapLink(data.locIn)+'</small>':''}</p>`;
-      html += `<p>🔴 <strong>الانصراف:</strong> ${data.checkOutTime || '-'} ${data.locOut?'<br><small>'+mapLink(data.locOut)+'</small>':''}</p>`;
-      html += `<p><strong>إجمالي الساعات:</strong> ${data.totalHours != null ? data.totalHours.toFixed(2)+' ساعة' : '-'}</p>`;
-    }else{
-      html += `<p>لم يتم تسجيل حضور اليوم بعد.</p>`;
-    }
+        // تسجيل الدخول
+        const loginBtn = document.getElementById("loginBtn");
+        const loginUser = document.getElementById("loginUser");
+        const loginPass = document.getElementById("loginPass");
+        const loginError = document.getElementById("loginError");
+        const loginWrapper = document.getElementById("loginWrapper");
+        const app = document.getElementById("app");
+        const currentUserLabel = document.getElementById("currentUserLabel");
+        const branchLabel = document.getElementById("branchLabel");
+        const branchSelect = document.getElementById("branchSelect");
 
-    html += `</div>`;
-    $("page").innerHTML = html;
-  }
+        function refreshBranchUI() {
+            branchLabel.textContent = "الفرع الحالي: " + state.currentBranch;
+            if (currentUser && currentUser.role === "super_admin") {
+                branchSelect.style.display = "inline-block";
+                branchSelect.innerHTML = "";
+                state.branches.forEach(b => {
+                    const opt = document.createElement("option");
+                    opt.value = b;
+                    opt.textContent = b;
+                    if (b === state.currentBranch) opt.selected = true;
+                    branchSelect.appendChild(opt);
+                });
+            } else {
+                branchSelect.style.display = "none";
+            }
+            renderEmployees();
+            renderTasks();
+            renderAttendance();
+            updateStats();
+            updateReports();
+        }
 
-  window.checkIn = async function(){
-    const user = auth.currentUser;
-    if(!user) return;
-    const ref = await getTodayDocRef(user);
-    const snap = await getDoc(ref);
-    if(snap.exists() && snap.data().checkInTime){
-      notify("تم تسجيل الحضور بالفعل","error");
-      return;
-    }
-    const loc = await getLocation();
-    const now = new Date();
-    const dateStr = now.toISOString().slice(0,10);
-    const yearMonth = dateStr.slice(0,7); // YYYY-MM
-    await setDoc(ref,{
-      uid:user.uid,
-      date:dateStr,
-      yearMonth:yearMonth,
-      checkInTime:now.toLocaleTimeString('ar-EG',{timeStyle:'short'}),
-      checkInMs:now.getTime(),
-      locIn:loc || null,
-      createdAt:serverTimestamp()
-    },{merge:true});
-    notify("تم تسجيل الحضور");
-    const profile = await loadUserProfile(user);
-    renderPunch(user, profile);
-  };
+        loginBtn.addEventListener("click", () => {
+            const u = (loginUser.value.trim() || "admin");
+            const p = (loginPass.value.trim() || "123");
+            const found = state.users.find(x => x.username === u && x.password === p);
+            if (!found) {
+                loginError.textContent = "بيانات الدخول غير صحيحة.";
+                return;
+            }
+            currentUser = found;
+            loginError.textContent = "";
+            loginWrapper.style.display = "none";
+            app.classList.add("show");
+            currentUserLabel.textContent = `${currentUser.username} (${currentUser.role})`;
 
-  window.checkOut = async function(){
-    const user = auth.currentUser;
-    if(!user) return;
-    const ref = await getTodayDocRef(user);
-    const snap = await getDoc(ref);
-    if(!snap.exists() || !snap.data().checkInTime){
-      notify("سجل الحضور أولاً","error");
-      return;
-    }
-    if(snap.data().checkOutTime){
-      notify("تم تسجيل الانصراف بالفعل","error");
-      return;
-    }
-    const loc = await getLocation();
-    const now = new Date();
-    const data = snap.data();
-    const checkInMs = data.checkInMs || now.getTime();
-    const diffHours = (now.getTime() - checkInMs) / (1000*60*60);
-    await setDoc(ref,{
-      checkOutTime:now.toLocaleTimeString('ar-EG',{timeStyle:'short'}),
-      checkOutMs:now.getTime(),
-      locOut:loc || null,
-      totalHours:diffHours,
-      updatedAt:serverTimestamp()
-    },{merge:true});
-    notify("تم تسجيل الانصراف");
-    const profile = await loadUserProfile(user);
-    renderPunch(user, profile);
-  };
-
-  // ===== Dashboard رئيسية =====
-  async function renderDash(user, profile){
-    const attCol = collection(db,"attendance");
-    const qSnap = await getDocs(query(attCol, where("uid","==",user.uid)));
-    let daysCount = 0;
-    let totalHours = 0;
-    qSnap.forEach(d=>{
-      const x = d.data();
-      daysCount++;
-      if(x.totalHours != null) totalHours += x.totalHours;
-    });
-
-    $("page").innerHTML = `
-      <div class="cards">
-        <div class="card">
-          <span class="badge">المستخدم</span>
-          <h3>مرحبًا ${profile.name || user.email}</h3>
-          <p>دورك الحالي: <strong>${profile.role === 'admin' ? 'مدير النظام' : 'موظف'}</strong></p>
-          <p class="stat-label">يمكنك تسجيل الحضور والانصراف من القائمة الجانبية.</p>
-        </div>
-        <div class="card">
-          <span class="badge">إحصاءات</span>
-          <h3>أيام تم تسجيلها</h3>
-          <div class="stat-value">${daysCount}</div>
-          <div class="stat-label">عدد الأيام التي تحتوي على حضور في النظام السحابي.</div>
-          <p style="margin-top:6px;"><strong>إجمالي الساعات:</strong> ${totalHours.toFixed(2)} ساعة</p>
-        </div>
-        <div class="card">
-          <span class="badge">النظام</span>
-          <h3>REEM TIME PRO – Cloud</h3>
-          <p>نظام حضور وانصراف سحابي مبني على Firebase، مع إدارة موظفين ومهام وتقارير شهرية قابلة للتطوير.</p>
-        </div>
-      </div>
-    `;
-  }
-
-  // ===== هل المستخدم مدير؟ =====
-  async function isAdmin(profile){
-    return profile.role === 'admin';
-  }
-
-  // ===== إدارة الموظفين كاملة (CRUD على مجموعة users) =====
-  async function renderEmployees(user, profile){
-    const admin = await isAdmin(profile);
-    if(!admin){
-      $("page").innerHTML = `
-        <div class="card">
-          <h3>الموظفون</h3>
-          <p>هذه الصفحة متاحة لمدير النظام فقط.</p>
-        </div>
-      `;
-      return;
-    }
-
-    const qSnap = await getDocs(collection(db,"users"));
-    let rows = '';
-    qSnap.forEach(d=>{
-      const u = d.data();
-      rows += `
-        <tr>
-          <td>${u.name || '-'}</td>
-          <td>${u.email || '-'}</td>
-          <td>${u.role || 'user'}</td>
-          <td>
-            <button class="small secondary" onclick="editEmployee('${d.id}')">تعديل</button>
-            <button class="small danger" onclick="deleteEmployee('${d.id}')">حذف</button>
-          </td>
-        </tr>
-      `;
-    });
-
-    $("page").innerHTML = `
-      <div class="card">
-        <span class="badge">الموظفون</span>
-        <h3>إدارة الموظفين</h3>
-        <p>إضافة / تعديل / حذف بيانات الموظفين في مجموعة <strong>users</strong>. (إنشاء حساب الدخول يتم من Firebase Auth).</p>
-        <div class="actions-row">
-          <button onclick="showEmployeeForm()">➕ إضافة موظف</button>
-        </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>الاسم</th>
-              <th>البريد</th>
-              <th>الدور</th>
-              <th>إجراءات</th>
-            </tr>
-          </thead>
-          <tbody>${rows || '<tr><td colspan="4">لا يوجد موظفون.</td></tr>'}</tbody>
-        </table>
-      </div>
-      <div id="empFormWrap"></div>
-    `;
-  }
-
-  window.showEmployeeForm = async function(empId=null){
-    let emp = null;
-    if(empId){
-      const ref = doc(db,"users",empId);
-      const snap = await getDoc(ref);
-      if(snap.exists()) emp = {id:empId, ...snap.data()};
-    }
-    const wrap = $("empFormWrap");
-    wrap.innerHTML = `
-      <div class="card" style="margin-top:10px;">
-        <h3>${emp?'تعديل موظف':'إضافة موظف جديد'}</h3>
-        <input id="empName" placeholder="اسم الموظف" value="${emp?emp.name||'':''}">
-        <input id="empEmail" placeholder="البريد الإلكتروني (نفس المستخدم في Auth)" value="${emp?emp.email||'':''}">
-        <select id="empRole">
-          <option value="admin" ${emp&&emp.role==='admin'?'selected':''}>مدير النظام</option>
-          <option value="user" ${!emp || emp.role==='user'?'selected':''}>موظف</option>
-        </select>
-        <div class="actions-row">
-          <button onclick="saveEmployee('${emp?emp.id:''}')">💾 حفظ</button>
-          <button class="secondary" onclick="cancelEmpForm()">إلغاء</button>
-        </div>
-        <small>تأكد أن البريد الإلكتروني هنا مطابق لحساب المستخدم في Firebase Auth.</small>
-      </div>
-    `;
-  };
-
-  window.cancelEmpForm = function(){
-    $("empFormWrap").innerHTML = '';
-  };
-
-  window.saveEmployee = async function(id){
-    const name  = $("empName").value.trim();
-    const email = $("empEmail").value.trim();
-    const role  = $("empRole").value;
-    if(!name || !email){
-      notify("يرجى إدخال الاسم والبريد","error");
-      return;
-    }
-    try{
-      if(id){
-        await updateDoc(doc(db,"users",id),{name,email,role});
-      }else{
-        // هنا نفترض أن uid = نفس id المستخدم في Auth غير معروف من الواجهة
-        // يمكن لاحقًا ربطه يدويًا أو عبر Cloud Functions
-        const newDoc = await addDoc(collection(db,"users"),{name,email,role});
-        // في نظام إنتاجي: يفضّل أن يكون documentId = uid
-      }
-      notify("تم حفظ بيانات الموظف");
-      const user = auth.currentUser;
-      const profile = await loadUserProfile(user);
-      renderEmployees(user, profile);
-    }catch(e){
-      console.error(e);
-      notify("خطأ في حفظ بيانات الموظف","error");
-    }
-  };
-
-  window.editEmployee = function(id){
-    showEmployeeForm(id);
-  };
-
-  window.deleteEmployee = async function(id){
-    if(!confirm("هل تريد حذف هذا الموظف؟")) return;
-    try{
-      await deleteDoc(doc(db,"users",id));
-      notify("تم حذف الموظف");
-      const user = auth.currentUser;
-      const profile = await loadUserProfile(user);
-      renderEmployees(user, profile);
-    }catch(e){
-      console.error(e);
-      notify("خطأ في حذف الموظف","error");
-    }
-  };
-
-  // ===== المهام المتقدمة =====
-  async function renderTasks(user, profile){
-    const tasksCol = collection(db,"tasks");
-    let qRef;
-    if(profile.role === 'admin'){
-      qRef = tasksCol;
-    }else{
-      qRef = query(tasksCol, where("uid","==",user.uid));
-    }
-    const qSnap = await getDocs(qRef);
-    let rows = '';
-    qSnap.forEach(d=>{
-      const t = d.data();
-      let tagClass = 'todo';
-      if(t.status==='progress') tagClass='progress';
-      if(t.status==='done') tagClass='done';
-      rows += `
-        <tr>
-          <td>${t.title || '-'}</td>
-          <td>${t.assigneeName || '-'}</td>
-          <td><span class="tag ${tagClass}">${t.status || 'todo'}</span></td>
-          <td>${t.dueDate || '-'}</td>
-          <td>
-            <button class="small secondary" onclick="editTask('${d.id}')">تعديل</button>
-            ${profile.role==='admin'?`<button class="small danger" onclick="deleteTask('${d.id}')">حذف</button>`:''}
-          </td>
-        </tr>
-      `;
-    });
-
-    $("page").innerHTML = `
-      <div class="card">
-        <span class="badge">المهام</span>
-        <h3>إدارة المهام</h3>
-        <p>إضافة مهام للموظفين مع حالة وتاريخ استحقاق، ومتابعة تقدم التنفيذ.</p>
-        <div class="actions-row">
-          ${profile.role==='admin'?`<button onclick="showTaskForm()">➕ إضافة مهمة</button>`:''}
-        </div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>المهمة</th>
-              <th>الموظف</th>
-              <th>الحالة</th>
-              <th>تاريخ الاستحقاق</th>
-              <th>إجراءات</th>
-            </tr>
-          </thead>
-          <tbody>${rows || '<tr><td colspan="5">لا توجد مهام.</td></tr>'}</tbody>
-        </table>
-      </div>
-      <div id="taskFormWrap"></div>
-    `;
-  }
-
-  window.showTaskForm = async function(taskId=null){
-    const user = auth.currentUser;
-    if(!user) return;
-    const profile = await loadUserProfile(user);
-    if(profile.role!=='admin' && !taskId){
-      notify("إضافة المهام متاحة للمدير فقط","error");
-      return;
-    }
-
-    let task = null;
-    if(taskId){
-      const ref = doc(db,"tasks",taskId);
-      const snap = await getDoc(ref);
-      if(snap.exists()) task = {id:taskId, ...snap.data()};
-    }
-
-    const usersSnap = await getDocs(collection(db,"users"));
-    let options = '';
-    usersSnap.forEach(d=>{
-      const u = d.data();
-      options += `<option value="${d.id}" ${task&&task.uid===d.id?'selected':''}>${u.name || u.email}</option>`;
-    });
-
-    $("taskFormWrap").innerHTML = `
-      <div class="card" style="margin-top:10px;">
-        <h3>${task?'تعديل مهمة':'إضافة مهمة جديدة'}</h3>
-        <input id="taskTitle" placeholder="عنوان المهمة" value="${task?task.title||'':''}">
-        <textarea id="taskDesc" placeholder="وصف المهمة (اختياري)">${task?task.desc||'':''}</textarea>
-        <label>الموظف:</label>
-        <select id="taskUser">${options}</select>
-        <label>الحالة:</label>
-        <select id="taskStatus">
-          <option value="todo" ${!task || task.status==='todo'?'selected':''}>لم تبدأ</option>
-          <option value="progress" ${task&&task.status==='progress'?'selected':''}>قيد التنفيذ</option>
-          <option value="done" ${task&&task.status==='done'?'selected':''}>منتهية</option>
-        </select>
-        <label>تاريخ الاستحقاق:</label>
-        <input id="taskDue" type="date" value="${task&&task.dueDate?task.dueDate:''}">
-        <div class="actions-row">
-          <button onclick="saveTask('${task?task.id:''}')">💾 حفظ</button>
-          <button class="secondary" onclick="cancelTaskForm()">إلغاء</button>
-        </div>
-      </div>
-    `;
-  };
-
-  window.cancelTaskForm = function(){
-    $("taskFormWrap").innerHTML = '';
-  };
-
-  window.saveTask = async function(id){
-    const title = $("taskTitle").value.trim();
-    const desc  = $("taskDesc").value.trim();
-    const uid   = $("taskUser").value;
-    const status= $("taskStatus").value;
-    const due   = $("taskDue").value;
-    if(!title || !uid){
-      notify("يرجى إدخال عنوان المهمة واختيار الموظف","error");
-      return;
-    }
-    try{
-      const userDoc = await getDoc(doc(db,"users",uid));
-      const assigneeName = userDoc.exists()? (userDoc.data().name || userDoc.data().email) : uid;
-      if(id){
-        await updateDoc(doc(db,"tasks",id),{title,desc,uid,status,dueDate:due,assigneeName});
-      }else{
-        await addDoc(collection(db,"tasks"),{
-          title,desc,uid,status,dueDate:due,assigneeName,
-          createdAt:serverTimestamp()
+            if (currentUser.role === "super_admin") {
+                if (!state.currentBranch) state.currentBranch = state.branches[0];
+            } else {
+                state.currentBranch = currentUser.branch;
+            }
+            refreshBranchUI();
+            applyPermissions();
         });
-      }
-      notify("تم حفظ المهمة");
-      const user = auth.currentUser;
-      const profile = await loadUserProfile(user);
-      renderTasks(user, profile);
-    }catch(e){
-      console.error(e);
-      notify("خطأ في حفظ المهمة","error");
-    }
-  };
 
-  window.editTask = function(id){
-    showTaskForm(id);
-  };
+        loginPass.addEventListener("keydown", e => {
+            if (e.key === "Enter") loginBtn.click();
+        });
 
-  window.deleteTask = async function(id){
-    if(!confirm("هل تريد حذف هذه المهمة؟")) return;
-    try{
-      await deleteDoc(doc(db,"tasks",id));
-      notify("تم حذف المهمة");
-      const user = auth.currentUser;
-      const profile = await loadUserProfile(user);
-      renderTasks(user, profile);
-    }catch(e){
-      console.error(e);
-      notify("خطأ في حذف المهمة","error");
-    }
-  };
+        // تنقل القائمة
+        document.getElementById("nav").addEventListener("click", e => {
+            const btn = e.target.closest(".nav-link");
+            if (!btn) return;
+            const page = btn.dataset.page;
+            if (page) showPage(page);
+        });
 
-  // ===== التقارير الشهرية الحقيقية =====
-  async function renderReport(user, profile){
-    const now = new Date();
-    const ym  = now.toISOString().slice(0,7); // YYYY-MM
-    const attCol = collection(db,"attendance");
-    const qSnap = await getDocs(query(attCol, where("uid","==",user.uid)));
-    let totalHours = 0;
-    let daysCount  = 0;
+        // تسجيل الخروج
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            app.classList.remove("show");
+            loginWrapper.style.display = "flex";
+            loginUser.value = "";
+            loginPass.value = "";
+            currentUser = null;
+        });
 
-    qSnap.forEach(d=>{
-      const x = d.data();
-      if(x.date && x.date.startsWith(ym) && x.totalHours != null){
-        totalHours += x.totalHours;
-        daysCount++;
-      }
-    });
+        // تغيير الفرع (Super Admin فقط)
+        branchSelect.addEventListener("change", () => {
+            state.currentBranch = branchSelect.value;
+            saveState();
+            refreshBranchUI();
+        });
 
-    $("page").innerHTML = `
-      <div class="card">
-        <span class="badge">التقارير</span>
-        <h3>تقرير شهر ${now.toLocaleDateString('ar-EG',{month:'long', year:'numeric'})}</h3>
-        <p><strong>عدد أيام العمل المسجلة:</strong> ${daysCount} يوم</p>
-        <p><strong>إجمالي الساعات:</strong> ${totalHours.toFixed(2)} ساعة</p>
-        <p class="stat-label">يتم حساب الساعات من فرق الوقت بين الحضور والانصراف لكل يوم.</p>
-      </div>
-    `;
-  }
-</script>
+        // ثيم Light/Dark
+        const themeToggle = document.getElementById("themeToggle");
+        const themeIcon = document.getElementById("themeIcon");
+        const themeText = document.getElementById("themeText");
 
+        function applyTheme(theme) {
+            if (theme === "light") {
+                document.body.classList.add("light");
+                themeIcon.textContent = "🌞";
+                themeText.textContent = "الوضع الفاتح";
+            } else {
+                document.body.classList.remove("light");
+                themeIcon.textContent = "🌙";
+                themeText.textContent = "الوضع الداكن";
+            }
+            localStorage.setItem("reem_theme", theme);
+        }
+
+        themeToggle.addEventListener("click", () => {
+            const current = document.body.classList.contains("light") ? "light" : "dark";
+            applyTheme(current === "light" ? "dark" : "light");
+        });
+
+        // نموذج الموظفين
+        const employeeForm = document.getElementById("employeeForm");
+        document.getElementById("addEmployeeBtn").addEventListener("click", () => {
+            employeeForm.style.display = "flex";
+            document.getElementById("employeeId").value = "";
+            document.getElementById("employeeName").value = "";
+            document.getElementById("employeeJob").value = "";
+            document.getElementById("employeeDept").value = "";
+        });
+        document.getElementById("cancelEmployeeBtn").addEventListener("click", () => {
+            employeeForm.style.display = "none";
+        });
+        document.getElementById("saveEmployeeBtn").addEventListener("click", () => {
+            const b = getBranchData();
+            const id = document.getElementById("employeeId").value;
+            const name = document.getElementById("employeeName").value.trim();
+            const job = document.getElementById("employeeJob").value.trim();
+            const dept = document.getElementById("employeeDept").value.trim();
+            if (!name) return;
+            if (id) {
+                const emp = b.employees.find(e => e.id === id);
+                if (emp) { emp.name = name; emp.job = job; emp.dept = dept; }
+            } else {
+                b.employees.push({ id: "emp_" + Date.now(), name, job, dept });
+            }
+            saveState();
+            renderEmployees();
+            employeeForm.style.display = "none";
+        });
+        document.getElementById("employeesTableBody").addEventListener("click", e => {
+            const btn = e.target;
+            const b = getBranchData();
+            const editId = btn.getAttribute("data-edit");
+            const delId = btn.getAttribute("data-del");
+            if (editId) {
+                const emp = b.employees.find(e => e.id === editId);
+                if (!emp) return;
+                employeeForm.style.display = "flex";
+                document.getElementById("employeeId").value = emp.id;
+                document.getElementById("employeeName").value = emp.name;
+                document.getElementById("employeeJob").value = emp.job;
+                document.getElementById("employeeDept").value = emp.dept;
+            } else if (delId) {
+                if (confirm("هل تريد حذف هذا الموظف؟")) {
+                    b.employees = b.employees.filter(e2 => e2.id !== delId);
+                    saveState();
+                    renderEmployees();
+                }
+            }
+        });
+
+        // نموذج المهام
+        const taskForm = document.getElementById("taskForm");
+        document.getElementById("addTaskBtn").addEventListener("click", () => {
+            taskForm.style.display = "flex";
+            document.getElementById("taskId").value = "";
+            document.getElementById("taskTitle").value = "";
+            document.getElementById("taskEmployee").value = "";
+            document.getElementById("taskDue").value = "";
+            document.getElementById("taskStatus").value = "new";
+        });
+        document.getElementById("cancelTaskBtn").addEventListener("click", () => {
+            taskForm.style.display = "none";
+        });
+        document.getElementById("saveTaskBtn").addEventListener("click", () => {
+            const b = getBranchData();
+            const id = document.getElementById("taskId").value;
+            const title = document.getElementById("taskTitle").value.trim();
+            const employee = document.getElementById("taskEmployee").value.trim();
+            const due = document.getElementById("taskDue").value;
+            const status = document.getElementById("taskStatus").value;
+            if (!title) return;
+            if (id) {
+                const t = b.tasks.find(t => t.id === id);
+                if (t) { t.title = title; t.employee = employee; t.due = due; t.status = status; }
+            } else {
+                b.tasks.push({ id: "task_" + Date.now(), title, employee, due, status });
+            }
+            saveState();
+            renderTasks();
+            taskForm.style.display = "none";
+        });
+        document.getElementById("tasksTableBody").addEventListener("click", e => {
+            const btn = e.target;
+            const b = getBranchData();
+            const editId = btn.getAttribute("data-edit");
+            const delId = btn.getAttribute("data-del");
+            if (editId) {
+                const t = b.tasks.find(t => t.id === editId);
+                if (!t) return;
+                taskForm.style.display = "flex";
+                document.getElementById("taskId").value = t.id;
+                document.getElementById("taskTitle").value = t.title;
+                document.getElementById("taskEmployee").value = t.employee;
+                document.getElementById("taskDue").value = t.due;
+                document.getElementById("taskStatus").value = t.status;
+            } else if (delId) {
+                if (confirm("هل تريد حذف هذه المهمة؟")) {
+                    b.tasks = b.tasks.filter(t2 => t2.id !== delId);
+                    saveState();
+                    renderTasks();
+                }
+            }
+        });
+
+        // نموذج الحضور
+        const attendanceForm = document.getElementById("attendanceForm");
+        document.getElementById("addAttendanceBtn").addEventListener("click", () => {
+            attendanceForm.style.display = "flex";
+            document.getElementById("attendanceId").value = "";
+            document.getElementById("attendanceEmployee").value = "";
+            document.getElementById("attendanceDate").valueAsDate = new Date();
+            document.getElementById("attendanceIn").value = "";
+            document.getElementById("attendanceOut").value = "";
+        });
+        document.getElementById("cancelAttendanceBtn").addEventListener("click", () => {
+            attendanceForm.style.display = "none";
+        });
+        document.getElementById("saveAttendanceBtn").addEventListener("click", () => {
+            const b = getBranchData();
+            const id = document.getElementById("attendanceId").value;
+            const employee = document.getElementById("attendanceEmployee").value.trim();
+            const date = document.getElementById("attendanceDate").value;
+            const inTime = document.getElementById("attendanceIn").value;
+            const outTime = document.getElementById("attendanceOut").value;
+            if (!employee || !date) return;
+            const hours = calcHours(inTime, outTime);
+            if (id) {
+                const a = b.attendance.find(a => a.id === id);
+                if (a) {
+                    a.employee = employee; a.date = date; a.in = inTime; a.out = outTime; a.hours = hours;
+                }
+            } else {
+                b.attendance.push({
+                    id: "att_" + Date.now(),
+                    employee, date, in: inTime, out: outTime, hours
+                });
+            }
+            saveState();
+            renderAttendance();
+            attendanceForm.style.display = "none";
+        });
+        document.getElementById("attendanceTableBody").addEventListener("click", e => {
+            const btn = e.target;
+            const b = getBranchData();
+            const editId = btn.getAttribute("data-edit");
+            const delId = btn.getAttribute("data-del");
+            if (editId) {
+                const a = b.attendance.find(a => a.id === editId);
+                if (!a) return;
+                attendanceForm.style.display = "flex";
+                document.getElementById("attendanceId").value = a.id;
+                document.getElementById("attendanceEmployee").value = a.employee;
+                document.getElementById("attendanceDate").value = a.date;
+                document.getElementById("attendanceIn").value = a.in;
+                document.getElementById("attendanceOut").value = a.out;
+            } else if (delId) {
+                if (confirm("هل تريد حذف هذا السجل؟")) {
+                    b.attendance = b.attendance.filter(a2 => a2.id !== delId);
+                    saveState();
+                    renderAttendance();
+                }
+            }
+        });
+
+        // النسخ الاحتياطي
+        const exportBackupBtn = document.getElementById("exportBackupBtn");
+        const importBackupInput = document.getElementById("importBackupInput");
+
+        exportBackupBtn.addEventListener("click", () => {
+            const dataStr = JSON.stringify(state, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const now = new Date();
+            const fileName = `reem-backup-${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}.json`;
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            URL.revokeObjectURL(url);
+            state.settings.lastBackup = now.toLocaleString("ar-EG");
+            saveState();
+        });
+
+        importBackupInput.addEventListener("change", () => {
+            const file = importBackupInput.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported && imported.branches && imported.data && imported.users) {
+                        state = imported;
+                        saveState();
+                        refreshBranchUI();
+                        alert("تم استرجاع النسخة الاحتياطية بنجاح.");
+                    } else {
+                        alert("ملف النسخة الاحتياطية غير صالح.");
+                    }
+                } catch (err) {
+                    alert("حدث خطأ أثناء قراءة الملف.");
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // PDF
+        async function exportSectionPDF(elementId, title) {
+            const { jsPDF } = window.jspdf;
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            const canvas = await html2canvas(element, { scale: 2 });
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("p", "mm", "a4");
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = pageWidth - 20;
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(14);
+            pdf.text(title, pageWidth - 10, 10, { align: "right" });
+            pdf.addImage(imgData, "PNG", 10, 16, imgWidth, Math.min(imgHeight, pageHeight - 26));
+            pdf.save(title.replace(/\s+/g, "_") + ".pdf");
+        }
+
+        document.getElementById("printAttendancePdfBtn").addEventListener("click", () => {
+            exportSectionPDF("attendanceTableWrapper", `تقرير الحضور - ${state.currentBranch}`);
+        });
+        document.getElementById("printReportsPdfBtn").addEventListener("click", () => {
+            exportSectionPDF("reportsCards", `تقرير إجمالي - ${state.currentBranch}`);
+        });
+
+        // تهيئة
+        (function init() {
+            loadState();
+            const savedTheme = localStorage.getItem("reem_theme") || "dark";
+            applyTheme(savedTheme);
+            renderEmployees();
+            renderTasks();
+            renderAttendance();
+            updateStats();
+            updateReports();
+        })();
+    </script>
 </body>
 </html>
