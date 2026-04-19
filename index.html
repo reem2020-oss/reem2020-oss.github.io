@@ -2,33 +2,29 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>REEM TIME PRO</title>
+<title>REEM TIME PRO – Dashboard</title>
 <style>
+*{box-sizing:border-box}
 body{
-  background:#0b1220;
-  color:#fff;
-  font-family:Arial;
+  background:#020617;
+  color:#e5e7eb;
+  font-family:Arial, Tahoma;
   margin:0;
-  padding:0;
 }
+a{text-decoration:none;color:inherit}
+#login, #app{min-height:100vh;}
 .center{
   width:320px;
   margin:120px auto;
-  background:#1f2937;
+  background:#020617;
   padding:20px;
-  border-radius:12px;
+  border-radius:16px;
   text-align:center;
-  box-shadow:0 15px 40px rgba(0,0,0,0.6);
+  box-shadow:0 20px 60px rgba(0,0,0,0.8);
+  border:1px solid #1f2937;
 }
-.center h2{
-  margin-bottom:6px;
-}
-.center p{
-  margin-top:0;
-  margin-bottom:16px;
-  font-size:13px;
-  color:#cbd5f5;
-}
+.center h2{margin-bottom:6px;}
+.center p{margin-top:0;margin-bottom:16px;font-size:13px;color:#9ca3af;}
 input{
   width:100%;
   padding:10px;
@@ -36,36 +32,143 @@ input{
   border-radius:8px;
   border:none;
   outline:none;
+  background:#020617;
+  color:#e5e7eb;
+  border:1px solid #1f2937;
 }
 button{
-  width:100%;
-  padding:10px;
-  background:#7d33ff;
+  padding:9px 14px;
+  background:#7c3aed;
   color:#fff;
   border:none;
   border-radius:8px;
   cursor:pointer;
   font-weight:bold;
+  font-size:13px;
 }
-button:hover{
-  background:#8b5bff;
+button:hover{background:#8b5bff;}
+.app-shell{
+  display:flex;
+  min-height:100vh;
 }
-.card{
-  max-width:600px;
-  margin:40px auto;
-  background:#1f2937;
-  padding:20px;
-  border-radius:12px;
-  white-space:pre-wrap;
-  line-height:1.8;
+.sidebar{
+  width:230px;
+  background:#020617;
+  border-left:1px solid #1f2937;
+  padding:16px 10px;
+  position:sticky;
+  top:0;
+  height:100vh;
+}
+.sidebar h3{
+  text-align:center;
+  margin-top:0;
+  margin-bottom:4px;
   font-size:16px;
-  box-shadow:0 15px 40px rgba(0,0,0,0.6);
+  color:#e5e7eb;
+}
+.sidebar small{
+  display:block;
+  text-align:center;
+  color:#6b7280;
+  margin-bottom:16px;
+  font-size:11px;
+}
+.menu-item{
+  padding:10px 12px;
+  margin-bottom:8px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  color:#e5e7eb;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.menu-item span.icon{font-size:16px;}
+.menu-item:hover{
+  background:#111827;
+}
+.menu-item.active{
+  background:#7c3aed;
+}
+.main{
+  flex:1;
+  padding:20px;
 }
 .topbar{
-  text-align:center;
-  padding-top:20px;
-  color:#e5e7eb;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  font-size:13px;
+  color:#9ca3af;
+}
+.topbar-left strong{color:#e5e7eb;}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+  margin-bottom:16px;
+}
+.card{
+  background:#020617;
+  border-radius:14px;
+  padding:16px;
+  border:1px solid #1f2937;
+  box-shadow:0 18px 40px rgba(0,0,0,0.7);
+}
+.card h2,h3{margin-top:0;margin-bottom:8px;font-size:16px;}
+.card p{margin:4px 0;font-size:13px;}
+.badge{
+  display:inline-block;
+  padding:3px 8px;
+  border-radius:999px;
+  font-size:11px;
+  background:#111827;
+  color:#9ca3af;
+}
+.stat-value{
+  font-size:20px;
+  font-weight:bold;
+  margin-top:4px;
+}
+.stat-label{
+  font-size:11px;
+  color:#9ca3af;
+}
+.table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+  font-size:13px;
+}
+.table th,.table td{
+  border-bottom:1px solid #111827;
+  padding:6px 4px;
+  text-align:right;
+}
+.table th{color:#9ca3af;font-weight:normal;}
+small{color:#9ca3af;}
+pre{
+  white-space:pre-wrap;
+  font-family:inherit;
   font-size:14px;
+  line-height:1.8;
+}
+.actions-row{
+  display:flex;
+  gap:8px;
+  margin:10px 0;
+  flex-wrap:wrap;
+}
+.actions-row button.danger{background:#ef4444;}
+.actions-row button.secondary{background:#111827;}
+@media(max-width:800px){
+  .app-shell{flex-direction:column;}
+  .sidebar{width:100%;height:auto;display:flex;overflow-x:auto;}
+  .sidebar h3,.sidebar small{display:none;}
+  .menu-item{white-space:nowrap;}
 }
 </style>
 </head>
@@ -85,12 +188,356 @@ button:hover{
   </div>
 </div>
 
-<!-- صفحة المحتوى -->
-<div id="content" style="display:none">
-  <div class="topbar">
-    تم تسجيل الدخول بنجاح كمستخدم: <strong>admin</strong>
+<!-- التطبيق -->
+<div id="app" style="display:none">
+  <div class="app-shell">
+    <div class="sidebar">
+      <h3>REEM TIME PRO</h3>
+      <small>لوحة تحكم الحضور والانصراف</small>
+      <div class="menu-item active" onclick="showPage('dash', this)">
+        <span class="icon">🏠</span><span>الرئيسية</span>
+      </div>
+      <div class="menu-item" onclick="showPage('punch', this)">
+        <span class="icon">⏱</span><span>الحضور والانصراف</span>
+      </div>
+      <div class="menu-item" onclick="showPage('logs', this)">
+        <span class="icon">📋</span><span>سجل الأيام</span>
+      </div>
+      <div class="menu-item" onclick="showPage('report', this)">
+        <span class="icon">📊</span><span>تقرير شهري</span>
+      </div>
+      <div class="menu-item" onclick="showPage('about', this)">
+        <span class="icon">📄</span><span>بيانات النظام</span>
+      </div>
+      <div class="menu-item" onclick="logout()">
+        <span class="icon">🚪</span><span>خروج</span>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          مرحبًا، <strong>admin</strong><br>
+          <small>نظام حضور وانصراف – نسخة تجريبية</small>
+        </div>
+        <div id="now"></div>
+      </div>
+      <div id="page"></div>
+    </div>
   </div>
-  <div class="card">
+</div>
+
+<script>
+// ====== وقت حي ======
+setInterval(()=>{
+  const d = new Date();
+  const f = d.toLocaleString('ar-EG',{dateStyle:'medium', timeStyle:'short'});
+  const el = document.getElementById('now');
+  if(el) el.textContent = f;
+},1000);
+
+// ====== LOGIN ======
+function login(){
+  let u = document.getElementById("email").value.trim();
+  let p = document.getElementById("pass").value.trim();
+
+  if(u === "admin" && p === "123"){
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    showPage('dash');
+  } else {
+    alert("بيانات الدخول غير صحيحة (جرّب admin / 123)");
+  }
+}
+
+function logout(){
+  location.reload();
+}
+
+// ====== DATA STRUCTURE ======
+// نخزن كل الأيام في localStorage
+// key: reem_days
+// value: { "2025-01-01": {checkIn, checkOut, totalMinutes} , ... }
+
+function getAllDays(){
+  const raw = localStorage.getItem('reem_days');
+  return raw ? JSON.parse(raw) : {};
+}
+function saveAllDays(data){
+  localStorage.setItem('reem_days', JSON.stringify(data));
+}
+function getTodayKey(){
+  return new Date().toISOString().slice(0,10);
+}
+function getTodayLogs(){
+  const all = getAllDays();
+  const k = getTodayKey();
+  return all[k] || {checkIn:null, checkOut:null, totalMinutes:0};
+}
+function saveTodayLogs(logs){
+  const all = getAllDays();
+  const k = getTodayKey();
+  all[k] = logs;
+  saveAllDays(all);
+}
+
+// ====== PAGES ROUTER ======
+function showPage(p, el){
+  document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
+  if(el) el.classList.add('active');
+
+  if(p === 'dash') renderDash();
+  if(p === 'punch') renderPunch();
+  if(p === 'logs') renderLogs();
+  if(p === 'report') renderReport();
+  if(p === 'about') renderAbout();
+}
+
+// ====== DASHBOARD ======
+function calcStats(){
+  const all = getAllDays();
+  const keys = Object.keys(all);
+  const todayKey = getTodayKey();
+  let totalMinutes = 0;
+  let daysWithWork = 0;
+  let lastDay = null;
+
+  keys.forEach(k=>{
+    const d = all[k];
+    if(d.totalMinutes && d.totalMinutes>0){
+      totalMinutes += d.totalMinutes;
+      daysWithWork++;
+      if(!lastDay || k > lastDay) lastDay = k;
+    }
+  });
+
+  const totalHours = (totalMinutes/60).toFixed(2);
+  const today = all[todayKey] || {checkIn:null, checkOut:null, totalMinutes:0};
+  let todayStatus = 'لم يتم تسجيل حضور اليوم';
+  if(today.checkIn && !today.checkOut) todayStatus = 'تم تسجيل حضور – في انتظار الانصراف';
+  if(today.checkIn && today.checkOut) todayStatus = 'تم تسجيل حضور وانصراف اليوم';
+
+  return {
+    totalHours,
+    daysWithWork,
+    todayStatus,
+    lastDay
+  };
+}
+
+function renderDash(){
+  const stats = calcStats();
+  const today = getTodayLogs();
+
+  let lastDayText = stats.lastDay
+    ? new Date(stats.lastDay).toLocaleDateString('ar-EG',{dateStyle:'medium'})
+    : 'لا يوجد';
+
+  let todayHours = '';
+  if(today.totalMinutes && today.totalMinutes>0){
+    todayHours = (today.totalMinutes/60).toFixed(2) + ' ساعة';
+  } else {
+    todayHours = '—';
+  }
+
+  document.getElementById('page').innerHTML = `
+    <div class="cards">
+      <div class="card">
+        <span class="badge">اليوم</span>
+        <h3>حالة اليوم</h3>
+        <p>${new Date().toLocaleDateString('ar-EG',{dateStyle:'full'})}</p>
+        <p><strong>${stats.todayStatus}</strong></p>
+        <p class="stat-label">ساعات اليوم</p>
+        <div class="stat-value">${todayHours}</div>
+      </div>
+      <div class="card">
+        <span class="badge">إحصائيات</span>
+        <h3>إجمالي الساعات</h3>
+        <div class="stat-value">${stats.totalHours}</div>
+        <div class="stat-label">إجمالي الساعات المسجلة في النظام</div>
+        <p style="margin-top:8px;"><strong>أيام العمل:</strong> ${stats.daysWithWork}</p>
+      </div>
+      <div class="card">
+        <span class="badge">آخر نشاط</span>
+        <h3>آخر يوم مسجل</h3>
+        <div class="stat-value">${lastDayText}</div>
+        <div class="stat-label">آخر يوم تم تسجيل حضور وانصراف فيه</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>نظرة عامة</h3>
+      <p>هذا النظام يوفر لك لوحة تحكم بسيطة واحترافية لإدارة الحضور والانصراف، مع حفظ البيانات في المتصفح (localStorage) بدون الحاجة إلى خادم أو قاعدة بيانات خارجية.</p>
+      <p>يمكنك استخدام صفحة <strong>"الحضور والانصراف"</strong> لتسجيل بداية ونهاية اليوم، وصفحة <strong>"سجل الأيام"</strong> لمراجعة الأيام المسجلة، وصفحة <strong>"تقرير شهري"</strong> لمراجعة إجمالي الساعات.</p>
+    </div>
+  `;
+}
+
+// ====== PUNCH IN/OUT ======
+function renderPunch(){
+  const logs = getTodayLogs();
+  let info = '';
+
+  if(logs.checkIn){
+    info += `<p>🟢 وقت الحضور: ${new Date(logs.checkIn).toLocaleTimeString('ar-EG',{timeStyle:'short'})}</p>`;
+  } else {
+    info += `<p>لم يتم تسجيل حضور بعد.</p>`;
+  }
+
+  if(logs.checkOut){
+    info += `<p>🔴 وقت الانصراف: ${new Date(logs.checkOut).toLocaleTimeString('ar-EG',{timeStyle:'short'})}</p>`;
+    const h = (logs.totalMinutes/60).toFixed(2);
+    info += `<p><strong>إجمالي الساعات:</strong> ${h} ساعة</p>`;
+  }
+
+  document.getElementById('page').innerHTML = `
+    <div class="card">
+      <h3>الحضور والانصراف</h3>
+      <p>قم بتسجيل الحضور عند بداية العمل، والانصراف عند نهاية اليوم. يتم حفظ بيانات كل يوم تلقائيًا.</p>
+      <div class="actions-row">
+        <button onclick="doCheckIn()">📍 تسجيل حضور</button>
+        <button class="danger" onclick="doCheckOut()">📍 تسجيل انصراف</button>
+        <button class="secondary" onclick="clearToday()">مسح بيانات اليوم</button>
+      </div>
+      <div id="punchInfo">${info}</div>
+      <small>يتم حفظ بيانات اليوم في المتصفح (localStorage) ويمكن مراجعتها من صفحة "سجل الأيام".</small>
+    </div>
+  `;
+}
+
+function doCheckIn(){
+  const logs = getTodayLogs();
+  if(logs.checkIn){
+    alert("تم تسجيل الحضور بالفعل اليوم.");
+    return;
+  }
+  logs.checkIn = new Date().toISOString();
+  saveTodayLogs(logs);
+  renderPunch();
+}
+
+function doCheckOut(){
+  const logs = getTodayLogs();
+  if(!logs.checkIn){
+    alert("لا يمكن تسجيل الانصراف قبل الحضور.");
+    return;
+  }
+  if(logs.checkOut){
+    alert("تم تسجيل الانصراف بالفعل اليوم.");
+    return;
+  }
+  logs.checkOut = new Date().toISOString();
+  const start = new Date(logs.checkIn);
+  const end   = new Date(logs.checkOut);
+  const diffMinutes = Math.round((end - start) / 60000);
+  logs.totalMinutes = diffMinutes;
+  saveTodayLogs(logs);
+  renderPunch();
+}
+
+function clearToday(){
+  if(!confirm("هل تريد مسح بيانات اليوم؟")) return;
+  const all = getAllDays();
+  const k = getTodayKey();
+  delete all[k];
+  saveAllDays(all);
+  renderPunch();
+}
+
+// ====== LOGS PAGE ======
+function renderLogs(){
+  const all = getAllDays();
+  const keys = Object.keys(all).sort(); // تصاعدي
+  let rows = '';
+
+  if(keys.length === 0){
+    rows = `<tr><td colspan="4">لا توجد بيانات مسجلة حتى الآن.</td></tr>`;
+  } else {
+    keys.forEach(k=>{
+      const d = all[k];
+      const ci = d.checkIn ? new Date(d.checkIn).toLocaleTimeString('ar-EG',{timeStyle:'short'}) : '-';
+      const co = d.checkOut ? new Date(d.checkOut).toLocaleTimeString('ar-EG',{timeStyle:'short'}) : '-';
+      const h  = d.totalMinutes ? (d.totalMinutes/60).toFixed(2) : '-';
+      rows += `
+        <tr>
+          <td>${new Date(k).toLocaleDateString('ar-EG',{dateStyle:'medium'})}</td>
+          <td>${ci}</td>
+          <td>${co}</td>
+          <td>${h}</td>
+        </tr>
+      `;
+    });
+  }
+
+  document.getElementById('page').innerHTML = `
+    <div class="card">
+      <h3>سجل الأيام</h3>
+      <p>عرض جميع الأيام التي تم تسجيل حضور أو انصراف فيها.</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>اليوم</th>
+            <th>وقت الحضور</th>
+            <th>وقت الانصراف</th>
+            <th>إجمالي الساعات</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+      <small>يمكنك مسح بيانات المتصفح يدويًا من إعدادات المتصفح لإعادة ضبط السجل بالكامل.</small>
+    </div>
+  `;
+}
+
+// ====== MONTHLY REPORT ======
+function renderReport(){
+  const all = getAllDays();
+  const keys = Object.keys(all).sort();
+  if(keys.length === 0){
+    document.getElementById('page').innerHTML = `
+      <div class="card">
+        <h3>تقرير شهري</h3>
+        <p>لا توجد بيانات كافية لإنشاء تقرير.</p>
+      </div>
+    `;
+    return;
+  }
+
+  // نحدد الشهر الحالي
+  const now = new Date();
+  const ym = now.toISOString().slice(0,7); // YYYY-MM
+  let totalMinutes = 0;
+  let daysCount = 0;
+
+  keys.forEach(k=>{
+    if(k.startsWith(ym)){
+      const d = all[k];
+      if(d.totalMinutes && d.totalMinutes>0){
+        totalMinutes += d.totalMinutes;
+        daysCount++;
+      }
+    }
+  });
+
+  const totalHours = (totalMinutes/60).toFixed(2);
+
+  document.getElementById('page').innerHTML = `
+    <div class="card">
+      <h3>تقرير شهر ${now.toLocaleDateString('ar-EG',{month:'long', year:'numeric'})}</h3>
+      <p><strong>إجمالي الساعات المسجلة:</strong> ${totalHours} ساعة</p>
+      <p><strong>عدد أيام العمل:</strong> ${daysCount} يوم</p>
+      <small>هذا التقرير يعتمد على الأيام المسجلة في هذا الشهر فقط.</small>
+    </div>
+  `;
+}
+
+// ====== ABOUT (ملف البيانات) ======
+function renderAbout(){
+  document.getElementById('page').innerHTML = `
+    <div class="card">
+      <h3>بيانات النظام</h3>
+      <pre>
 المسؤول:
 - البريد: admin@company.com
 - كلمة المرور: admin123
@@ -109,20 +556,9 @@ button:hover{
 
 كود تفعيل تجريبي
 REEM-2024-A1B2C3D4
-  </div>
-</div>
-
-<script>
-function login(){
-  let u = document.getElementById("email").value.trim();
-  let p = document.getElementById("pass").value.trim();
-
-  if(u === "admin" && p === "123"){
-    document.getElementById("login").style.display = "none";
-    document.getElementById("content").style.display = "block";
-  } else {
-    alert("بيانات الدخول غير صحيحة (جرّب admin / 123)");
-  }
+      </pre>
+    </div>
+  `;
 }
 </script>
 
