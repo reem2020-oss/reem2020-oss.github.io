@@ -3,180 +3,103 @@
 <head>
 <meta charset="UTF-8">
 <title>REEM TIME PRO</title>
-
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
-
 <style>
-body{font-family:Arial;background:#0b1220;color:#fff;margin:0}
-.sidebar{width:250px;height:100vh;background:#111;position:fixed;right:0;padding:20px}
-.sidebar div{padding:10px;margin-bottom:8px;cursor:pointer;border-radius:8px}
-.sidebar div:hover{background:#222}
-.main{margin-right:260px;padding:20px}
-.card{background:#1f2937;padding:20px;border-radius:10px;margin-bottom:20px}
-button{padding:10px;background:#7d33ff;color:#fff;border:none;border-radius:8px;cursor:pointer}
-input{width:100%;padding:8px;margin:5px 0;border-radius:6px;border:none}
-pre{white-space:pre-wrap;background:#000;padding:15px;border-radius:10px}
+body{
+  background:#0b1220;
+  color:#fff;
+  font-family:Arial;
+  margin:0;
+  padding:0;
+}
+.center{
+  width:320px;
+  margin:120px auto;
+  background:#1f2937;
+  padding:20px;
+  border-radius:12px;
+  text-align:center;
+}
+input{
+  width:100%;
+  padding:10px;
+  margin:6px 0;
+  border-radius:8px;
+  border:none;
+}
+button{
+  width:100%;
+  padding:10px;
+  background:#7d33ff;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+.card{
+  max-width:600px;
+  margin:40px auto;
+  background:#1f2937;
+  padding:20px;
+  border-radius:12px;
+  white-space:pre-wrap;
+  line-height:1.8;
+  font-size:16px;
+}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- شاشة الدخول -->
 <div id="login">
-<div class="card" style="width:320px;margin:100px auto;text-align:center">
-<img src="reem-wall.jpg" style="width:100%;border-radius:10px;margin-bottom:10px">
-<h3>REEM TIME PRO</h3>
-<p>نظام حضور ورواتب احترافي</p>
-<input id="email" placeholder="البريد الإلكتروني">
-<input id="pass" type="password" placeholder="كلمة المرور">
-<button onclick="login()">دخول</button>
-</div>
+  <div class="center">
+    <h2>REEM TIME PRO</h2>
+    <p>نظام حضور رواتب أخلاقي</p>
+
+    <input id="email" placeholder="admin">
+    <input id="pass" type="password" placeholder="123">
+
+    <button onclick="login()">دخول</button>
+  </div>
 </div>
 
-<!-- APP -->
-<div id="app" style="display:none">
-<div class="sidebar">
-<div onclick="page('dash')">🏠 الرئيسية</div>
-<div onclick="page('emp')">👥 الموظفين</div>
-<div onclick="page('att')">⏱ الحضور</div>
-<div onclick="page('pay')">💰 الرواتب</div>
-<div onclick="page('punch')">📍 البصمة</div>
-<div onclick="page('about')">📄 معلومات النظام</div>
-<div onclick="logout()">🚪 خروج</div>
-</div>
+<!-- صفحة المحتوى -->
+<div id="content" style="display:none">
+  <div class="card">
+المسؤول:
+- البريد: admin@company.com
+- كلمة المرور: admin123
 
-<div class="main" id="c"></div>
+المدير:
+- البريد: manager@company.com
+- كلمة المرور: manager123
+
+الموارد البشرية:
+- البريد: hr@company.com
+- كلمة المرور: hr123
+
+المسؤول الإضافي:
+- البريد: admin
+- كلمة المرور: 123
+
+كود تفعيل تجريبي
+REEM-2024-A1B2C3D4
+  </div>
 </div>
 
 <script>
-// =======================
-// Firebase Config
-// =======================
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID"
-};
+function login(){
+  let u = document.getElementById("email").value.trim();
+  let p = document.getElementById("pass").value.trim();
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db   = firebase.firestore();
-
-let user, company;
-
-// =======================
-// LOGIN
-// =======================
-async function login(){
-  try{
-    let cred = await auth.signInWithEmailAndPassword(email.value, pass.value);
-    let uid  = cred.user.uid;
-
-    let u = await db.collection("users").doc(uid).get();
-    user = { id: uid, ...u.data() };
-
-    let comp = await db.collection("companies").doc(user.companyId).get();
-    company = comp.data();
-
-    login.style.display="none";
-    app.style.display="block";
-
-    page('dash');
-  }catch(e){
-    alert("خطأ في تسجيل الدخول");
+  if(u === "admin" && p === "123"){
+    document.getElementById("login").style.display = "none";
+    document.getElementById("content").style.display = "block";
+  } else {
+    alert("بيانات الدخول غير صحيحة");
   }
 }
+</script>
 
-// =======================
-// LOGOUT
-// =======================
-async function logout(){
-  await auth.signOut();
-  location.reload();
-}
-
-// =======================
-// PAGE ROUTER
-// =======================
-function page(p){
-  if(p=="dash") loadDash();
-  if(p=="emp")  loadEmp();
-  if(p=="att")  loadAtt();
-  if(p=="pay")  loadPay();
-  if(p=="punch")loadPunch();
-  if(p=="about")loadAbout();
-}
-
-// =======================
-// DASHBOARD
-// =======================
-function loadDash(){
-  c.innerHTML = `
-  <div class="card">
-    <h2>مرحبا ${user.name}</h2>
-    <p>شركة: ${company.name}</p>
-  </div>`;
-}
-
-// =======================
-// EMPLOYEES
-// =======================
-function loadEmp(){
-  c.innerHTML = `
-  <div class="card">
-    <h3>إضافة موظف</h3>
-    <input id="n" placeholder="اسم">
-    <input id="em" placeholder="البريد">
-    <input id="pw" placeholder="كلمة المرور">
-    <input id="sal" placeholder="راتب شهري">
-    <button onclick="addEmp()">إضافة</button>
-  </div>`;
-}
-
-async function addEmp(){
-  try{
-    let cred = await auth.createUserWithEmailAndPassword(em.value, pw.value);
-    let uid  = cred.user.uid;
-
-    await db.collection("users").doc(uid).set({
-      name:n.value,
-      email:em.value,
-      role:"employee",
-      salary:parseFloat(sal.value||0),
-      companyId:user.companyId
-    });
-
-    alert("تم إضافة الموظف");
-  }catch(e){
-    alert("خطأ: البريد مستخدم من قبل");
-  }
-}
-
-// =======================
-// ATTENDANCE
-// =======================
-async function loadAtt(){
-  let logs = await db.collection("logs")
-    .where("companyId","==",user.companyId)
-    .orderBy("date","desc")
-    .get();
-
-  let html = `<div class="card"><h3>سجلات الحضور</h3>`;
-
-  logs.forEach(d=>{
-    let l = d.data();
-    html += `<p>${l.name} | ${l.date} | ${l.totalHours||0} ساعة</p>`;
-  });
-
-  html += `</div>`;
-  c.innerHTML = html;
-}
-
-// =======================
-// PAYROLL
-// =======================
-async function loadPay(){
-  let users = await db.collection("users
+</body>
+</html>
