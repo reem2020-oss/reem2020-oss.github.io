@@ -1,321 +1,328 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>REEM TIME PRO – Full Control</title>
-<style>
-*{box-sizing:border-box}
-:root{
-  --bg:#0f172a;
-  --bg-soft:#111827;
-  --bg-card:#111827;
-  --border:#1f2937;
-  --text:#e5e7eb;
-  --muted:#9ca3af;
-  --accent:#6366f1;
-  --accent-soft:#8b5cf6;
-  --accent-strong:#22c55e;
-}
-body.light{
-  --bg:#e5e7eb;
-  --bg-soft:#f3f4f6;
-  --bg-card:#ffffff;
-  --border:#d1d5db;
-  --text:#111827;
-  --muted:#6b7280;
-  --accent:#6366f1;
-  --accent-soft:#8b5cf6;
-  --accent-strong:#16a34a;
-}
-body{
-  background:radial-gradient(circle at top,#1f2937 0,#020617 50%,#000 100%);
-  color:var(--text);
-  font-family:Arial, Tahoma;
-  margin:0;
-  font-size:15px;
-  transition:background 0.4s ease,color 0.4s ease;
-}
-a{text-decoration:none;color:inherit}
-#login, #app{min-height:100vh;}
-.center{
-  width:360px;
-  margin:120px auto;
-  background:linear-gradient(145deg,#020617,#020617,#111827);
-  padding:24px;
-  border-radius:22px;
-  text-align:center;
-  box-shadow:0 25px 80px rgba(0,0,0,0.9);
-  border:1px solid var(--border);
-  transform:translateY(0);
-  transition:transform 0.3s ease, box-shadow 0.3s ease;
-}
-.center:hover{
-  transform:translateY(-4px);
-  box-shadow:0 35px 90px rgba(0,0,0,1);
-}
-.center h2{margin-bottom:4px;font-size:20px;}
-.center p{margin-top:0;margin-bottom:16px;font-size:13px;color:var(--muted);}
-.logo{
-  font-weight:bold;
-  letter-spacing:1px;
-  font-size:20px;
-}
-.logo span{
-  color:var(--accent);
-}
-input,select,textarea{
-  width:100%;
-  padding:10px;
-  margin:6px 0;
-  border-radius:10px;
-  border:none;
-  outline:none;
-  background:#020617;
-  color:var(--text);
-  border:1px solid var(--border);
-  font-size:14px;
-}
-textarea{min-height:70px;resize:vertical;}
-body.light input,body.light select,body.light textarea{
-  background:#f9fafb;
-}
-button{
-  padding:9px 16px;
-  background:linear-gradient(135deg,var(--accent),var(--accent-soft));
-  color:#fff;
-  border:none;
-  border-radius:999px;
-  cursor:pointer;
-  font-weight:bold;
-  font-size:14px;
-  box-shadow:0 10px 25px rgba(99,102,241,0.5);
-  transition:transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-}
-button:hover{
-  transform:translateY(-1px);
-  box-shadow:0 16px 35px rgba(99,102,241,0.7);
-  filter:brightness(1.05);
-}
-button.flat{
-  border-radius:10px;
-  box-shadow:none;
-  background:#111827;
-}
-button.danger{
-  background:linear-gradient(135deg,#ef4444,#b91c1c);
-  box-shadow:0 10px 25px rgba(239,68,68,0.5);
-}
-button.secondary{
-  background:#111827;
-  box-shadow:none;
-}
-button.small{
-  padding:5px 10px;
-  font-size:12px;
-}
-.app-shell{
-  display:flex;
-  min-height:100vh;
-}
-.sidebar{
-  width:250px;
-  background:linear-gradient(180deg,#020617,#020617,#000);
-  border-left:1px solid var(--border);
-  padding:16px 10px;
-  position:sticky;
-  top:0;
-  height:100vh;
-  box-shadow:-10px 0 40px rgba(0,0,0,0.8);
-}
-.sidebar h3{
-  text-align:center;
-  margin-top:0;
-  margin-bottom:4px;
-  font-size:18px;
-}
-.sidebar small{
-  display:block;
-  text-align:center;
-  color:var(--muted);
-  margin-bottom:16px;
-  font-size:11px;
-}
-.menu-item{
-  padding:10px 12px;
-  margin-bottom:8px;
-  border-radius:12px;
-  cursor:pointer;
-  font-size:14px;
-  color:var(--text);
-  display:flex;
-  align-items:center;
-  gap:8px;
-  background:rgba(15,23,42,0.7);
-  border:1px solid transparent;
-  transition:background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
-}
-.menu-item span.icon{font-size:18px;}
-.menu-item:hover{
-  background:rgba(15,23,42,1);
-  transform:translateY(-1px);
-  box-shadow:0 10px 25px rgba(0,0,0,0.7);
-}
-.menu-item.active{
-  background:linear-gradient(135deg,var(--accent),var(--accent-soft));
-  box-shadow:0 12px 30px rgba(99,102,241,0.7);
-  border:1px solid rgba(255,255,255,0.08);
-}
-.main{
-  flex:1;
-  padding:20px;
-}
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:16px;
-  font-size:13px;
-  color:var(--muted);
-}
-.topbar-left strong{color:var(--text);font-size:15px;}
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-  gap:14px;
-  margin-bottom:16px;
-}
-.card{
-  background:radial-gradient(circle at top left,#1f2937 0,var(--bg-card) 45%,#020617 100%);
-  border-radius:18px;
-  padding:16px;
-  border:1px solid var(--border);
-  box-shadow:0 22px 60px rgba(0,0,0,0.9);
-  transform:translateY(0) translateZ(0);
-  transition:transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
-}
-.card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 30px 80px rgba(0,0,0,1);
-  border-color:rgba(99,102,241,0.6);
-}
-.card h2,h3{margin-top:0;margin-bottom:8px;font-size:17px;}
-.card p{margin:4px 0;font-size:14px;}
-.badge{
-  display:inline-block;
-  padding:3px 8px;
-  border-radius:999px;
-  font-size:11px;
-  background:#111827;
-  color:var(--muted);
-}
-.stat-value{
-  font-size:22px;
-  font-weight:bold;
-  margin-top:4px;
-}
-.stat-label{
-  font-size:12px;
-  color:var(--muted);
-}
-.table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
-  font-size:13px;
-}
-.table th,.table td{
-  border-bottom:1px solid #111827;
-  padding:6px 4px;
-  text-align:right;
-}
-.table th{color:var(--muted);font-weight:normal;}
-small{color:var(--muted);}
-pre{
-  white-space:pre-wrap;
-  font-family:inherit;
-  font-size:14px;
-  line-height:1.8;
-}
-.actions-row{
-  display:flex;
-  gap:8px;
-  margin:10px 0;
-  flex-wrap:wrap;
-}
-@media(max-width:900px){
-  .app-shell{flex-direction:column;}
-  .sidebar{width:100%;height:auto;display:flex;overflow-x:auto;box-shadow:none;border-left:none;border-bottom:1px solid var(--border);}
-  .sidebar h3,.sidebar small{display:none;}
-  .menu-item{white-space:nowrap;}
-}
-#notif{
-  position:fixed;
-  top:16px;
-  left:50%;
-  transform:translateX(-50%) translateY(-80px);
-  background:#16a34a;
-  color:#ecfdf5;
-  padding:8px 16px;
-  border-radius:999px;
-  font-size:12px;
-  box-shadow:0 15px 40px rgba(22,163,74,0.7);
-  opacity:0;
-  transition:transform 0.3s ease, opacity 0.3s ease;
-  z-index:9999;
-}
-#notif.error{
-  background:#b91c1c;
-  box-shadow:0 15px 40px rgba(185,28,28,0.7);
-}
-#notif.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-}
-.calendar-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:6px;
-  margin-top:10px;
-  font-size:11px;
-}
-.calendar-day{
-  padding:6px;
-  border-radius:8px;
-  text-align:center;
-  border:1px solid #111827;
-  min-height:40px;
-}
-.calendar-day span.date{
-  display:block;
-  font-weight:bold;
-  margin-bottom:2px;
-}
-.calendar-day.work{background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.6);}
-.calendar-day.partial{background:rgba(234,179,8,0.12);border-color:rgba(234,179,8,0.6);}
-.calendar-day.absent{background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.6);}
-.calendar-day.off{background:rgba(59,130,246,0.12);border-color:rgba(59,130,246,0.6);}
-.toggle-wrap{
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-.toggle-wrap input{
-  width:auto;
-}
-.tag{
-  display:inline-block;
-  padding:2px 6px;
-  border-radius:999px;
-  font-size:11px;
-  background:#111827;
-  color:var(--muted);
-}
-.tag.done{background:rgba(34,197,94,0.15);color:#4ade80;}
-.tag.todo{background:rgba(239,68,68,0.15);color:#f87171;}
-.tag.progress{background:rgba(59,130,246,0.15);color:#60a5fa;}
-</style>
-</head>
+  <meta charset="UTF-8">
+  <title>REEM TIME PRO – Cloud Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    *{box-sizing:border-box}
+    :root{
+      --bg:#0f172a;
+      --bg-soft:#111827;
+      --bg-card:#111827;
+      --border:#1f2937;
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --accent:#6366f1;
+      --accent-soft:#8b5cf6;
+      --accent-strong:#22c55e;
+    }
+    body.light{
+      --bg:#e5e7eb;
+      --bg-soft:#f3f4f6;
+      --bg-card:#ffffff;
+      --border:#d1d5db;
+      --text:#111827;
+      --muted:#6b7280;
+      --accent:#6366f1;
+      --accent-soft:#8b5cf6;
+      --accent-strong:#16a34a;
+    }
+    body{
+      margin:0;
+      font-family:Arial, Tahoma;
+      background:radial-gradient(circle at top,#1f2937 0,#020617 50%,#000 100%);
+      color:var(--text);
+      font-size:15px;
+      transition:background 0.4s ease,color 0.4s ease;
+    }
+    a{text-decoration:none;color:inherit}
+    #login,#app{min-height:100vh;}
 
+    .center{
+      width:360px;
+      margin:80px auto;
+      background:linear-gradient(145deg,#020617,#020617,#111827);
+      padding:24px;
+      border-radius:22px;
+      text-align:center;
+      box-shadow:0 25px 80px rgba(0,0,0,0.9);
+      border:1px solid var(--border);
+      transform:translateY(0);
+      transition:transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .center:hover{
+      transform:translateY(-4px);
+      box-shadow:0 35px 90px rgba(0,0,0,1);
+    }
+    .logo{
+      font-weight:bold;
+      font-size:22px;
+      letter-spacing:1px;
+      margin-bottom:4px;
+    }
+    .logo span{color:var(--accent);}
+    .subtitle{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:16px;
+    }
+    input,select,textarea{
+      width:100%;
+      padding:11px;
+      margin:6px 0;
+      border-radius:12px;
+      border:none;
+      outline:none;
+      background:#020617;
+      color:var(--text);
+      border:1px solid var(--border);
+      font-size:14px;
+    }
+    textarea{min-height:70px;resize:vertical;}
+    body.light input,body.light select,body.light textarea{
+      background:#f9fafb;
+    }
+    button{
+      padding:10px 18px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-soft));
+      color:#fff;
+      border:none;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:bold;
+      font-size:14px;
+      box-shadow:0 10px 25px rgba(99,102,241,0.5);
+      transition:transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+    button:hover{
+      transform:translateY(-1px);
+      box-shadow:0 16px 35px rgba(99,102,241,0.7);
+      filter:brightness(1.05);
+    }
+    button.secondary{
+      background:#111827;
+      box-shadow:none;
+    }
+    button.danger{
+      background:linear-gradient(135deg,#ef4444,#b91c1c);
+      box-shadow:0 10px 25px rgba(239,68,68,0.5);
+    }
+    button.small{
+      padding:6px 10px;
+      font-size:12px;
+      border-radius:10px;
+    }
+
+    .app-shell{
+      display:flex;
+      min-height:100vh;
+    }
+    .sidebar{
+      width:260px;
+      background:linear-gradient(180deg,#020617,#020617,#000);
+      border-left:1px solid var(--border);
+      padding:16px 12px;
+      position:sticky;
+      top:0;
+      height:100vh;
+      box-shadow:-10px 0 40px rgba(0,0,0,0.8);
+    }
+    .sidebar-header{
+      text-align:center;
+      margin-bottom:16px;
+    }
+    .sidebar-header h3{
+      margin:0;
+      font-size:18px;
+    }
+    .sidebar-header small{
+      color:var(--muted);
+      font-size:11px;
+    }
+    .menu-item{
+      padding:11px 12px;
+      margin-bottom:8px;
+      border-radius:14px;
+      cursor:pointer;
+      font-size:14px;
+      color:var(--text);
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:rgba(15,23,42,0.7);
+      border:1px solid transparent;
+      transition:background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+    }
+    .menu-item span.icon{
+      font-size:20px;
+    }
+    .menu-item:hover{
+      background:rgba(15,23,42,1);
+      transform:translateY(-1px);
+      box-shadow:0 10px 25px rgba(0,0,0,0.7);
+    }
+    .menu-item.active{
+      background:linear-gradient(135deg,var(--accent),var(--accent-soft));
+      box-shadow:0 12px 30px rgba(99,102,241,0.7);
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .main{
+      flex:1;
+      padding:18px;
+    }
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:16px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .topbar-left strong{
+      color:var(--text);
+      font-size:15px;
+    }
+    .topbar-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .theme-toggle{
+      display:flex;
+      align-items:center;
+      gap:4px;
+      font-size:12px;
+      cursor:pointer;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#020617;
+      border:1px solid var(--border);
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+      gap:14px;
+      margin-bottom:16px;
+    }
+    .card{
+      background:radial-gradient(circle at top left,#1f2937 0,var(--bg-card) 45%,#020617 100%);
+      border-radius:18px;
+      padding:16px;
+      border:1px solid var(--border);
+      box-shadow:0 22px 60px rgba(0,0,0,0.9);
+      transform:translateY(0) translateZ(0);
+      transition:transform 0.25s ease, box-shadow 0.25s ease, border 0.25s ease;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 30px 80px rgba(0,0,0,1);
+      border-color:rgba(99,102,241,0.6);
+    }
+    .card h2,.card h3{
+      margin-top:0;
+      margin-bottom:8px;
+      font-size:17px;
+    }
+    .card p{
+      margin:4px 0;
+      font-size:14px;
+    }
+    .badge{
+      display:inline-block;
+      padding:3px 8px;
+      border-radius:999px;
+      font-size:11px;
+      background:#111827;
+      color:var(--muted);
+    }
+    .stat-value{
+      font-size:22px;
+      font-weight:bold;
+      margin-top:4px;
+    }
+    .stat-label{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+      font-size:13px;
+    }
+    .table th,.table td{
+      border-bottom:1px solid #111827;
+      padding:6px 4px;
+      text-align:right;
+    }
+    .table th{
+      color:var(--muted);
+      font-weight:normal;
+    }
+
+    .actions-row{
+      display:flex;
+      gap:8px;
+      margin:10px 0;
+      flex-wrap:wrap;
+    }
+
+    #notif{
+      position:fixed;
+      top:16px;
+      left:50%;
+      transform:translateX(-50%) translateY(-80px);
+      background:#16a34a;
+      color:#ecfdf5;
+      padding:8px 16px;
+      border-radius:999px;
+      font-size:12px;
+      box-shadow:0 15px 40px rgba(22,163,74,0.7);
+      opacity:0;
+      transition:transform 0.3s ease, opacity 0.3s ease;
+      z-index:9999;
+    }
+    #notif.error{
+      background:#b91c1c;
+      box-shadow:0 15px 40px rgba(185,28,28,0.7);
+    }
+    #notif.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    .tag{
+      display:inline-block;
+      padding:2px 6px;
+      border-radius:999px;
+      font-size:11px;
+      background:#111827;
+      color:var(--muted);
+    }
+    .tag.todo{background:rgba(239,68,68,0.15);color:#f87171;}
+    .tag.progress{background:rgba(59,130,246,0.15);color:#60a5fa;}
+    .tag.done{background:rgba(34,197,94,0.15);color:#4ade80;}
+
+    @media(max-width:900px){
+      .app-shell{flex-direction:column;}
+      .sidebar{
+        width:100%;
+        height:auto;
+        display:flex;
+        overflow-x:auto;
+        box-shadow:none;
+        border-left:none;
+        border-bottom:1px solid var(--border);
+      }
+      .sidebar-header{display:none;}
+      .menu-item{white-space:nowrap;}
+    }
+  </style>
+</head>
 <body>
 
 <div id="notif"></div>
@@ -323,18 +330,14 @@ pre{
 <!-- شاشة الدخول -->
 <div id="login">
   <div class="center">
-    <div class="logo" id="loginLogo">REEM <span>TIME</span> PRO</div>
-    <p>نظام حضور وانصراف – لوحة تحكم مكتملة</p>
-
-    <select id="role">
-      <option value="admin">مدير النظام (admin)</option>
-      <option value="hr">مسؤول الموارد البشرية (hr)</option>
-      <option value="user">موظف (user)</option>
-    </select>
-    <input id="email" placeholder="اسم المستخدم (admin / hr / user)">
-    <input id="pass" type="password" placeholder="كلمة المرور (123)">
-
+    <div class="logo">REEM <span>TIME</span> PRO</div>
+    <div class="subtitle">نظام حضور وانصراف سحابي – Firebase</div>
+    <input id="email" placeholder="البريد الإلكتروني">
+    <input id="pass" type="password" placeholder="كلمة المرور">
     <button onclick="login()">دخول</button>
+    <p style="font-size:12px;color:#9ca3af;margin-top:10px;">
+      يتم إنشاء حسابات الدخول من Firebase Auth، وإدارة بيانات الموظفين من داخل هذه اللوحة.
+    </p>
   </div>
 </div>
 
@@ -342,22 +345,15 @@ pre{
 <div id="app" style="display:none">
   <div class="app-shell">
     <div class="sidebar">
-      <h3 id="sideTitle">REEM TIME PRO</h3>
-      <small id="sideSub">لوحة تحكم الحضور والانصراف</small>
+      <div class="sidebar-header">
+        <h3>REEM TIME PRO</h3>
+        <small>Cloud Attendance Dashboard</small>
+      </div>
       <div class="menu-item active" onclick="showPage('dash', this)">
         <span class="icon">🏠</span><span>الرئيسية</span>
       </div>
       <div class="menu-item" onclick="showPage('punch', this)">
         <span class="icon">⏱</span><span>الحضور والانصراف</span>
-      </div>
-      <div class="menu-item" onclick="showPage('calendar', this)">
-        <span class="icon">📆</span><span>تقويم الحضور</span>
-      </div>
-      <div class="menu-item" onclick="showPage('logs', this)">
-        <span class="icon">📋</span><span>سجل الأيام</span>
-      </div>
-      <div class="menu-item" onclick="showPage('report', this)">
-        <span class="icon">📊</span><span>تقرير شهري</span>
       </div>
       <div class="menu-item" onclick="showPage('employees', this)">
         <span class="icon">👥</span><span>الموظفون</span>
@@ -365,11 +361,8 @@ pre{
       <div class="menu-item" onclick="showPage('tasks', this)">
         <span class="icon">✅</span><span>المهام</span>
       </div>
-      <div class="menu-item" onclick="showPage('settings', this)">
-        <span class="icon">⚙️</span><span>الإعدادات</span>
-      </div>
-      <div class="menu-item" onclick="showPage('about', this)">
-        <span class="icon">📄</span><span>بيانات النظام</span>
+      <div class="menu-item" onclick="showPage('report', this)">
+        <span class="icon">📊</span><span>التقارير</span>
       </div>
       <div class="menu-item" onclick="logout()">
         <span class="icon">🚪</span><span>خروج</span>
@@ -378,11 +371,14 @@ pre{
     <div class="main">
       <div class="topbar">
         <div class="topbar-left">
-          مرحبًا، <strong id="topUser">admin</strong><br>
-          <small id="topRole">مشرف حضور وانصراف – نسخة تجريبية</small>
+          مرحبًا، <strong id="topUser">—</strong><br>
+          <small id="topRole">مستخدم سحابي</small>
         </div>
         <div class="topbar-right">
           <div id="now"></div>
+          <div class="theme-toggle" onclick="toggleTheme()">
+            <span>🌓</span><span>الوضع</span>
+          </div>
         </div>
       </div>
       <div id="page"></div>
@@ -390,849 +386,597 @@ pre{
   </div>
 </div>
 
-<script>
-// ===== إشعارات =====
-function notify(msg, type='ok'){
-  const n = document.getElementById('notif');
-  n.textContent = msg;
-  n.className = '';
-  if(type === 'error') n.classList.add('error');
-  n.classList.add('show');
-  setTimeout(()=>{ n.classList.remove('show'); }, 2200);
-}
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+  import {
+    getFirestore,
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    setDoc,
+    addDoc,
+    updateDoc,
+    deleteDoc,
+    serverTimestamp,
+    query,
+    where
+  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-// ===== وقت حي =====
-setInterval(()=>{
-  const d = new Date();
-  const f = d.toLocaleString('ar-EG',{dateStyle:'medium', timeStyle:'short'});
-  const el = document.getElementById('now');
-  if(el) el.textContent = f;
-},1000);
+  // ===== إعداد Firebase (عدّل هذه القيم من لوحة Firebase) =====
+  const firebaseConfig = {
+    apiKey: "ضع_القيمة_من_لوحة_Firebase",
+    authDomain: "ضع_القيمة",
+    projectId: "ضع_القيمة",
+    storageBucket: "ضع_القيمة",
+    messagingSenderId: "ضع_القيمة",
+    appId: "ضع_القيمة"
+  };
 
-// ===== USERS / LOGIN =====
-function getUsers(){
-  const raw = localStorage.getItem('reem_users');
-  if(raw) return JSON.parse(raw);
-  // seed default
-  const seed = [
-    {id:1,name:'مدير النظام',username:'admin',password:'123',role:'admin'},
-    {id:2,name:'مسؤول الموارد البشرية',username:'hr',password:'123',role:'hr'},
-    {id:3,name:'موظف تجريبي',username:'user',password:'123',role:'user'}
-  ];
-  localStorage.setItem('reem_users', JSON.stringify(seed));
-  return seed;
-}
-function saveUsers(list){
-  localStorage.setItem('reem_users', JSON.stringify(list));
-}
-function findUserByCred(username, pass, role){
-  const users = getUsers();
-  return users.find(u=>u.username===username && u.password===pass && u.role===role);
-}
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
 
-function login(){
-  let roleSel = document.getElementById("role").value;
-  let u = document.getElementById("email").value.trim();
-  let p = document.getElementById("pass").value.trim();
-
-  const user = findUserByCred(u,p,roleSel);
-  if(user){
-    localStorage.setItem('reem_logged', JSON.stringify({id:user.id,user:user.username,role:user.role,label:user.name}));
-    document.getElementById("login").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    document.getElementById("topUser").textContent = user.username;
-    document.getElementById("topRole").textContent = user.name + " – " + user.role;
-    applySettings();
-    showPage('dash');
-    notify("تم تسجيل الدخول بنجاح");
-  } else {
-    notify("بيانات الدخول غير صحيحة", "error");
+  // ===== أدوات عامة =====
+  function notify(msg, type='ok'){
+    const n = document.getElementById('notif');
+    n.textContent = msg;
+    n.className = '';
+    if(type === 'error') n.classList.add('error');
+    n.classList.add('show');
+    setTimeout(()=>{ n.classList.remove('show'); }, 2200);
   }
-}
+  function $(id){return document.getElementById(id);}
 
-function logout(){
-  localStorage.removeItem('reem_logged');
-  location.reload();
-}
+  // ساعة أعلى الواجهة
+  setInterval(()=>{
+    const d = new Date();
+    const f = d.toLocaleString('ar-EG',{dateStyle:'medium', timeStyle:'short'});
+    const el = $("now");
+    if(el) el.textContent = f;
+  },1000);
 
-function getSession(){
-  const raw = localStorage.getItem('reem_logged');
-  if(!raw) return null;
-  try{return JSON.parse(raw);}catch(e){return null;}
-}
-
-// استعادة جلسة
-(function restoreSession(){
-  const s = getSession();
-  if(s){
-    document.getElementById("login").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    document.getElementById("topUser").textContent = s.user;
-    document.getElementById("topRole").textContent = s.label || "مستخدم";
-    applySettings();
-    showPage('dash');
-  }else{
-    applySettings(); // لتطبيق الثيم على شاشة الدخول
+  // ===== الثيم (فاتح/غامق) =====
+  function loadTheme(){
+    const t = localStorage.getItem('reem_theme') || 'dark';
+    document.body.classList.toggle('light', t === 'light');
   }
-})();
+  loadTheme();
+  window.toggleTheme = function(){
+    const isLight = document.body.classList.contains('light');
+    const next = isLight ? 'dark' : 'light';
+    localStorage.setItem('reem_theme', next);
+    loadTheme();
+  };
 
-// ===== DATA STRUCTURE =====
-// reem_days: { "YYYY-MM-DD": { [userId]: {checkIn, checkOut, totalMinutes, locIn, locOut} } }
-function getAllDays(){
-  const raw = localStorage.getItem('reem_days');
-  return raw ? JSON.parse(raw) : {};
-}
-function saveAllDays(data){
-  localStorage.setItem('reem_days', JSON.stringify(data));
-}
-function getTodayKey(){
-  return new Date().toISOString().slice(0,10);
-}
-function getTodayLogsForUser(userId){
-  const all = getAllDays();
-  const k = getTodayKey();
-  const day = all[k] || {};
-  return day[userId] || {checkIn:null, checkOut:null, totalMinutes:0,locIn:null,locOut:null};
-}
-function saveTodayLogsForUser(userId, logs){
-  const all = getAllDays();
-  const k = getTodayKey();
-  const day = all[k] || {};
-  day[userId] = logs;
-  all[k] = day;
-  saveAllDays(all);
-}
+  // ===== تسجيل الدخول =====
+  window.login = async function(){
+    const email = $("email").value.trim();
+    const pass  = $("pass").value.trim();
+    if(!email || !pass){
+      notify("أدخل البريد وكلمة المرور","error");
+      return;
+    }
+    try{
+      await signInWithEmailAndPassword(auth, email, pass);
+      notify("تم تسجيل الدخول");
+    }catch(e){
+      console.error(e);
+      notify("بيانات الدخول غير صحيحة","error");
+    }
+  };
 
-// ===== ROUTER =====
-function showPage(p, el){
-  document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
-  if(el) el.classList.add('active');
+  window.logout = async function(){
+    await signOut(auth);
+  };
 
-  if(p === 'dash') renderDash();
-  if(p === 'punch') renderPunch();
-  if(p === 'calendar') renderCalendar();
-  if(p === 'logs') renderLogs();
-  if(p === 'report') renderReport();
-  if(p === 'employees') renderEmployees();
-  if(p === 'tasks') renderTasks();
-  if(p === 'settings') renderSettings();
-  if(p === 'about') renderAbout();
-}
+  // ===== ملف المستخدم في Firestore =====
+  async function loadUserProfile(user){
+    const ref = doc(db,"users",user.uid);
+    const snap = await getDoc(ref);
+    if(!snap.exists()) return {role:'user', name:user.email, email:user.email};
+    return snap.data();
+  }
 
-// ===== STATS =====
-function calcStatsForUser(userId){
-  const all = getAllDays();
-  const keys = Object.keys(all);
-  const todayKey = getTodayKey();
-  let totalMinutes = 0;
-  let daysWithWork = 0;
-  let lastDay = null;
-
-  keys.forEach(k=>{
-    const day = all[k];
-    const d = day[userId];
-    if(d && d.totalMinutes && d.totalMinutes>0){
-      totalMinutes += d.totalMinutes;
-      daysWithWork++;
-      if(!lastDay || k > lastDay) lastDay = k;
+  // ===== حالة المستخدم =====
+  onAuthStateChanged(auth, async (user)=>{
+    if(user){
+      $("login").style.display = "none";
+      $("app").style.display   = "block";
+      const profile = await loadUserProfile(user);
+      $("topUser").textContent = profile.name || user.email;
+      $("topRole").textContent = profile.role === 'admin' ? 'مدير النظام' : 'موظف';
+      renderDash(user, profile);
+    }else{
+      $("login").style.display = "block";
+      $("app").style.display   = "none";
     }
   });
 
-  const totalHours = (totalMinutes/60).toFixed(2);
-  const todayDay = all[todayKey] || {};
-  const today = todayDay[userId] || {checkIn:null, checkOut:null, totalMinutes:0};
-  let todayStatus = 'لم يتم تسجيل حضور اليوم';
-  if(today.checkIn && !today.checkOut) todayStatus = 'تم تسجيل حضور – في انتظار الانصراف';
-  if(today.checkIn && today.checkOut) todayStatus = 'تم تسجيل حضور وانصراف اليوم';
+  // ===== التنقل بين الصفحات =====
+  window.showPage = async function(page, el){
+    document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
+    if(el) el.classList.add('active');
 
-  return {
-    totalHours,
-    daysWithWork,
-    todayStatus,
-    lastDay,
-    today
+    const user = auth.currentUser;
+    if(!user) return;
+    const profile = await loadUserProfile(user);
+
+    if(page==='dash')      renderDash(user, profile);
+    if(page==='punch')     renderPunch(user, profile);
+    if(page==='employees') renderEmployees(user, profile);
+    if(page==='tasks')     renderTasks(user, profile);
+    if(page==='report')    renderReport(user, profile);
   };
-}
 
-// ===== DASHBOARD =====
-function renderDash(){
-  const s = getSession();
-  if(!s){return;}
-  const stats = calcStatsForUser(s.id);
-  const today = stats.today;
-
-  let lastDayText = stats.lastDay
-    ? new Date(stats.lastDay).toLocaleDateString('ar-EG',{dateStyle:'medium'})
-    : 'لا يوجد';
-
-  let todayHours = '';
-  if(today.totalMinutes && today.totalMinutes>0){
-    todayHours = (today.totalMinutes/60).toFixed(2) + ' ساعة';
-  } else {
-    todayHours = '—';
+  // ===== حضور وانصراف مع GPS + حساب ساعات =====
+  function getLocation(){
+    return new Promise((resolve)=>{
+      if(!navigator.geolocation){
+        notify("المتصفح لا يدعم GPS","error");
+        resolve(null);
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        pos=>resolve({lat:pos.coords.latitude,lng:pos.coords.longitude}),
+        err=>{notify("تعذر الحصول على الموقع","error");resolve(null);},
+        {enableHighAccuracy:true,timeout:8000}
+      );
+    });
+  }
+  function mapLink(coords){
+    if(!coords) return '';
+    return `<a href="https://www.google.com/maps?q=${coords.lat},${coords.lng}" target="_blank">عرض على الخريطة</a>`;
+  }
+  async function getTodayDocRef(user){
+    const today = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+    const ref = doc(db, "attendance", `${user.uid}_${today}`);
+    return ref;
   }
 
-  document.getElementById('page').innerHTML = `
-    <div class="cards">
+  async function renderPunch(user, profile){
+    const ref = await getTodayDocRef(user);
+    const snap = await getDoc(ref);
+    let data = snap.exists()?snap.data():null;
+
+    let html = `
       <div class="card">
-        <span class="badge">اليوم</span>
-        <h3>حالة اليوم</h3>
-        <p>${new Date().toLocaleDateString('ar-EG',{dateStyle:'full'})}</p>
-        <p><strong>${stats.todayStatus}</strong></p>
-        <p class="stat-label">ساعات اليوم</p>
-        <div class="stat-value">${todayHours}</div>
+        <span class="badge">الحضور اليومي</span>
+        <h3>الحضور والانصراف</h3>
+        <p>قم بتسجيل الحضور والانصراف مع حفظ الموقع (GPS) في قاعدة البيانات السحابية.</p>
+        <div class="actions-row">
+          <button onclick="checkIn()">📍 تسجيل حضور</button>
+          <button class="danger" onclick="checkOut()">📍 تسجيل انصراف</button>
+        </div>
+        <hr style="margin:10px 0;border-color:#1f2937;">
+    `;
+
+    if(data){
+      html += `<p>🟢 <strong>الحضور:</strong> ${data.checkInTime || '-'} ${data.locIn?'<br><small>'+mapLink(data.locIn)+'</small>':''}</p>`;
+      html += `<p>🔴 <strong>الانصراف:</strong> ${data.checkOutTime || '-'} ${data.locOut?'<br><small>'+mapLink(data.locOut)+'</small>':''}</p>`;
+      html += `<p><strong>إجمالي الساعات:</strong> ${data.totalHours != null ? data.totalHours.toFixed(2)+' ساعة' : '-'}</p>`;
+    }else{
+      html += `<p>لم يتم تسجيل حضور اليوم بعد.</p>`;
+    }
+
+    html += `</div>`;
+    $("page").innerHTML = html;
+  }
+
+  window.checkIn = async function(){
+    const user = auth.currentUser;
+    if(!user) return;
+    const ref = await getTodayDocRef(user);
+    const snap = await getDoc(ref);
+    if(snap.exists() && snap.data().checkInTime){
+      notify("تم تسجيل الحضور بالفعل","error");
+      return;
+    }
+    const loc = await getLocation();
+    const now = new Date();
+    const dateStr = now.toISOString().slice(0,10);
+    const yearMonth = dateStr.slice(0,7); // YYYY-MM
+    await setDoc(ref,{
+      uid:user.uid,
+      date:dateStr,
+      yearMonth:yearMonth,
+      checkInTime:now.toLocaleTimeString('ar-EG',{timeStyle:'short'}),
+      checkInMs:now.getTime(),
+      locIn:loc || null,
+      createdAt:serverTimestamp()
+    },{merge:true});
+    notify("تم تسجيل الحضور");
+    const profile = await loadUserProfile(user);
+    renderPunch(user, profile);
+  };
+
+  window.checkOut = async function(){
+    const user = auth.currentUser;
+    if(!user) return;
+    const ref = await getTodayDocRef(user);
+    const snap = await getDoc(ref);
+    if(!snap.exists() || !snap.data().checkInTime){
+      notify("سجل الحضور أولاً","error");
+      return;
+    }
+    if(snap.data().checkOutTime){
+      notify("تم تسجيل الانصراف بالفعل","error");
+      return;
+    }
+    const loc = await getLocation();
+    const now = new Date();
+    const data = snap.data();
+    const checkInMs = data.checkInMs || now.getTime();
+    const diffHours = (now.getTime() - checkInMs) / (1000*60*60);
+    await setDoc(ref,{
+      checkOutTime:now.toLocaleTimeString('ar-EG',{timeStyle:'short'}),
+      checkOutMs:now.getTime(),
+      locOut:loc || null,
+      totalHours:diffHours,
+      updatedAt:serverTimestamp()
+    },{merge:true});
+    notify("تم تسجيل الانصراف");
+    const profile = await loadUserProfile(user);
+    renderPunch(user, profile);
+  };
+
+  // ===== Dashboard رئيسية =====
+  async function renderDash(user, profile){
+    const attCol = collection(db,"attendance");
+    const qSnap = await getDocs(query(attCol, where("uid","==",user.uid)));
+    let daysCount = 0;
+    let totalHours = 0;
+    qSnap.forEach(d=>{
+      const x = d.data();
+      daysCount++;
+      if(x.totalHours != null) totalHours += x.totalHours;
+    });
+
+    $("page").innerHTML = `
+      <div class="cards">
+        <div class="card">
+          <span class="badge">المستخدم</span>
+          <h3>مرحبًا ${profile.name || user.email}</h3>
+          <p>دورك الحالي: <strong>${profile.role === 'admin' ? 'مدير النظام' : 'موظف'}</strong></p>
+          <p class="stat-label">يمكنك تسجيل الحضور والانصراف من القائمة الجانبية.</p>
+        </div>
+        <div class="card">
+          <span class="badge">إحصاءات</span>
+          <h3>أيام تم تسجيلها</h3>
+          <div class="stat-value">${daysCount}</div>
+          <div class="stat-label">عدد الأيام التي تحتوي على حضور في النظام السحابي.</div>
+          <p style="margin-top:6px;"><strong>إجمالي الساعات:</strong> ${totalHours.toFixed(2)} ساعة</p>
+        </div>
+        <div class="card">
+          <span class="badge">النظام</span>
+          <h3>REEM TIME PRO – Cloud</h3>
+          <p>نظام حضور وانصراف سحابي مبني على Firebase، مع إدارة موظفين ومهام وتقارير شهرية قابلة للتطوير.</p>
+        </div>
       </div>
-      <div class="card">
-        <span class="badge">الإحصاءات</span>
-        <h3>إجمالي الساعات</h3>
-        <div class="stat-value">${stats.totalHours}</div>
-        <div class="stat-label">إجمالي الساعات المسجلة لهذا المستخدم</div>
-        <p style="margin-top:8px;"><strong>أيام العمل:</strong> ${stats.daysWithWork}</p>
-      </div>
-      <div class="card">
-        <span class="badge">آخر عمل</span>
-        <h3>آخر يوم مسجل</h3>
-        <div class="stat-value">${lastDayText}</div>
-        <div class="stat-label">آخر يوم تم تسجيل الحضور والانصراف فيه</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>نظرة عامة</h3>
-      <p>هذا النظام يوفر لوحة تحكم كاملة لإدارة الحضور والانصراف والموظفين والمهام، مع حفظ البيانات في المتصفح (localStorage) بدون الحاجة إلى خادم أو قاعدة بيانات خارجية.</p>
-      <p>يمكنك استخدام صفحة <strong>"الحضور والانصراف"</strong> لتسجيل بداية ونهاية اليوم مع حفظ موقع GPS، وصفحة <strong>"تقويم الحضور"</strong> لمراجعة حالة كل يوم، وصفحة <strong>"الموظفون"</strong> لإدارة المستخدمين، وصفحة <strong>"المهام"</strong> لمتابعة مهام الموظفين.</p>
-    </div>
-  `;
-}
-
-// ===== GEOLOCATION =====
-function getLocation(callback){
-  if(!navigator.geolocation){
-    notify("المتصفح لا يدعم GPS","error");
-    callback(null);
-    return;
-  }
-  navigator.geolocation.getCurrentPosition(
-    pos=>{
-      const coords = {lat:pos.coords.latitude, lng:pos.coords.longitude};
-      callback(coords);
-    },
-    err=>{
-      notify("تعذر الحصول على الموقع","error");
-      callback(null);
-    },
-    {enableHighAccuracy:true,timeout:8000}
-  );
-}
-function mapLink(coords){
-  if(!coords) return '';
-  return `<a href="https://www.google.com/maps?q=${coords.lat},${coords.lng}" target="_blank">عرض على الخريطة</a>`;
-}
-
-// ===== PUNCH IN/OUT =====
-function renderPunch(){
-  const s = getSession();
-  if(!s){return;}
-  const logs = getTodayLogsForUser(s.id);
-  let info = '';
-
-  if(logs.checkIn){
-    info += `<p>🟢 وقت الحضور: ${new Date(logs.checkIn).toLocaleTimeString('ar-EG',{timeStyle:'short'})} ${logs.locIn?`<br><small>${mapLink(logs.locIn)}</small>`:''}</p>`;
-  } else {
-    info += `<p>لم يتم تسجيل حضور بعد.</p>`;
+    `;
   }
 
-  if(logs.checkOut){
-    info += `<p>🔴 وقت الانصراف: ${new Date(logs.checkOut).toLocaleTimeString('ar-EG',{timeStyle:'short'})} ${logs.locOut?`<br><small>${mapLink(logs.locOut)}</small>`:''}</p>`;
-    const h = (logs.totalMinutes/60).toFixed(2);
-    info += `<p><strong>إجمالي الساعات:</strong> ${h} ساعة</p>`;
+  // ===== هل المستخدم مدير؟ =====
+  async function isAdmin(profile){
+    return profile.role === 'admin';
   }
 
-  document.getElementById('page').innerHTML = `
-    <div class="card">
-      <h3>الحضور والانصراف</h3>
-      <p>قم بتسجيل الحضور عند بداية العمل، والانصراف عند نهاية اليوم. يتم حفظ بيانات كل يوم تلقائيًا مع موقع GPS.</p>
-      <div class="actions-row">
-        <button onclick="doCheckIn()">📍 تسجيل حضور مع GPS</button>
-        <button class="danger" onclick="doCheckOut()">📍 تسجيل انصراف مع GPS</button>
-        <button class="secondary" onclick="clearToday()">مسح بيانات اليوم</button>
-      </div>
-      <div id="punchInfo">${info}</div>
-      <small>يتم حفظ بيانات اليوم في المتصفح (localStorage) ويمكن مراجعتها من صفحة "سجل الأيام" و"تقويم الحضور".</small>
-    </div>
-  `;
-}
+  // ===== إدارة الموظفين كاملة (CRUD على مجموعة users) =====
+  async function renderEmployees(user, profile){
+    const admin = await isAdmin(profile);
+    if(!admin){
+      $("page").innerHTML = `
+        <div class="card">
+          <h3>الموظفون</h3>
+          <p>هذه الصفحة متاحة لمدير النظام فقط.</p>
+        </div>
+      `;
+      return;
+    }
 
-function doCheckIn(){
-  const s = getSession();
-  if(!s){return;}
-  const logs = getTodayLogsForUser(s.id);
-  if(logs.checkIn){
-    notify("تم تسجيل الحضور بالفعل اليوم","error");
-    return;
-  }
-  getLocation(coords=>{
-    logs.checkIn = new Date().toISOString();
-    logs.locIn = coords;
-    saveTodayLogsForUser(s.id, logs);
-    notify("تم تسجيل الحضور بنجاح");
-    renderPunch();
-  });
-}
-
-function doCheckOut(){
-  const s = getSession();
-  if(!s){return;}
-  const logs = getTodayLogsForUser(s.id);
-  if(!logs.checkIn){
-    notify("لا يمكن تسجيل الانصراف قبل الحضور","error");
-    return;
-  }
-  if(logs.checkOut){
-    notify("تم تسجيل الانصراف بالفعل اليوم","error");
-    return;
-  }
-  getLocation(coords=>{
-    logs.checkOut = new Date().toISOString();
-    logs.locOut = coords;
-    const start = new Date(logs.checkIn);
-    const end   = new Date(logs.checkOut);
-    const diffMinutes = Math.round((end - start) / 60000);
-    logs.totalMinutes = diffMinutes;
-    saveTodayLogsForUser(s.id, logs);
-    notify("تم تسجيل الانصراف وحساب الساعات");
-    renderPunch();
-  });
-}
-
-function clearToday(){
-  const s = getSession();
-  if(!s){return;}
-  if(!confirm("هل تريد مسح بيانات اليوم لهذا المستخدم؟")) return;
-  const all = getAllDays();
-  const k = getTodayKey();
-  const day = all[k] || {};
-  delete day[s.id];
-  all[k] = day;
-  saveAllDays(all);
-  notify("تم مسح بيانات اليوم");
-  renderPunch();
-}
-
-// ===== LOGS PAGE =====
-function renderLogs(){
-  const s = getSession();
-  if(!s){return;}
-  const all = getAllDays();
-  const keys = Object.keys(all).sort();
-  let rows = '';
-
-  if(keys.length === 0){
-    rows = `<tr><td colspan="5">لا توجد بيانات مسجلة حتى الآن.</td></tr>`;
-  } else {
-    keys.forEach(k=>{
-      const day = all[k];
-      const d = day[s.id];
-      if(!d) return;
-      const ci = d.checkIn ? new Date(d.checkIn).toLocaleTimeString('ar-EG',{timeStyle:'short'}) : '-';
-      const co = d.checkOut ? new Date(d.checkOut).toLocaleTimeString('ar-EG',{timeStyle:'short'}) : '-';
-      const h  = d.totalMinutes ? (d.totalMinutes/60).toFixed(2) : '-';
+    const qSnap = await getDocs(collection(db,"users"));
+    let rows = '';
+    qSnap.forEach(d=>{
+      const u = d.data();
       rows += `
         <tr>
-          <td>${new Date(k).toLocaleDateString('ar-EG',{dateStyle:'medium'})}</td>
-          <td>${ci}</td>
-          <td>${co}</td>
-          <td>${h}</td>
-          <td>${d.locIn?mapLink(d.locIn):''}</td>
+          <td>${u.name || '-'}</td>
+          <td>${u.email || '-'}</td>
+          <td>${u.role || 'user'}</td>
+          <td>
+            <button class="small secondary" onclick="editEmployee('${d.id}')">تعديل</button>
+            <button class="small danger" onclick="deleteEmployee('${d.id}')">حذف</button>
+          </td>
         </tr>
       `;
     });
+
+    $("page").innerHTML = `
+      <div class="card">
+        <span class="badge">الموظفون</span>
+        <h3>إدارة الموظفين</h3>
+        <p>إضافة / تعديل / حذف بيانات الموظفين في مجموعة <strong>users</strong>. (إنشاء حساب الدخول يتم من Firebase Auth).</p>
+        <div class="actions-row">
+          <button onclick="showEmployeeForm()">➕ إضافة موظف</button>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>الاسم</th>
+              <th>البريد</th>
+              <th>الدور</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody>${rows || '<tr><td colspan="4">لا يوجد موظفون.</td></tr>'}</tbody>
+        </table>
+      </div>
+      <div id="empFormWrap"></div>
+    `;
   }
 
-  document.getElementById('page').innerHTML = `
-    <div class="card">
-      <h3>سجل الأيام</h3>
-      <p>عرض جميع الأيام التي تم تسجيل حضور أو انصراف فيها لهذا المستخدم.</p>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>اليوم</th>
-            <th>وقت الحضور</th>
-            <th>وقت الانصراف</th>
-            <th>إجمالي الساعات</th>
-            <th>الموقع</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-// ===== MONTHLY REPORT =====
-function renderReport(){
-  const s = getSession();
-  if(!s){return;}
-  const all = getAllDays();
-  const keys = Object.keys(all).sort();
-  if(keys.length === 0){
-    document.getElementById('page').innerHTML = `
-      <div class="card">
-        <h3>تقرير شهري</h3>
-        <p>لا توجد بيانات كافية لإنشاء تقرير.</p>
+  window.showEmployeeForm = async function(empId=null){
+    let emp = null;
+    if(empId){
+      const ref = doc(db,"users",empId);
+      const snap = await getDoc(ref);
+      if(snap.exists()) emp = {id:empId, ...snap.data()};
+    }
+    const wrap = $("empFormWrap");
+    wrap.innerHTML = `
+      <div class="card" style="margin-top:10px;">
+        <h3>${emp?'تعديل موظف':'إضافة موظف جديد'}</h3>
+        <input id="empName" placeholder="اسم الموظف" value="${emp?emp.name||'':''}">
+        <input id="empEmail" placeholder="البريد الإلكتروني (نفس المستخدم في Auth)" value="${emp?emp.email||'':''}">
+        <select id="empRole">
+          <option value="admin" ${emp&&emp.role==='admin'?'selected':''}>مدير النظام</option>
+          <option value="user" ${!emp || emp.role==='user'?'selected':''}>موظف</option>
+        </select>
+        <div class="actions-row">
+          <button onclick="saveEmployee('${emp?emp.id:''}')">💾 حفظ</button>
+          <button class="secondary" onclick="cancelEmpForm()">إلغاء</button>
+        </div>
+        <small>تأكد أن البريد الإلكتروني هنا مطابق لحساب المستخدم في Firebase Auth.</small>
       </div>
     `;
-    return;
+  };
+
+  window.cancelEmpForm = function(){
+    $("empFormWrap").innerHTML = '';
+  };
+
+  window.saveEmployee = async function(id){
+    const name  = $("empName").value.trim();
+    const email = $("empEmail").value.trim();
+    const role  = $("empRole").value;
+    if(!name || !email){
+      notify("يرجى إدخال الاسم والبريد","error");
+      return;
+    }
+    try{
+      if(id){
+        await updateDoc(doc(db,"users",id),{name,email,role});
+      }else{
+        // هنا نفترض أن uid = نفس id المستخدم في Auth غير معروف من الواجهة
+        // يمكن لاحقًا ربطه يدويًا أو عبر Cloud Functions
+        const newDoc = await addDoc(collection(db,"users"),{name,email,role});
+        // في نظام إنتاجي: يفضّل أن يكون documentId = uid
+      }
+      notify("تم حفظ بيانات الموظف");
+      const user = auth.currentUser;
+      const profile = await loadUserProfile(user);
+      renderEmployees(user, profile);
+    }catch(e){
+      console.error(e);
+      notify("خطأ في حفظ بيانات الموظف","error");
+    }
+  };
+
+  window.editEmployee = function(id){
+    showEmployeeForm(id);
+  };
+
+  window.deleteEmployee = async function(id){
+    if(!confirm("هل تريد حذف هذا الموظف؟")) return;
+    try{
+      await deleteDoc(doc(db,"users",id));
+      notify("تم حذف الموظف");
+      const user = auth.currentUser;
+      const profile = await loadUserProfile(user);
+      renderEmployees(user, profile);
+    }catch(e){
+      console.error(e);
+      notify("خطأ في حذف الموظف","error");
+    }
+  };
+
+  // ===== المهام المتقدمة =====
+  async function renderTasks(user, profile){
+    const tasksCol = collection(db,"tasks");
+    let qRef;
+    if(profile.role === 'admin'){
+      qRef = tasksCol;
+    }else{
+      qRef = query(tasksCol, where("uid","==",user.uid));
+    }
+    const qSnap = await getDocs(qRef);
+    let rows = '';
+    qSnap.forEach(d=>{
+      const t = d.data();
+      let tagClass = 'todo';
+      if(t.status==='progress') tagClass='progress';
+      if(t.status==='done') tagClass='done';
+      rows += `
+        <tr>
+          <td>${t.title || '-'}</td>
+          <td>${t.assigneeName || '-'}</td>
+          <td><span class="tag ${tagClass}">${t.status || 'todo'}</span></td>
+          <td>${t.dueDate || '-'}</td>
+          <td>
+            <button class="small secondary" onclick="editTask('${d.id}')">تعديل</button>
+            ${profile.role==='admin'?`<button class="small danger" onclick="deleteTask('${d.id}')">حذف</button>`:''}
+          </td>
+        </tr>
+      `;
+    });
+
+    $("page").innerHTML = `
+      <div class="card">
+        <span class="badge">المهام</span>
+        <h3>إدارة المهام</h3>
+        <p>إضافة مهام للموظفين مع حالة وتاريخ استحقاق، ومتابعة تقدم التنفيذ.</p>
+        <div class="actions-row">
+          ${profile.role==='admin'?`<button onclick="showTaskForm()">➕ إضافة مهمة</button>`:''}
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>المهمة</th>
+              <th>الموظف</th>
+              <th>الحالة</th>
+              <th>تاريخ الاستحقاق</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody>${rows || '<tr><td colspan="5">لا توجد مهام.</td></tr>'}</tbody>
+        </table>
+      </div>
+      <div id="taskFormWrap"></div>
+    `;
   }
 
-  const now = new Date();
-  const ym = now.toISOString().slice(0,7); // YYYY-MM
-  let totalMinutes = 0;
-  let daysCount = 0;
+  window.showTaskForm = async function(taskId=null){
+    const user = auth.currentUser;
+    if(!user) return;
+    const profile = await loadUserProfile(user);
+    if(profile.role!=='admin' && !taskId){
+      notify("إضافة المهام متاحة للمدير فقط","error");
+      return;
+    }
 
-  keys.forEach(k=>{
-    if(k.startsWith(ym)){
-      const day = all[k];
-      const d = day[s.id];
-      if(d && d.totalMinutes && d.totalMinutes>0){
-        totalMinutes += d.totalMinutes;
+    let task = null;
+    if(taskId){
+      const ref = doc(db,"tasks",taskId);
+      const snap = await getDoc(ref);
+      if(snap.exists()) task = {id:taskId, ...snap.data()};
+    }
+
+    const usersSnap = await getDocs(collection(db,"users"));
+    let options = '';
+    usersSnap.forEach(d=>{
+      const u = d.data();
+      options += `<option value="${d.id}" ${task&&task.uid===d.id?'selected':''}>${u.name || u.email}</option>`;
+    });
+
+    $("taskFormWrap").innerHTML = `
+      <div class="card" style="margin-top:10px;">
+        <h3>${task?'تعديل مهمة':'إضافة مهمة جديدة'}</h3>
+        <input id="taskTitle" placeholder="عنوان المهمة" value="${task?task.title||'':''}">
+        <textarea id="taskDesc" placeholder="وصف المهمة (اختياري)">${task?task.desc||'':''}</textarea>
+        <label>الموظف:</label>
+        <select id="taskUser">${options}</select>
+        <label>الحالة:</label>
+        <select id="taskStatus">
+          <option value="todo" ${!task || task.status==='todo'?'selected':''}>لم تبدأ</option>
+          <option value="progress" ${task&&task.status==='progress'?'selected':''}>قيد التنفيذ</option>
+          <option value="done" ${task&&task.status==='done'?'selected':''}>منتهية</option>
+        </select>
+        <label>تاريخ الاستحقاق:</label>
+        <input id="taskDue" type="date" value="${task&&task.dueDate?task.dueDate:''}">
+        <div class="actions-row">
+          <button onclick="saveTask('${task?task.id:''}')">💾 حفظ</button>
+          <button class="secondary" onclick="cancelTaskForm()">إلغاء</button>
+        </div>
+      </div>
+    `;
+  };
+
+  window.cancelTaskForm = function(){
+    $("taskFormWrap").innerHTML = '';
+  };
+
+  window.saveTask = async function(id){
+    const title = $("taskTitle").value.trim();
+    const desc  = $("taskDesc").value.trim();
+    const uid   = $("taskUser").value;
+    const status= $("taskStatus").value;
+    const due   = $("taskDue").value;
+    if(!title || !uid){
+      notify("يرجى إدخال عنوان المهمة واختيار الموظف","error");
+      return;
+    }
+    try{
+      const userDoc = await getDoc(doc(db,"users",uid));
+      const assigneeName = userDoc.exists()? (userDoc.data().name || userDoc.data().email) : uid;
+      if(id){
+        await updateDoc(doc(db,"tasks",id),{title,desc,uid,status,dueDate:due,assigneeName});
+      }else{
+        await addDoc(collection(db,"tasks"),{
+          title,desc,uid,status,dueDate:due,assigneeName,
+          createdAt:serverTimestamp()
+        });
+      }
+      notify("تم حفظ المهمة");
+      const user = auth.currentUser;
+      const profile = await loadUserProfile(user);
+      renderTasks(user, profile);
+    }catch(e){
+      console.error(e);
+      notify("خطأ في حفظ المهمة","error");
+    }
+  };
+
+  window.editTask = function(id){
+    showTaskForm(id);
+  };
+
+  window.deleteTask = async function(id){
+    if(!confirm("هل تريد حذف هذه المهمة؟")) return;
+    try{
+      await deleteDoc(doc(db,"tasks",id));
+      notify("تم حذف المهمة");
+      const user = auth.currentUser;
+      const profile = await loadUserProfile(user);
+      renderTasks(user, profile);
+    }catch(e){
+      console.error(e);
+      notify("خطأ في حذف المهمة","error");
+    }
+  };
+
+  // ===== التقارير الشهرية الحقيقية =====
+  async function renderReport(user, profile){
+    const now = new Date();
+    const ym  = now.toISOString().slice(0,7); // YYYY-MM
+    const attCol = collection(db,"attendance");
+    const qSnap = await getDocs(query(attCol, where("uid","==",user.uid)));
+    let totalHours = 0;
+    let daysCount  = 0;
+
+    qSnap.forEach(d=>{
+      const x = d.data();
+      if(x.date && x.date.startsWith(ym) && x.totalHours != null){
+        totalHours += x.totalHours;
         daysCount++;
       }
-    }
-  });
+    });
 
-  const totalHours = (totalMinutes/60).toFixed(2);
-
-  document.getElementById('page').innerHTML = `
-    <div class="card" id="reportCard">
-      <h3>تقرير شهر ${now.toLocaleDateString('ar-EG',{month:'long', year:'numeric'})}</h3>
-      <p><strong>إجمالي الساعات المسجلة:</strong> ${totalHours} ساعة</p>
-      <p><strong>عدد أيام العمل:</strong> ${daysCount} يوم</p>
-      <div class="actions-row">
-        <button onclick="printReport()">🖨 طباعة / حفظ PDF</button>
-      </div>
-      <small>يمكنك استخدام خيار الطباعة في المتصفح لحفظ التقرير كملف PDF.</small>
-    </div>
-  `;
-}
-
-function printReport(){
-  notify("استخدم نافذة الطباعة لحفظ التقرير كـ PDF");
-  window.print();
-}
-
-// ===== CALENDAR VIEW =====
-function renderCalendar(){
-  const s = getSession();
-  if(!s){return;}
-  const all = getAllDays();
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth(); // 0-11
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month+1, 0);
-  const startWeekDay = (firstDay.getDay()+6)%7; // تحويل الأحد لآخر
-  const daysInMonth = lastDay.getDate();
-
-  let cells = '';
-  const ym = now.toISOString().slice(0,7);
-
-  for(let i=0;i<startWeekDay;i++){
-    cells += `<div class="calendar-day"></div>`;
-  }
-
-  for(let d=1; d<=daysInMonth; d++){
-    const dayKey = `${ym}-${String(d).padStart(2,'0')}`;
-    const day = all[dayKey];
-    const rec = day ? day[s.id] : null;
-    let cls = '';
-    let label = 'لا بيانات';
-
-    if(rec){
-      if(rec.checkIn && rec.checkOut && rec.totalMinutes>0){
-        cls = 'work';
-        label = 'حضور كامل';
-      }else if(rec.checkIn && !rec.checkOut){
-        cls = 'partial';
-        label = 'حضور فقط';
-      }
-    }else{
-      const tmp = new Date(year, month, d);
-      const wd = tmp.getDay(); // 0=أحد
-      if(wd === 5){ // جمعة
-        cls = 'off';
-        label = 'عطلة';
-      }else{
-        cls = 'absent';
-        label = 'غياب';
-      }
-    }
-
-    cells += `
-      <div class="calendar-day ${cls}">
-        <span class="date">${d}</span>
-        <span>${label}</span>
-      </div>
-    `;
-  }
-
-  document.getElementById('page').innerHTML = `
-    <div class="card">
-      <h3>تقويم الحضور – ${now.toLocaleDateString('ar-EG',{month:'long', year:'numeric'})}</h3>
-      <p>عرض حالة كل يوم في الشهر الحالي (حضور كامل، حضور فقط، غياب، عطلة).</p>
-      <div class="calendar-grid">
-        ${cells}
-      </div>
-    </div>
-  `;
-}
-
-// ===== EMPLOYEES CRUD =====
-function renderEmployees(){
-  const s = getSession();
-  if(!s || (s.role!=='admin' && s.role!=='hr')){
-    document.getElementById('page').innerHTML = `
+    $("page").innerHTML = `
       <div class="card">
-        <h3>الموظفون</h3>
-        <p>هذه الصفحة متاحة فقط لمدير النظام أو مسؤول الموارد البشرية.</p>
+        <span class="badge">التقارير</span>
+        <h3>تقرير شهر ${now.toLocaleDateString('ar-EG',{month:'long', year:'numeric'})}</h3>
+        <p><strong>عدد أيام العمل المسجلة:</strong> ${daysCount} يوم</p>
+        <p><strong>إجمالي الساعات:</strong> ${totalHours.toFixed(2)} ساعة</p>
+        <p class="stat-label">يتم حساب الساعات من فرق الوقت بين الحضور والانصراف لكل يوم.</p>
       </div>
     `;
-    return;
   }
-  const users = getUsers();
-  let rows = '';
-  users.forEach(u=>{
-    rows += `
-      <tr>
-        <td>${u.id}</td>
-        <td>${u.name}</td>
-        <td>${u.username}</td>
-        <td>${u.role}</td>
-        <td>
-          <button class="small secondary" onclick="editEmployee(${u.id})">تعديل</button>
-          <button class="small danger" onclick="deleteEmployee(${u.id})">حذف</button>
-        </td>
-      </tr>
-    `;
-  });
-
-  document.getElementById('page').innerHTML = `
-    <div class="card">
-      <h3>الموظفون</h3>
-      <p>إدارة الموظفين (إضافة / تعديل / حذف) وإرسال بيانات الدخول لكل موظف.</p>
-      <div class="actions-row">
-        <button onclick="showEmployeeForm()">➕ إضافة موظف</button>
-      </div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>م</th>
-            <th>الاسم</th>
-            <th>اسم المستخدم</th>
-            <th>الدور</th>
-            <th>إجراءات</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>
-    <div id="empFormWrap"></div>
-  `;
-}
-
-function showEmployeeForm(emp){
-  const wrap = document.getElementById('empFormWrap');
-  const isEdit = !!emp;
-  wrap.innerHTML = `
-    <div class="card" style="margin-top:10px;">
-      <h3>${isEdit?'تعديل موظف':'إضافة موظف جديد'}</h3>
-      <input id="empName" placeholder="اسم الموظف" value="${emp?emp.name:''}">
-      <input id="empUser" placeholder="اسم المستخدم" value="${emp?emp.username:''}">
-      <input id="empPass" placeholder="كلمة المرور" value="${emp?emp.password:'123'}">
-      <select id="empRole">
-        <option value="admin" ${emp&&emp.role==='admin'?'selected':''}>مدير النظام</option>
-        <option value="hr" ${emp&&emp.role==='hr'?'selected':''}>مسؤول الموارد البشرية</option>
-        <option value="user" ${!emp || emp.role==='user'?'selected':''}>موظف</option>
-      </select>
-      <div class="actions-row">
-        <button onclick="saveEmployee(${emp?emp.id:'null'})">💾 حفظ</button>
-        <button class="secondary" onclick="cancelEmpForm()">إلغاء</button>
-      </div>
-      <small>يمكنك إرسال اسم المستخدم وكلمة المرور للموظف عبر أي وسيلة تواصل.</small>
-    </div>
-  `;
-}
-function cancelEmpForm(){
-  document.getElementById('empFormWrap').innerHTML = '';
-}
-function saveEmployee(id){
-  const name = document.getElementById('empName').value.trim();
-  const user = document.getElementById('empUser').value.trim();
-  const pass = document.getElementById('empPass').value.trim();
-  const role = document.getElementById('empRole').value;
-  if(!name || !user || !pass){
-    notify("يرجى إدخال جميع البيانات","error");
-    return;
-  }
-  let users = getUsers();
-  if(id){
-    users = users.map(u=>u.id===id?{...u,name,username:user,password:pass,role}:u);
-  }else{
-    const newId = users.length?Math.max(...users.map(u=>u.id))+1:1;
-    users.push({id:newId,name,username:user,password:pass,role});
-  }
-  saveUsers(users);
-  notify("تم حفظ بيانات الموظف");
-  renderEmployees();
-}
-function editEmployee(id){
-  const users = getUsers();
-  const emp = users.find(u=>u.id===id);
-  if(!emp) return;
-  renderEmployees();
-  showEmployeeForm(emp);
-}
-function deleteEmployee(id){
-  if(!confirm("هل تريد حذف هذا الموظف؟")) return;
-  let users = getUsers().filter(u=>u.id!==id);
-  saveUsers(users);
-  notify("تم حذف الموظف");
-  renderEmployees();
-}
-
-// ===== TASKS =====
-// reem_tasks: [{id,title,desc,assignedTo,status,due}]
-function getTasks(){
-  const raw = localStorage.getItem('reem_tasks');
-  return raw ? JSON.parse(raw) : [];
-}
-function saveTasks(list){
-  localStorage.setItem('reem_tasks', JSON.stringify(list));
-}
-function renderTasks(){
-  const s = getSession();
-  if(!s){return;}
-  const tasks = getTasks();
-  const users = getUsers();
-  const isManager = (s.role==='admin' || s.role==='hr');
-
-  let filtered = tasks;
-  if(!isManager){
-    filtered = tasks.filter(t=>t.assignedTo===s.id);
-  }
-
-  let rows = '';
-  filtered.forEach(t=>{
-    const u = users.find(x=>x.id===t.assignedTo);
-    const uname = u?u.name:'—';
-    let tagClass = 'todo';
-    if(t.status==='done') tagClass='done';
-    else if(t.status==='progress') tagClass='progress';
-    rows += `
-      <tr>
-        <td>${t.id}</td>
-        <td>${t.title}</td>
-        <td>${uname}</td>
-        <td><span class="tag ${tagClass}">${t.status}</span></td>
-        <td>${t.due||''}</td>
-        <td>
-          <button class="small secondary" onclick="editTask(${t.id})">تعديل</button>
-          ${isManager?`<button class="small danger" onclick="deleteTask(${t.id})">حذف</button>`:''}
-        </td>
-      </tr>
-    `;
-  });
-
-  document.getElementById('page').innerHTML = `
-    <div class="card">
-      <h3>المهام</h3>
-      <p>إدارة مهام الموظفين ومتابعة حالة كل مهمة.</p>
-      <div class="actions-row">
-        ${isManager?`<button onclick="showTaskForm()">➕ إضافة مهمة</button>`:''}
-      </div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>م</th>
-            <th>المهمة</th>
-            <th>الموظف</th>
-            <th>الحالة</th>
-            <th>تاريخ الاستحقاق</th>
-            <th>إجراءات</th>
-          </tr>
-        </thead>
-        <tbody>${rows || '<tr><td colspan="6">لا توجد مهام.</td></tr>'}</tbody>
-      </table>
-    </div>
-    <div id="taskFormWrap"></div>
-  `;
-}
-
-function showTaskForm(task){
-  const s = getSession();
-  if(!s){return;}
-  const isManager = (s.role==='admin' || s.role==='hr');
-  if(!isManager && !task){
-    notify("إضافة المهام متاحة للإدارة فقط","error");
-    return;
-  }
-  const users = getUsers();
-  const wrap = document.getElementById('taskFormWrap');
-  const isEdit = !!task;
-  let userOptions = users.map(u=>`<option value="${u.id}" ${task&&task.assignedTo===u.id?'selected':''}>${u.name}</option>`).join('');
-  wrap.innerHTML = `
-    <div class="card" style="margin-top:10px;">
-      <h3>${isEdit?'تعديل مهمة':'إضافة مهمة جديدة'}</h3>
-      <input id="taskTitle" placeholder="عنوان المهمة" value="${task?task.title:''}">
-      <textarea id="taskDesc" placeholder="وصف المهمة">${task?task.desc||'':''}</textarea>
-      <label>الموظف:</label>
-      <select id="taskUser">${userOptions}</select>
-      <label>الحالة:</label>
-      <select id="taskStatus">
-        <option value="todo" ${!task || task.status==='todo'?'selected':''}>لم تبدأ</option>
-        <option value="progress" ${task&&task.status==='progress'?'selected':''}>قيد التنفيذ</option>
-        <option value="done" ${task&&task.status==='done'?'selected':''}>منتهية</option>
-      </select>
-      <input id="taskDue" placeholder="تاريخ الاستحقاق (اختياري)">
-      <div class="actions-row">
-        <button onclick="saveTask(${task?task.id:'null'})">💾 حفظ</button>
-        <button class="secondary" onclick="cancelTaskForm()">إلغاء</button>
-      </div>
-    </div>
-  `;
-}
-function cancelTaskForm(){
-  document.getElementById('taskFormWrap').innerHTML = '';
-}
-function saveTask(id){
-  const title = document.getElementById('taskTitle').value.trim();
-  const desc = document.getElementById('taskDesc').value.trim();
-  const assignedTo = parseInt(document.getElementById('taskUser').value,10);
-  const status = document.getElementById('taskStatus').value;
-  const due = document.getElementById('taskDue').value.trim();
-  if(!title){
-    notify("يرجى إدخال عنوان المهمة","error");
-    return;
-  }
-  let tasks = getTasks();
-  if(id){
-    tasks = tasks.map(t=>t.id===id?{...t,title,desc,assignedTo,status,due}:t);
-  }else{
-    const newId = tasks.length?Math.max(...tasks.map(t=>t.id))+1:1;
-    tasks.push({id:newId,title,desc,assignedTo,status,due});
-  }
-  saveTasks(tasks);
-  notify("تم حفظ المهمة");
-  renderTasks();
-}
-function editTask(id){
-  const tasks = getTasks();
-  const t = tasks.find(x=>x.id===id);
-  if(!t) return;
-  renderTasks();
-  showTaskForm(t);
-}
-function deleteTask(id){
-  if(!confirm("هل تريد حذف هذه المهمة؟")) return;
-  let tasks = getTasks().filter(t=>t.id!==id);
-  saveTasks(tasks);
-  notify("تم حذف المهمة");
-  renderTasks();
-}
-
-// ===== SETTINGS =====
-// reem_settings: {theme, companyName, logoText, country, activity}
-function getSettings(){
-  const raw = localStorage.getItem('reem_settings');
-  return raw ? JSON.parse(raw) : {theme:'dark', companyName:'REEM TIME PRO', logoText:'REEM TIME PRO', country:'السعودية', activity:'نظام حضور وانصراف'};
-}
-function saveSettings(s){
-  localStorage.setItem('reem_settings', JSON.stringify(s));
-}
-function applySettings(){
-  const s = getSettings();
-  document.body.classList.toggle('light', s.theme === 'light');
-  document.getElementById('sideTitle').textContent = s.companyName || 'REEM TIME PRO';
-  document.getElementById('sideSub').textContent = s.activity || 'نظام حضور وانصراف';
-  document.getElementById('loginLogo').textContent = s.logoText || 'REEM TIME PRO';
-}
-
-function renderSettings(){
-  const s = getSettings();
-  document.getElementById('page').innerHTML = `
-    <div class="card">
-      <h3>الإعدادات</h3>
-      <p>تخصيص مظهر النظام وبيانات الشركة.</p>
-      <div style="margin-top:10px;">
-        <label>اسم الشركة:</label>
-        <input id="setCompany" value="${s.companyName}">
-      </div>
-      <div style="margin-top:10px;">
-        <label>نص اللوجو (يظهر في شاشة الدخول):</label>
-        <input id="setLogo" value="${s.logoText}">
-      </div>
-      <div style="margin-top:10px;">
-        <label>الدولة:</label>
-        <input id="setCountry" value="${s.country}">
-      </div>
-      <div style="margin-top:10px;">
-        <label>نشاط الشركة:</label>
-        <input id="setActivity" value="${s.activity}">
-      </div>
-      <div style="margin-top:10px;" class="toggle-wrap">
-        <input type="checkbox" id="setTheme" ${s.theme === 'light' ? 'checked' : ''}>
-        <label for="setTheme">تفعيل الوضع الفاتح (Light Mode)</label>
-      </div>
-      <div class="actions-row" style="margin-top:12px;">
-        <button onclick="saveSettingsUI()">💾 حفظ الإعدادات</button>
-      </div>
-      <small>يتم حفظ الإعدادات في المتصفح، وتُطبق تلقائيًا عند فتح النظام مرة أخرى.</small>
-    </div>
-  `;
-}
-
-function saveSettingsUI(){
-  const companyName = document.getElementById('setCompany').value.trim() || 'REEM TIME PRO';
-  const logoText = document.getElementById('setLogo').value.trim() || 'REEM TIME PRO';
-  const country = document.getElementById('setCountry').value.trim() || '';
-  const activity = document.getElementById('setActivity').value.trim() || '';
-  const theme = document.getElementById('setTheme').checked ? 'light' : 'dark';
-  const s = {companyName, logoText, country, activity, theme};
-  saveSettings(s);
-  applySettings();
-  notify("تم حفظ الإعدادات");
-}
-
-// ===== ABOUT =====
-function renderAbout(){
-  document.getElementById('page').innerHTML = `
-    <div class="card">
-      <h3>بيانات النظام</h3>
-      <pre>
-المسؤول:
-- البريد: admin@company.com
-- كلمة المرور: admin123
-
-المدير:
-- البريد: manager@company.com
-- كلمة المرور: manager123
-
-الموارد البشرية:
-- البريد: hr@company.com
-- كلمة المرور: hr123
-
-المسؤول الإضافي:
-- البريد: admin
-- كلمة المرور: 123
-
-كود تفعيل تجريبي
-REEM-2024-A1B2C3D4
-      </pre>
-    </div>
-  `;
-}
 </script>
 
 </body>
