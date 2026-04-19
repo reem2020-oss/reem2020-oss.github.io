@@ -2,44 +2,47 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>REEM TIME PRO – Ultra 3D Dashboard</title>
+<title>REEM TIME PRO – Full Control</title>
 <style>
 *{box-sizing:border-box}
 :root{
-  --bg:#020617;
-  --bg-soft:#020617;
-  --bg-card:#020617;
+  --bg:#0f172a;
+  --bg-soft:#111827;
+  --bg-card:#111827;
   --border:#1f2937;
   --text:#e5e7eb;
   --muted:#9ca3af;
-  --accent:#7c3aed;
-  --accent-soft:#8b5bff;
+  --accent:#6366f1;
+  --accent-soft:#8b5cf6;
+  --accent-strong:#22c55e;
 }
 body.light{
-  --bg:#f3f4f6;
-  --bg-soft:#e5e7eb;
+  --bg:#e5e7eb;
+  --bg-soft:#f3f4f6;
   --bg-card:#ffffff;
   --border:#d1d5db;
   --text:#111827;
   --muted:#6b7280;
-  --accent:#7c3aed;
-  --accent-soft:#8b5bff;
+  --accent:#6366f1;
+  --accent-soft:#8b5cf6;
+  --accent-strong:#16a34a;
 }
 body{
-  background:radial-gradient(circle at top,#111827 0,#020617 45%,#000 100%);
+  background:radial-gradient(circle at top,#1f2937 0,#020617 50%,#000 100%);
   color:var(--text);
   font-family:Arial, Tahoma;
   margin:0;
+  font-size:15px;
   transition:background 0.4s ease,color 0.4s ease;
 }
 a{text-decoration:none;color:inherit}
 #login, #app{min-height:100vh;}
 .center{
-  width:340px;
+  width:360px;
   margin:120px auto;
   background:linear-gradient(145deg,#020617,#020617,#111827);
-  padding:22px;
-  border-radius:20px;
+  padding:24px;
+  border-radius:22px;
   text-align:center;
   box-shadow:0 25px 80px rgba(0,0,0,0.9);
   border:1px solid var(--border);
@@ -50,17 +53,17 @@ a{text-decoration:none;color:inherit}
   transform:translateY(-4px);
   box-shadow:0 35px 90px rgba(0,0,0,1);
 }
-.center h2{margin-bottom:4px;}
+.center h2{margin-bottom:4px;font-size:20px;}
 .center p{margin-top:0;margin-bottom:16px;font-size:13px;color:var(--muted);}
 .logo{
   font-weight:bold;
   letter-spacing:1px;
-  font-size:18px;
+  font-size:20px;
 }
 .logo span{
   color:var(--accent);
 }
-input,select{
+input,select,textarea{
   width:100%;
   padding:10px;
   margin:6px 0;
@@ -70,25 +73,27 @@ input,select{
   background:#020617;
   color:var(--text);
   border:1px solid var(--border);
+  font-size:14px;
 }
-body.light input,body.light select{
+textarea{min-height:70px;resize:vertical;}
+body.light input,body.light select,body.light textarea{
   background:#f9fafb;
 }
 button{
-  padding:9px 14px;
+  padding:9px 16px;
   background:linear-gradient(135deg,var(--accent),var(--accent-soft));
   color:#fff;
   border:none;
   border-radius:999px;
   cursor:pointer;
   font-weight:bold;
-  font-size:13px;
-  box-shadow:0 10px 25px rgba(124,58,237,0.5);
+  font-size:14px;
+  box-shadow:0 10px 25px rgba(99,102,241,0.5);
   transition:transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 button:hover{
   transform:translateY(-1px);
-  box-shadow:0 16px 35px rgba(124,58,237,0.7);
+  box-shadow:0 16px 35px rgba(99,102,241,0.7);
   filter:brightness(1.05);
 }
 button.flat{
@@ -104,12 +109,16 @@ button.secondary{
   background:#111827;
   box-shadow:none;
 }
+button.small{
+  padding:5px 10px;
+  font-size:12px;
+}
 .app-shell{
   display:flex;
   min-height:100vh;
 }
 .sidebar{
-  width:240px;
+  width:250px;
   background:linear-gradient(180deg,#020617,#020617,#000);
   border-left:1px solid var(--border);
   padding:16px 10px;
@@ -122,7 +131,7 @@ button.secondary{
   text-align:center;
   margin-top:0;
   margin-bottom:4px;
-  font-size:16px;
+  font-size:18px;
 }
 .sidebar small{
   display:block;
@@ -140,12 +149,12 @@ button.secondary{
   color:var(--text);
   display:flex;
   align-items:center;
-  gap:6px;
+  gap:8px;
   background:rgba(15,23,42,0.7);
   border:1px solid transparent;
   transition:background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
 }
-.menu-item span.icon{font-size:16px;}
+.menu-item span.icon{font-size:18px;}
 .menu-item:hover{
   background:rgba(15,23,42,1);
   transform:translateY(-1px);
@@ -153,7 +162,7 @@ button.secondary{
 }
 .menu-item.active{
   background:linear-gradient(135deg,var(--accent),var(--accent-soft));
-  box-shadow:0 12px 30px rgba(124,58,237,0.7);
+  box-shadow:0 12px 30px rgba(99,102,241,0.7);
   border:1px solid rgba(255,255,255,0.08);
 }
 .main{
@@ -168,15 +177,15 @@ button.secondary{
   font-size:13px;
   color:var(--muted);
 }
-.topbar-left strong{color:var(--text);}
+.topbar-left strong{color:var(--text);font-size:15px;}
 .cards{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
   gap:14px;
   margin-bottom:16px;
 }
 .card{
-  background:radial-gradient(circle at top left,#111827 0,var(--bg-card) 45%,#020617 100%);
+  background:radial-gradient(circle at top left,#1f2937 0,var(--bg-card) 45%,#020617 100%);
   border-radius:18px;
   padding:16px;
   border:1px solid var(--border);
@@ -187,10 +196,10 @@ button.secondary{
 .card:hover{
   transform:translateY(-4px);
   box-shadow:0 30px 80px rgba(0,0,0,1);
-  border-color:rgba(124,58,237,0.6);
+  border-color:rgba(99,102,241,0.6);
 }
-.card h2,h3{margin-top:0;margin-bottom:8px;font-size:16px;}
-.card p{margin:4px 0;font-size:13px;}
+.card h2,h3{margin-top:0;margin-bottom:8px;font-size:17px;}
+.card p{margin:4px 0;font-size:14px;}
 .badge{
   display:inline-block;
   padding:3px 8px;
@@ -200,12 +209,12 @@ button.secondary{
   color:var(--muted);
 }
 .stat-value{
-  font-size:20px;
+  font-size:22px;
   font-weight:bold;
   margin-top:4px;
 }
 .stat-label{
-  font-size:11px;
+  font-size:12px;
   color:var(--muted);
 }
 .table{
@@ -293,6 +302,17 @@ pre{
 .toggle-wrap input{
   width:auto;
 }
+.tag{
+  display:inline-block;
+  padding:2px 6px;
+  border-radius:999px;
+  font-size:11px;
+  background:#111827;
+  color:var(--muted);
+}
+.tag.done{background:rgba(34,197,94,0.15);color:#4ade80;}
+.tag.todo{background:rgba(239,68,68,0.15);color:#f87171;}
+.tag.progress{background:rgba(59,130,246,0.15);color:#60a5fa;}
 </style>
 </head>
 
@@ -303,13 +323,13 @@ pre{
 <!-- شاشة الدخول -->
 <div id="login">
   <div class="center">
-    <div class="logo">REEM <span>TIME</span> PRO</div>
-    <p>نظام حضور وانصراف أخلاقي – نسخة 3D تجريبية</p>
+    <div class="logo" id="loginLogo">REEM <span>TIME</span> PRO</div>
+    <p>نظام حضور وانصراف – لوحة تحكم مكتملة</p>
 
     <select id="role">
       <option value="admin">مدير النظام (admin)</option>
       <option value="hr">مسؤول الموارد البشرية (hr)</option>
-      <option value="user">موظف عادي (user)</option>
+      <option value="user">موظف (user)</option>
     </select>
     <input id="email" placeholder="اسم المستخدم (admin / hr / user)">
     <input id="pass" type="password" placeholder="كلمة المرور (123)">
@@ -322,8 +342,8 @@ pre{
 <div id="app" style="display:none">
   <div class="app-shell">
     <div class="sidebar">
-      <h3>REEM TIME PRO</h3>
-      <small>لوحة تحكم الحضور والانصراف</small>
+      <h3 id="sideTitle">REEM TIME PRO</h3>
+      <small id="sideSub">لوحة تحكم الحضور والانصراف</small>
       <div class="menu-item active" onclick="showPage('dash', this)">
         <span class="icon">🏠</span><span>الرئيسية</span>
       </div>
@@ -338,6 +358,12 @@ pre{
       </div>
       <div class="menu-item" onclick="showPage('report', this)">
         <span class="icon">📊</span><span>تقرير شهري</span>
+      </div>
+      <div class="menu-item" onclick="showPage('employees', this)">
+        <span class="icon">👥</span><span>الموظفون</span>
+      </div>
+      <div class="menu-item" onclick="showPage('tasks', this)">
+        <span class="icon">✅</span><span>المهام</span>
       </div>
       <div class="menu-item" onclick="showPage('settings', this)">
         <span class="icon">⚙️</span><span>الإعدادات</span>
@@ -365,17 +391,17 @@ pre{
 </div>
 
 <script>
-// ====== إشعارات ======
+// ===== إشعارات =====
 function notify(msg, type='ok'){
   const n = document.getElementById('notif');
   n.textContent = msg;
   n.className = '';
-  n.classList.add(type === 'error' ? 'error' : '');
+  if(type === 'error') n.classList.add('error');
   n.classList.add('show');
   setTimeout(()=>{ n.classList.remove('show'); }, 2200);
 }
 
-// ====== وقت حي ======
+// ===== وقت حي =====
 setInterval(()=>{
   const d = new Date();
   const f = d.toLocaleString('ar-EG',{dateStyle:'medium', timeStyle:'short'});
@@ -383,29 +409,39 @@ setInterval(()=>{
   if(el) el.textContent = f;
 },1000);
 
-// ====== USERS / LOGIN ======
-const USERS = {
-  admin:{user:'admin', pass:'123', role:'admin', label:'مدير النظام'},
-  hr:{user:'hr', pass:'123', role:'hr', label:'مسؤول الموارد البشرية'},
-  user:{user:'user', pass:'123', role:'user', label:'موظف'}
-};
+// ===== USERS / LOGIN =====
+function getUsers(){
+  const raw = localStorage.getItem('reem_users');
+  if(raw) return JSON.parse(raw);
+  // seed default
+  const seed = [
+    {id:1,name:'مدير النظام',username:'admin',password:'123',role:'admin'},
+    {id:2,name:'مسؤول الموارد البشرية',username:'hr',password:'123',role:'hr'},
+    {id:3,name:'موظف تجريبي',username:'user',password:'123',role:'user'}
+  ];
+  localStorage.setItem('reem_users', JSON.stringify(seed));
+  return seed;
+}
+function saveUsers(list){
+  localStorage.setItem('reem_users', JSON.stringify(list));
+}
+function findUserByCred(username, pass, role){
+  const users = getUsers();
+  return users.find(u=>u.username===username && u.password===pass && u.role===role);
+}
 
 function login(){
   let roleSel = document.getElementById("role").value;
   let u = document.getElementById("email").value.trim();
   let p = document.getElementById("pass").value.trim();
 
-  const target = USERS[roleSel];
-  if(!target){
-    notify("دور غير معروف", "error");
-    return;
-  }
-  if(u === target.user && p === target.pass){
-    localStorage.setItem('reem_logged', JSON.stringify({user:u, role:target.role, label:target.label}));
+  const user = findUserByCred(u,p,roleSel);
+  if(user){
+    localStorage.setItem('reem_logged', JSON.stringify({id:user.id,user:user.username,role:user.role,label:user.name}));
     document.getElementById("login").style.display = "none";
     document.getElementById("app").style.display = "block";
-    document.getElementById("topUser").textContent = u;
-    document.getElementById("topRole").textContent = target.label + " – نسخة تجريبية";
+    document.getElementById("topUser").textContent = user.username;
+    document.getElementById("topRole").textContent = user.name + " – " + user.role;
     applySettings();
     showPage('dash');
     notify("تم تسجيل الدخول بنجاح");
@@ -419,23 +455,29 @@ function logout(){
   location.reload();
 }
 
+function getSession(){
+  const raw = localStorage.getItem('reem_logged');
+  if(!raw) return null;
+  try{return JSON.parse(raw);}catch(e){return null;}
+}
+
 // استعادة جلسة
 (function restoreSession(){
-  const raw = localStorage.getItem('reem_logged');
-  if(raw){
-    try{
-      const s = JSON.parse(raw);
-      document.getElementById("login").style.display = "none";
-      document.getElementById("app").style.display = "block";
-      document.getElementById("topUser").textContent = s.user;
-      document.getElementById("topRole").textContent = s.label || "مستخدم";
-      applySettings();
-      showPage('dash');
-    }catch(e){}
+  const s = getSession();
+  if(s){
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    document.getElementById("topUser").textContent = s.user;
+    document.getElementById("topRole").textContent = s.label || "مستخدم";
+    applySettings();
+    showPage('dash');
+  }else{
+    applySettings(); // لتطبيق الثيم على شاشة الدخول
   }
 })();
 
-// ====== DATA STRUCTURE ======
+// ===== DATA STRUCTURE =====
+// reem_days: { "YYYY-MM-DD": { [userId]: {checkIn, checkOut, totalMinutes, locIn, locOut} } }
 function getAllDays(){
   const raw = localStorage.getItem('reem_days');
   return raw ? JSON.parse(raw) : {};
@@ -446,19 +488,22 @@ function saveAllDays(data){
 function getTodayKey(){
   return new Date().toISOString().slice(0,10);
 }
-function getTodayLogs(){
+function getTodayLogsForUser(userId){
   const all = getAllDays();
   const k = getTodayKey();
-  return all[k] || {checkIn:null, checkOut:null, totalMinutes:0};
+  const day = all[k] || {};
+  return day[userId] || {checkIn:null, checkOut:null, totalMinutes:0,locIn:null,locOut:null};
 }
-function saveTodayLogs(logs){
+function saveTodayLogsForUser(userId, logs){
   const all = getAllDays();
   const k = getTodayKey();
-  all[k] = logs;
+  const day = all[k] || {};
+  day[userId] = logs;
+  all[k] = day;
   saveAllDays(all);
 }
 
-// ====== ROUTER ======
+// ===== ROUTER =====
 function showPage(p, el){
   document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
   if(el) el.classList.add('active');
@@ -468,12 +513,14 @@ function showPage(p, el){
   if(p === 'calendar') renderCalendar();
   if(p === 'logs') renderLogs();
   if(p === 'report') renderReport();
+  if(p === 'employees') renderEmployees();
+  if(p === 'tasks') renderTasks();
   if(p === 'settings') renderSettings();
   if(p === 'about') renderAbout();
 }
 
-// ====== STATS ======
-function calcStats(){
+// ===== STATS =====
+function calcStatsForUser(userId){
   const all = getAllDays();
   const keys = Object.keys(all);
   const todayKey = getTodayKey();
@@ -482,8 +529,9 @@ function calcStats(){
   let lastDay = null;
 
   keys.forEach(k=>{
-    const d = all[k];
-    if(d.totalMinutes && d.totalMinutes>0){
+    const day = all[k];
+    const d = day[userId];
+    if(d && d.totalMinutes && d.totalMinutes>0){
       totalMinutes += d.totalMinutes;
       daysWithWork++;
       if(!lastDay || k > lastDay) lastDay = k;
@@ -491,7 +539,8 @@ function calcStats(){
   });
 
   const totalHours = (totalMinutes/60).toFixed(2);
-  const today = all[todayKey] || {checkIn:null, checkOut:null, totalMinutes:0};
+  const todayDay = all[todayKey] || {};
+  const today = todayDay[userId] || {checkIn:null, checkOut:null, totalMinutes:0};
   let todayStatus = 'لم يتم تسجيل حضور اليوم';
   if(today.checkIn && !today.checkOut) todayStatus = 'تم تسجيل حضور – في انتظار الانصراف';
   if(today.checkIn && today.checkOut) todayStatus = 'تم تسجيل حضور وانصراف اليوم';
@@ -500,14 +549,17 @@ function calcStats(){
     totalHours,
     daysWithWork,
     todayStatus,
-    lastDay
+    lastDay,
+    today
   };
 }
 
-// ====== DASHBOARD ======
+// ===== DASHBOARD =====
 function renderDash(){
-  const stats = calcStats();
-  const today = getTodayLogs();
+  const s = getSession();
+  if(!s){return;}
+  const stats = calcStatsForUser(s.id);
+  const today = stats.today;
 
   let lastDayText = stats.lastDay
     ? new Date(stats.lastDay).toLocaleDateString('ar-EG',{dateStyle:'medium'})
@@ -531,14 +583,14 @@ function renderDash(){
         <div class="stat-value">${todayHours}</div>
       </div>
       <div class="card">
-        <span class="badge">إحصائيات</span>
+        <span class="badge">الإحصاءات</span>
         <h3>إجمالي الساعات</h3>
         <div class="stat-value">${stats.totalHours}</div>
-        <div class="stat-label">إجمالي الساعات المسجلة في النظام</div>
+        <div class="stat-label">إجمالي الساعات المسجلة لهذا المستخدم</div>
         <p style="margin-top:8px;"><strong>أيام العمل:</strong> ${stats.daysWithWork}</p>
       </div>
       <div class="card">
-        <span class="badge">آخر تسجيل</span>
+        <span class="badge">آخر عمل</span>
         <h3>آخر يوم مسجل</h3>
         <div class="stat-value">${lastDayText}</div>
         <div class="stat-label">آخر يوم تم تسجيل الحضور والانصراف فيه</div>
@@ -547,25 +599,51 @@ function renderDash(){
 
     <div class="card">
       <h3>نظرة عامة</h3>
-      <p>هذا النظام يوفر لوحة تحكم احترافية لإدارة الحضور والانصراف، مع حفظ البيانات في المتصفح (localStorage) بدون الحاجة إلى خادم أو قاعدة بيانات خارجية.</p>
-      <p>يمكنك استخدام صفحة <strong>"الحضور والانصراف"</strong> لتسجيل بداية ونهاية اليوم، وصفحة <strong>"تقويم الحضور"</strong> لمراجعة حالة كل يوم في الشهر، وصفحة <strong>"سجل الأيام"</strong> لمراجعة جميع الأيام المسجلة، وصفحة <strong>"تقرير شهري"</strong> لمراجعة إجمالي الساعات.</p>
+      <p>هذا النظام يوفر لوحة تحكم كاملة لإدارة الحضور والانصراف والموظفين والمهام، مع حفظ البيانات في المتصفح (localStorage) بدون الحاجة إلى خادم أو قاعدة بيانات خارجية.</p>
+      <p>يمكنك استخدام صفحة <strong>"الحضور والانصراف"</strong> لتسجيل بداية ونهاية اليوم مع حفظ موقع GPS، وصفحة <strong>"تقويم الحضور"</strong> لمراجعة حالة كل يوم، وصفحة <strong>"الموظفون"</strong> لإدارة المستخدمين، وصفحة <strong>"المهام"</strong> لمتابعة مهام الموظفين.</p>
     </div>
   `;
 }
 
-// ====== PUNCH IN/OUT ======
+// ===== GEOLOCATION =====
+function getLocation(callback){
+  if(!navigator.geolocation){
+    notify("المتصفح لا يدعم GPS","error");
+    callback(null);
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      const coords = {lat:pos.coords.latitude, lng:pos.coords.longitude};
+      callback(coords);
+    },
+    err=>{
+      notify("تعذر الحصول على الموقع","error");
+      callback(null);
+    },
+    {enableHighAccuracy:true,timeout:8000}
+  );
+}
+function mapLink(coords){
+  if(!coords) return '';
+  return `<a href="https://www.google.com/maps?q=${coords.lat},${coords.lng}" target="_blank">عرض على الخريطة</a>`;
+}
+
+// ===== PUNCH IN/OUT =====
 function renderPunch(){
-  const logs = getTodayLogs();
+  const s = getSession();
+  if(!s){return;}
+  const logs = getTodayLogsForUser(s.id);
   let info = '';
 
   if(logs.checkIn){
-    info += `<p>🟢 وقت الحضور: ${new Date(logs.checkIn).toLocaleTimeString('ar-EG',{timeStyle:'short'})}</p>`;
+    info += `<p>🟢 وقت الحضور: ${new Date(logs.checkIn).toLocaleTimeString('ar-EG',{timeStyle:'short'})} ${logs.locIn?`<br><small>${mapLink(logs.locIn)}</small>`:''}</p>`;
   } else {
     info += `<p>لم يتم تسجيل حضور بعد.</p>`;
   }
 
   if(logs.checkOut){
-    info += `<p>🔴 وقت الانصراف: ${new Date(logs.checkOut).toLocaleTimeString('ar-EG',{timeStyle:'short'})}</p>`;
+    info += `<p>🔴 وقت الانصراف: ${new Date(logs.checkOut).toLocaleTimeString('ar-EG',{timeStyle:'short'})} ${logs.locOut?`<br><small>${mapLink(logs.locOut)}</small>`:''}</p>`;
     const h = (logs.totalMinutes/60).toFixed(2);
     info += `<p><strong>إجمالي الساعات:</strong> ${h} ساعة</p>`;
   }
@@ -573,10 +651,10 @@ function renderPunch(){
   document.getElementById('page').innerHTML = `
     <div class="card">
       <h3>الحضور والانصراف</h3>
-      <p>قم بتسجيل الحضور عند بداية العمل، والانصراف عند نهاية اليوم. يتم حفظ بيانات كل يوم تلقائيًا.</p>
+      <p>قم بتسجيل الحضور عند بداية العمل، والانصراف عند نهاية اليوم. يتم حفظ بيانات كل يوم تلقائيًا مع موقع GPS.</p>
       <div class="actions-row">
-        <button onclick="doCheckIn()">📍 تسجيل حضور</button>
-        <button class="danger" onclick="doCheckOut()">📍 تسجيل انصراف</button>
+        <button onclick="doCheckIn()">📍 تسجيل حضور مع GPS</button>
+        <button class="danger" onclick="doCheckOut()">📍 تسجيل انصراف مع GPS</button>
         <button class="secondary" onclick="clearToday()">مسح بيانات اليوم</button>
       </div>
       <div id="punchInfo">${info}</div>
@@ -586,19 +664,26 @@ function renderPunch(){
 }
 
 function doCheckIn(){
-  const logs = getTodayLogs();
+  const s = getSession();
+  if(!s){return;}
+  const logs = getTodayLogsForUser(s.id);
   if(logs.checkIn){
     notify("تم تسجيل الحضور بالفعل اليوم","error");
     return;
   }
-  logs.checkIn = new Date().toISOString();
-  saveTodayLogs(logs);
-  notify("تم تسجيل الحضور بنجاح");
-  renderPunch();
+  getLocation(coords=>{
+    logs.checkIn = new Date().toISOString();
+    logs.locIn = coords;
+    saveTodayLogsForUser(s.id, logs);
+    notify("تم تسجيل الحضور بنجاح");
+    renderPunch();
+  });
 }
 
 function doCheckOut(){
-  const logs = getTodayLogs();
+  const s = getSession();
+  if(!s){return;}
+  const logs = getTodayLogsForUser(s.id);
   if(!logs.checkIn){
     notify("لا يمكن تسجيل الانصراف قبل الحضور","error");
     return;
@@ -607,37 +692,48 @@ function doCheckOut(){
     notify("تم تسجيل الانصراف بالفعل اليوم","error");
     return;
   }
-  logs.checkOut = new Date().toISOString();
-  const start = new Date(logs.checkIn);
-  const end   = new Date(logs.checkOut);
-  const diffMinutes = Math.round((end - start) / 60000);
-  logs.totalMinutes = diffMinutes;
-  saveTodayLogs(logs);
-  notify("تم تسجيل الانصراف وحساب الساعات");
-  renderPunch();
+  getLocation(coords=>{
+    logs.checkOut = new Date().toISOString();
+    logs.locOut = coords;
+    const start = new Date(logs.checkIn);
+    const end   = new Date(logs.checkOut);
+    const diffMinutes = Math.round((end - start) / 60000);
+    logs.totalMinutes = diffMinutes;
+    saveTodayLogsForUser(s.id, logs);
+    notify("تم تسجيل الانصراف وحساب الساعات");
+    renderPunch();
+  });
 }
 
 function clearToday(){
-  if(!confirm("هل تريد مسح بيانات اليوم؟")) return;
+  const s = getSession();
+  if(!s){return;}
+  if(!confirm("هل تريد مسح بيانات اليوم لهذا المستخدم؟")) return;
   const all = getAllDays();
   const k = getTodayKey();
-  delete all[k];
+  const day = all[k] || {};
+  delete day[s.id];
+  all[k] = day;
   saveAllDays(all);
   notify("تم مسح بيانات اليوم");
   renderPunch();
 }
 
-// ====== LOGS PAGE ======
+// ===== LOGS PAGE =====
 function renderLogs(){
+  const s = getSession();
+  if(!s){return;}
   const all = getAllDays();
   const keys = Object.keys(all).sort();
   let rows = '';
 
   if(keys.length === 0){
-    rows = `<tr><td colspan="4">لا توجد بيانات مسجلة حتى الآن.</td></tr>`;
+    rows = `<tr><td colspan="5">لا توجد بيانات مسجلة حتى الآن.</td></tr>`;
   } else {
     keys.forEach(k=>{
-      const d = all[k];
+      const day = all[k];
+      const d = day[s.id];
+      if(!d) return;
       const ci = d.checkIn ? new Date(d.checkIn).toLocaleTimeString('ar-EG',{timeStyle:'short'}) : '-';
       const co = d.checkOut ? new Date(d.checkOut).toLocaleTimeString('ar-EG',{timeStyle:'short'}) : '-';
       const h  = d.totalMinutes ? (d.totalMinutes/60).toFixed(2) : '-';
@@ -647,6 +743,7 @@ function renderLogs(){
           <td>${ci}</td>
           <td>${co}</td>
           <td>${h}</td>
+          <td>${d.locIn?mapLink(d.locIn):''}</td>
         </tr>
       `;
     });
@@ -655,7 +752,7 @@ function renderLogs(){
   document.getElementById('page').innerHTML = `
     <div class="card">
       <h3>سجل الأيام</h3>
-      <p>عرض جميع الأيام التي تم تسجيل حضور أو انصراف فيها.</p>
+      <p>عرض جميع الأيام التي تم تسجيل حضور أو انصراف فيها لهذا المستخدم.</p>
       <table class="table">
         <thead>
           <tr>
@@ -663,19 +760,21 @@ function renderLogs(){
             <th>وقت الحضور</th>
             <th>وقت الانصراف</th>
             <th>إجمالي الساعات</th>
+            <th>الموقع</th>
           </tr>
         </thead>
         <tbody>
           ${rows}
         </tbody>
       </table>
-      <small>يمكنك مسح بيانات المتصفح يدويًا من إعدادات المتصفح لإعادة ضبط السجل بالكامل.</small>
     </div>
   `;
 }
 
-// ====== MONTHLY REPORT ======
+// ===== MONTHLY REPORT =====
 function renderReport(){
+  const s = getSession();
+  if(!s){return;}
   const all = getAllDays();
   const keys = Object.keys(all).sort();
   if(keys.length === 0){
@@ -695,8 +794,9 @@ function renderReport(){
 
   keys.forEach(k=>{
     if(k.startsWith(ym)){
-      const d = all[k];
-      if(d.totalMinutes && d.totalMinutes>0){
+      const day = all[k];
+      const d = day[s.id];
+      if(d && d.totalMinutes && d.totalMinutes>0){
         totalMinutes += d.totalMinutes;
         daysCount++;
       }
@@ -723,8 +823,10 @@ function printReport(){
   window.print();
 }
 
-// ====== CALENDAR VIEW ======
+// ===== CALENDAR VIEW =====
 function renderCalendar(){
+  const s = getSession();
+  if(!s){return;}
   const all = getAllDays();
   const now = new Date();
   const year = now.getFullYear();
@@ -743,7 +845,8 @@ function renderCalendar(){
 
   for(let d=1; d<=daysInMonth; d++){
     const dayKey = `${ym}-${String(d).padStart(2,'0')}`;
-    const rec = all[dayKey];
+    const day = all[dayKey];
+    const rec = day ? day[s.id] : null;
     let cls = '';
     let label = 'لا بيانات';
 
@@ -756,7 +859,6 @@ function renderCalendar(){
         label = 'حضور فقط';
       }
     }else{
-      // نعتبر الجمعة عطلة (اختياري)
       const tmp = new Date(year, month, d);
       const wd = tmp.getDay(); // 0=أحد
       if(wd === 5){ // جمعة
@@ -783,15 +885,268 @@ function renderCalendar(){
       <div class="calendar-grid">
         ${cells}
       </div>
-      <small>يتم تحديد العطلة افتراضيًا يوم الجمعة، ويمكن تعديل المنطق لاحقًا حسب سياسة العمل.</small>
     </div>
   `;
 }
 
-// ====== SETTINGS ======
+// ===== EMPLOYEES CRUD =====
+function renderEmployees(){
+  const s = getSession();
+  if(!s || (s.role!=='admin' && s.role!=='hr')){
+    document.getElementById('page').innerHTML = `
+      <div class="card">
+        <h3>الموظفون</h3>
+        <p>هذه الصفحة متاحة فقط لمدير النظام أو مسؤول الموارد البشرية.</p>
+      </div>
+    `;
+    return;
+  }
+  const users = getUsers();
+  let rows = '';
+  users.forEach(u=>{
+    rows += `
+      <tr>
+        <td>${u.id}</td>
+        <td>${u.name}</td>
+        <td>${u.username}</td>
+        <td>${u.role}</td>
+        <td>
+          <button class="small secondary" onclick="editEmployee(${u.id})">تعديل</button>
+          <button class="small danger" onclick="deleteEmployee(${u.id})">حذف</button>
+        </td>
+      </tr>
+    `;
+  });
+
+  document.getElementById('page').innerHTML = `
+    <div class="card">
+      <h3>الموظفون</h3>
+      <p>إدارة الموظفين (إضافة / تعديل / حذف) وإرسال بيانات الدخول لكل موظف.</p>
+      <div class="actions-row">
+        <button onclick="showEmployeeForm()">➕ إضافة موظف</button>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>م</th>
+            <th>الاسم</th>
+            <th>اسم المستخدم</th>
+            <th>الدور</th>
+            <th>إجراءات</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div id="empFormWrap"></div>
+  `;
+}
+
+function showEmployeeForm(emp){
+  const wrap = document.getElementById('empFormWrap');
+  const isEdit = !!emp;
+  wrap.innerHTML = `
+    <div class="card" style="margin-top:10px;">
+      <h3>${isEdit?'تعديل موظف':'إضافة موظف جديد'}</h3>
+      <input id="empName" placeholder="اسم الموظف" value="${emp?emp.name:''}">
+      <input id="empUser" placeholder="اسم المستخدم" value="${emp?emp.username:''}">
+      <input id="empPass" placeholder="كلمة المرور" value="${emp?emp.password:'123'}">
+      <select id="empRole">
+        <option value="admin" ${emp&&emp.role==='admin'?'selected':''}>مدير النظام</option>
+        <option value="hr" ${emp&&emp.role==='hr'?'selected':''}>مسؤول الموارد البشرية</option>
+        <option value="user" ${!emp || emp.role==='user'?'selected':''}>موظف</option>
+      </select>
+      <div class="actions-row">
+        <button onclick="saveEmployee(${emp?emp.id:'null'})">💾 حفظ</button>
+        <button class="secondary" onclick="cancelEmpForm()">إلغاء</button>
+      </div>
+      <small>يمكنك إرسال اسم المستخدم وكلمة المرور للموظف عبر أي وسيلة تواصل.</small>
+    </div>
+  `;
+}
+function cancelEmpForm(){
+  document.getElementById('empFormWrap').innerHTML = '';
+}
+function saveEmployee(id){
+  const name = document.getElementById('empName').value.trim();
+  const user = document.getElementById('empUser').value.trim();
+  const pass = document.getElementById('empPass').value.trim();
+  const role = document.getElementById('empRole').value;
+  if(!name || !user || !pass){
+    notify("يرجى إدخال جميع البيانات","error");
+    return;
+  }
+  let users = getUsers();
+  if(id){
+    users = users.map(u=>u.id===id?{...u,name,username:user,password:pass,role}:u);
+  }else{
+    const newId = users.length?Math.max(...users.map(u=>u.id))+1:1;
+    users.push({id:newId,name,username:user,password:pass,role});
+  }
+  saveUsers(users);
+  notify("تم حفظ بيانات الموظف");
+  renderEmployees();
+}
+function editEmployee(id){
+  const users = getUsers();
+  const emp = users.find(u=>u.id===id);
+  if(!emp) return;
+  renderEmployees();
+  showEmployeeForm(emp);
+}
+function deleteEmployee(id){
+  if(!confirm("هل تريد حذف هذا الموظف؟")) return;
+  let users = getUsers().filter(u=>u.id!==id);
+  saveUsers(users);
+  notify("تم حذف الموظف");
+  renderEmployees();
+}
+
+// ===== TASKS =====
+// reem_tasks: [{id,title,desc,assignedTo,status,due}]
+function getTasks(){
+  const raw = localStorage.getItem('reem_tasks');
+  return raw ? JSON.parse(raw) : [];
+}
+function saveTasks(list){
+  localStorage.setItem('reem_tasks', JSON.stringify(list));
+}
+function renderTasks(){
+  const s = getSession();
+  if(!s){return;}
+  const tasks = getTasks();
+  const users = getUsers();
+  const isManager = (s.role==='admin' || s.role==='hr');
+
+  let filtered = tasks;
+  if(!isManager){
+    filtered = tasks.filter(t=>t.assignedTo===s.id);
+  }
+
+  let rows = '';
+  filtered.forEach(t=>{
+    const u = users.find(x=>x.id===t.assignedTo);
+    const uname = u?u.name:'—';
+    let tagClass = 'todo';
+    if(t.status==='done') tagClass='done';
+    else if(t.status==='progress') tagClass='progress';
+    rows += `
+      <tr>
+        <td>${t.id}</td>
+        <td>${t.title}</td>
+        <td>${uname}</td>
+        <td><span class="tag ${tagClass}">${t.status}</span></td>
+        <td>${t.due||''}</td>
+        <td>
+          <button class="small secondary" onclick="editTask(${t.id})">تعديل</button>
+          ${isManager?`<button class="small danger" onclick="deleteTask(${t.id})">حذف</button>`:''}
+        </td>
+      </tr>
+    `;
+  });
+
+  document.getElementById('page').innerHTML = `
+    <div class="card">
+      <h3>المهام</h3>
+      <p>إدارة مهام الموظفين ومتابعة حالة كل مهمة.</p>
+      <div class="actions-row">
+        ${isManager?`<button onclick="showTaskForm()">➕ إضافة مهمة</button>`:''}
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>م</th>
+            <th>المهمة</th>
+            <th>الموظف</th>
+            <th>الحالة</th>
+            <th>تاريخ الاستحقاق</th>
+            <th>إجراءات</th>
+          </tr>
+        </thead>
+        <tbody>${rows || '<tr><td colspan="6">لا توجد مهام.</td></tr>'}</tbody>
+      </table>
+    </div>
+    <div id="taskFormWrap"></div>
+  `;
+}
+
+function showTaskForm(task){
+  const s = getSession();
+  if(!s){return;}
+  const isManager = (s.role==='admin' || s.role==='hr');
+  if(!isManager && !task){
+    notify("إضافة المهام متاحة للإدارة فقط","error");
+    return;
+  }
+  const users = getUsers();
+  const wrap = document.getElementById('taskFormWrap');
+  const isEdit = !!task;
+  let userOptions = users.map(u=>`<option value="${u.id}" ${task&&task.assignedTo===u.id?'selected':''}>${u.name}</option>`).join('');
+  wrap.innerHTML = `
+    <div class="card" style="margin-top:10px;">
+      <h3>${isEdit?'تعديل مهمة':'إضافة مهمة جديدة'}</h3>
+      <input id="taskTitle" placeholder="عنوان المهمة" value="${task?task.title:''}">
+      <textarea id="taskDesc" placeholder="وصف المهمة">${task?task.desc||'':''}</textarea>
+      <label>الموظف:</label>
+      <select id="taskUser">${userOptions}</select>
+      <label>الحالة:</label>
+      <select id="taskStatus">
+        <option value="todo" ${!task || task.status==='todo'?'selected':''}>لم تبدأ</option>
+        <option value="progress" ${task&&task.status==='progress'?'selected':''}>قيد التنفيذ</option>
+        <option value="done" ${task&&task.status==='done'?'selected':''}>منتهية</option>
+      </select>
+      <input id="taskDue" placeholder="تاريخ الاستحقاق (اختياري)">
+      <div class="actions-row">
+        <button onclick="saveTask(${task?task.id:'null'})">💾 حفظ</button>
+        <button class="secondary" onclick="cancelTaskForm()">إلغاء</button>
+      </div>
+    </div>
+  `;
+}
+function cancelTaskForm(){
+  document.getElementById('taskFormWrap').innerHTML = '';
+}
+function saveTask(id){
+  const title = document.getElementById('taskTitle').value.trim();
+  const desc = document.getElementById('taskDesc').value.trim();
+  const assignedTo = parseInt(document.getElementById('taskUser').value,10);
+  const status = document.getElementById('taskStatus').value;
+  const due = document.getElementById('taskDue').value.trim();
+  if(!title){
+    notify("يرجى إدخال عنوان المهمة","error");
+    return;
+  }
+  let tasks = getTasks();
+  if(id){
+    tasks = tasks.map(t=>t.id===id?{...t,title,desc,assignedTo,status,due}:t);
+  }else{
+    const newId = tasks.length?Math.max(...tasks.map(t=>t.id))+1:1;
+    tasks.push({id:newId,title,desc,assignedTo,status,due});
+  }
+  saveTasks(tasks);
+  notify("تم حفظ المهمة");
+  renderTasks();
+}
+function editTask(id){
+  const tasks = getTasks();
+  const t = tasks.find(x=>x.id===id);
+  if(!t) return;
+  renderTasks();
+  showTaskForm(t);
+}
+function deleteTask(id){
+  if(!confirm("هل تريد حذف هذه المهمة؟")) return;
+  let tasks = getTasks().filter(t=>t.id!==id);
+  saveTasks(tasks);
+  notify("تم حذف المهمة");
+  renderTasks();
+}
+
+// ===== SETTINGS =====
+// reem_settings: {theme, companyName, logoText, country, activity}
 function getSettings(){
   const raw = localStorage.getItem('reem_settings');
-  return raw ? JSON.parse(raw) : {theme:'dark', displayName:'REEM TIME PRO'};
+  return raw ? JSON.parse(raw) : {theme:'dark', companyName:'REEM TIME PRO', logoText:'REEM TIME PRO', country:'السعودية', activity:'نظام حضور وانصراف'};
 }
 function saveSettings(s){
   localStorage.setItem('reem_settings', JSON.stringify(s));
@@ -799,6 +1154,9 @@ function saveSettings(s){
 function applySettings(){
   const s = getSettings();
   document.body.classList.toggle('light', s.theme === 'light');
+  document.getElementById('sideTitle').textContent = s.companyName || 'REEM TIME PRO';
+  document.getElementById('sideSub').textContent = s.activity || 'نظام حضور وانصراف';
+  document.getElementById('loginLogo').textContent = s.logoText || 'REEM TIME PRO';
 }
 
 function renderSettings(){
@@ -806,10 +1164,22 @@ function renderSettings(){
   document.getElementById('page').innerHTML = `
     <div class="card">
       <h3>الإعدادات</h3>
-      <p>تخصيص مظهر النظام وبعض الإعدادات العامة.</p>
+      <p>تخصيص مظهر النظام وبيانات الشركة.</p>
       <div style="margin-top:10px;">
-        <label>اسم العرض للنظام:</label>
-        <input id="setName" value="${s.displayName}">
+        <label>اسم الشركة:</label>
+        <input id="setCompany" value="${s.companyName}">
+      </div>
+      <div style="margin-top:10px;">
+        <label>نص اللوجو (يظهر في شاشة الدخول):</label>
+        <input id="setLogo" value="${s.logoText}">
+      </div>
+      <div style="margin-top:10px;">
+        <label>الدولة:</label>
+        <input id="setCountry" value="${s.country}">
+      </div>
+      <div style="margin-top:10px;">
+        <label>نشاط الشركة:</label>
+        <input id="setActivity" value="${s.activity}">
       </div>
       <div style="margin-top:10px;" class="toggle-wrap">
         <input type="checkbox" id="setTheme" ${s.theme === 'light' ? 'checked' : ''}>
@@ -824,15 +1194,18 @@ function renderSettings(){
 }
 
 function saveSettingsUI(){
-  const name = document.getElementById('setName').value.trim() || 'REEM TIME PRO';
+  const companyName = document.getElementById('setCompany').value.trim() || 'REEM TIME PRO';
+  const logoText = document.getElementById('setLogo').value.trim() || 'REEM TIME PRO';
+  const country = document.getElementById('setCountry').value.trim() || '';
+  const activity = document.getElementById('setActivity').value.trim() || '';
   const theme = document.getElementById('setTheme').checked ? 'light' : 'dark';
-  const s = {displayName:name, theme};
+  const s = {companyName, logoText, country, activity, theme};
   saveSettings(s);
   applySettings();
   notify("تم حفظ الإعدادات");
 }
 
-// ====== ABOUT (ملف البيانات) ======
+// ===== ABOUT =====
 function renderAbout(){
   document.getElementById('page').innerHTML = `
     <div class="card">
