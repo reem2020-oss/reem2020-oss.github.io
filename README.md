@@ -441,7 +441,6 @@ th {
     <input type="password" id="password" placeholder="admin123 / cash123 / view123" />
     <button id="loginBtn">دخول</button>
     <p class="muted" style="text-align:center; margin-bottom:0;">
-      المستخدمون الافتراضيون للتجربة:<br>
       admin / admin123 (مدير)<br>
       cashier / cash123 (كاشير)<br>
       viewer / view123 (عرض فقط)
