@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>ريم برو - نظام حسابات</title>
+
+<style>
+:root {
+  --primary: #b3003c;
+  --primary-dark: #8a002f;
+  --bg: #f4f4f4;
+  --card-bg: #ffffff;
+  --text-main: #222;
+  --text-muted: #777;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Tahoma", sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+}
+
+/* Layout */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 230px;
+  background: #1f1f24;
+  color: #fff;
+  padding: 20px 15px;
+}
+
+.sidebar h2 {
+  margin: 0 0 20px;
+  font-size: 20px;
+  color: #fff;
+}
+
+.sidebar .brand {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.nav-link {
+  display: block;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  color: #ddd;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.nav-link.active,
+.nav-link:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top bar */
+.top-bar {
+  background: #ffffff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.top-bar .user-info {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.top-bar button {
+  width: auto;
+  padding: 6px 14px;
+}
+
+/* Content */
+.content {
+  padding: 20px;
+}
+
+/* Cards & general UI */
+.card {
+  background: var(--card-bg);
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-header h2,
+.card-header h3 {
+  margin: 0;
+}
+
+label {
+  display: block;
+  margin: 8px 0 4px;
+  font-size: 13px;
+}
+
+input, select, button, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--primary-dark);
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Login screen */
+.login-wrapper {
+  max-width: 380px;
+  margin: 60px auto;
+}
+
+/* Dashboard summary */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.summary-card {
+  text-align: center;
+}
+
+.summary-card h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+}
+
+.summary-card span.value {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th, td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+th {
+  background: #fafafa;
+}
+
+/* Tabs (sections) */
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  color: #fff;
+}
+
+.badge-income {
+  background: #2e7d32;
+}
+
+.badge-expense {
+  background: #c62828;
+}
+
+.badge-role-admin {
+  background: #1565c0;
+}
+
+.badge-role-cashier {
+  background: #6a1b9a;
+}
+
+.badge-role-viewer {
+  background: #757575;
+}
+
+/* Small text */
+.muted {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* Customers – Business Premium Cards */
+.customers-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+.customers-toolbar > * {
+  flex: 1;
+  min-width: 160px;
+}
+
+.customers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 15px;
+}
+
+.customer-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.customer-card-header {
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #8a002f, #b3003c);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.customer-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.customer-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  background: rgba(0,0,0,0.15);
+}
+
+.customer-name {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.customer-balance {
+  font-size: 13px;
+  text-align: right;
+}
+
+.customer-balance.positive {
+  color: #c8ffb0;
+}
+
+.customer-balance.negative {
+  color: #ffd0d0;
+}
+
+.customer-card-body {
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.customer-card-body-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.customer-card-footer {
+  padding: 8px 10px 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+/* Buttons small */
+.btn-sm {
+  width: auto;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+/* Popup overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.popup {
+  background: #fff;
+  border-radius: 10px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+
+.popup-header {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #8a002f, #b3003c);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.popup-body {
+  padding: 12px 16px 16px;
+}
+
+.popup-close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Transactions */
+.transactions-form-inline {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.transactions-form-inline > div {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .app-shell {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+  }
+  .nav-link {
+    display: inline-block;
+    margin-right: 6px;
+  }
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+  .transactions-form-inline {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .transactions-form-inline {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+</head>
+<body>
+
+<!-- شاشة تسجيل الدخول -->
+<div id="login-screen">
+  <div class="login-wrapper card">
+    <h2 style="text-align:center; margin-top:0;">تسجيل الدخول - ريم برو</h2>
+    <label>اسم المستخدم</label>
+    <input type="text" id="username" placeholder="admin / cashier / viewer" />
+    <label>كلمة المرور</label>
+    <input type="password" id="password" placeholder="admin123 / cash123 / view123" />
+    <button id="loginBtn">دخول</button>
+    <p class="muted" style="text-align:center;">
+      المستخدمون الافتراضيون:<br>
+      admin / admin123 (مدير)<br>
+      cashier / cash123 (كاشير)<br>
+      viewer / view123 (عرض فقط)
+    </p>
+  </div>
+</div>
+
+<!-- التطبيق بعد تسجيل الدخول -->
+<div id="app-shell" class="app-shell hidden">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2><span class="brand">ريم برو</span><br><span style="font-size:12px;">نظام حسابات</span></h2>
+    <a class="nav-link active" data-section="dashboard-section">لوحة التحكم</a>
+    <a class="nav-link" data-section="transactions-section">الحركات</a>
+    <a class="nav-link" data-section="customers-section">العملاء</a>
+    <a class="nav-link" data-section="settings-section">الإعدادات</a>
+  </aside>
+
+  <!-- Main area -->
+  <div class="main-area">
+    <div class="top-bar">
+      <div class="user-info">
+        <span id="currentUserName"></span>
+        <span id="currentUserRole" class="badge"></span>
+      </div>
+      <button id="logoutBtn">تسجيل الخروج</button>
+    </div>
+
+    <div class="content">
+      <!-- لوحة التحكم -->
+      <section id="dashboard-section" class="section active">
+        <div class="card">
+          <div class="card-header">
+            <h2>لوحة التحكم</h2>
+            <span class="muted">نظرة عامة على الحسابات</span>
+          </div>
+          <div class="summary-grid">
+            <div class="card summary-card">
+              <h3>إجمالي الدخل</h3>
+              <span id="totalIncome" class="value">0</span> ريال
+            </div>
+            <div class="card summary-card">
+              <h3>إجمالي المصروف</h3>
+              <span id="totalExpense" class="value">0</span> ريال
+            </div>
+            <div class="card summary-card">
+              <h3>الرصيد الحالي</h3>
+              <span id="balance" class="value">0</span> ريال
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>إحصائيات سريعة</h3>
+          </div>
+          <p class="muted">
+            عدد الحركات المسجلة: <strong id="transactionsCount">0</strong><br>
+            آخر حركة: <span id="lastTransactionText">لا يوجد</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- الحركات -->
+      <section id="transactions-section" class="section">
+        <div class="card">
+          <div class="card-header">
+            <h2>إضافة حركة مالية</h2>
+            <span class="muted" id="transactionPermissionNote"></span>
+          </div>
+
+          <div class="transactions-form-inline">
+            <div>
+              <label>النوع</label>
+              <select id="type">
+                <option value="income">دخل</option>
+                <option value="expense">مصروف</option>
+              </select>
+            </div>
+            <div>
+              <label>الوصف</label>
+              <input type="text" id="description" />
+            </div>
+            <div>
+              <label>المبلغ</label>
+              <input type="number" id="amount" />
+            </div>
+            <div>
+              <label>العميل (اختياري)</label>
+              <select id="transactionCustomerSelect">
+                <option value="">بدون عميل</option>
+              </select>
+            </div>
+          </div>
+
+          <button id="addTransactionBtn">إضافة</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2>الحركات</h2>
+            <span class="muted">جميع الحركات المسجلة في النظام</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>التاريخ</th>
+                <th>النوع</th>
+                <th>الوصف</th>
+                <th>المبلغ</th>
+                <th>العميل</th>
+              </tr>
+            </thead>
+            <tbody id="transactionsTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- العملاء -->
+      <section id="customers-section" class="section">
+        <div class="card">
+          <div class="card-header">
+            <h2>العملاء</h2>
+            <button id="addCustomerBtn" class="btn-sm">إضافة عميل</button>
+          </div>
+
+          <div class="customers-toolbar">
+            <input type="text" id="customerSearchInput" placeholder="بحث بالاسم أو الهاتف..." />
+            <select id="customerBalanceFilter">
+              <option value="all">كل الأرصدة</option>
+              <option value="positive">رصيد إيجابي</option>
+              <option value="negative">رصيد سلبي</option>
+              <option value="zero">رصيد صفر</option>
+            </select>
+          </div>
+
+          <div id="customersGrid" class="customers-grid"></div>
+          <p class="muted" id="customersEmptyText" style="display:none;">لا يوجد عملاء حتى الآن.</p>
+        </div>
+      </section>
+
+      <!-- الإعدادات -->
+      <section id="settings-section" class="section">
+        <div class="card">
+          <div class="card-header">
+            <h2>إعدادات النظام</h2>
+          </div>
+          <p class="muted">
+            في هذه النسخة، المستخدمون ثابتون داخل الكود للتجربة.<br>
+            لاحقًا يمكن جعلها شاشة إدارة مستخدمين كاملة (إضافة / تعديل / حذف).
+          </p>
+
+          <h3>المستخدمون الافتراضيون</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>اسم المستخدم</th>
+                <th>الدور</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>admin</td>
+                <td><span class="badge badge-role-admin">مدير</span></td>
+              </tr>
+              <tr>
+                <td>cashier</td>
+                <td><span class="badge badge-role-cashier">كاشير</span></td>
+              </tr>
+              <tr>
+                <td>viewer</td>
+                <td><span class="badge badge-role-viewer">عرض فقط</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- Popup إضافة/تعديل عميل -->
+<div id="customerFormOverlay" class="overlay hidden">
+  <div class="popup">
+    <div class="popup-header">
+      <h3 id="customerFormTitle">إضافة عميل</h3>
+      <button class="popup-close" id="closeCustomerFormPopup">&times;</button>
+    </div>
+    <div class="popup-body">
+      <input type="hidden" id="customerIdField" />
+      <label>اسم العميل</label>
+      <input type="text" id="customerNameField" />
+
+      <label>رقم الهاتف</label>
+      <input type="text" id="customerPhoneField" />
+
+      <label>العنوان</label>
+      <input type="text" id="customerAddressField" />
+
+      <label>الرصيد الافتتاحي</label>
+      <input type="number" id="customerOpeningBalanceField" value="0" />
+
+      <label>ملاحظات</label>
+      <textarea id="customerNotesField" rows="3"></textarea>
+
+      <button id="saveCustomerBtn">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Popup تفاصيل عميل -->
+<div id="customerDetailsOverlay" class="overlay hidden">
+  <div class="popup">
+    <div class="popup-header">
+      <h3 id="customerDetailsTitle">تفاصيل العميل</h3>
+      <button class="popup-close" id="closeCustomerDetailsPopup">&times;</button>
+    </div>
+    <div class="popup-body">
+      <div id="customerDetailsInfo"></div>
+      <hr>
+      <h4>سجل التعاملات</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>التاريخ</th>
+            <th>النوع</th>
+            <th>الوصف</th>
+            <th>المبلغ</th>
+            <th>الرصيد بعد الحركة</th>
+          </tr>
+        </thead>
+        <tbody id="customerTransactionsBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== بيانات المستخدمين والأدوار =====
+const USERS = [
+  { username: "admin",   password: "admin123", role: "admin" },
+  { username: "cashier", password: "cash123",  role: "cashier" },
+  { username: "viewer",  password: "view123",  role: "viewer" }
+];
+
+let currentUser = null;
+
+// ===== عناصر الواجهة العامة =====
+const loginScreen = document.getElementById("login-screen");
+const appShell = document.getElementById("app-shell");
+
+const loginBtn = document.getElementById("loginBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+
+const currentUserNameSpan = document.getElementById("currentUserName");
+const currentUserRoleSpan = document.getElementById("currentUserRole");
+
+// ===== عناصر الحركات والملخص =====
+const totalIncomeSpan = document.getElementById("totalIncome");
+const totalExpenseSpan = document.getElementById("totalExpense");
+const balanceSpan = document.getElementById("balance");
+const transactionsCountSpan = document.getElementById("transactionsCount");
+const lastTransactionTextSpan = document.getElementById("lastTransactionText");
+
+const typeSelect = document.getElementById("type");
+const descriptionInput = document.getElementById("description");
+const amountInput = document.getElementById("amount");
+const addTransactionBtn = document.getElementById("addTransactionBtn");
+const transactionsTableBody = document.getElementById("transactionsTableBody");
+const transactionPermissionNote = document.getElementById("transactionPermissionNote");
+const transactionCustomerSelect = document.getElementById("transactionCustomerSelect");
+
+// ===== التنقل بين الأقسام =====
+const navLinks = document.querySelectorAll(".nav-link");
+const sections = document.querySelectorAll(".section");
+
+navLinks.forEach(link => {
+  link.addEventListener("click", () => {
+    const target = link.getAttribute("data-section");
+    navLinks.forEach(l => l.classList.remove("active"));
+    link.classList.add("active");
+    sections.forEach(sec => {
+      sec.classList.toggle("active", sec.id === target);
+    });
+  });
+});
+
+// ===== LocalStorage =====
+let transactions = JSON.parse(localStorage.getItem("reem_pro_transactions") || "[]");
+let customers = JSON.parse(localStorage.getItem("reem_pro_customers") || "[]");
+
+function saveTransactions() {
+  localStorage.setItem("reem_pro_transactions", JSON.stringify(transactions));
+}
+
+function saveCustomers() {
+  localStorage.setItem("reem_pro_customers", JSON.stringify(customers));
+}
+
+// ===== حساب أرصدة العملاء من الحركات =====
+function recalcCustomerBalances() {
+  customers.forEach(c => {
+    c.balance = Number(c.openingBalance || 0);
+  });
+
+  transactions.forEach(tr => {
+    if (tr.customerId) {
+      const c = customers.find(cu => cu.id === tr.customerId);
+      if (c) {
+        if (tr.type === "income") c.balance += tr.amount;
+        else c.balance -= tr.amount;
+      }
+    }
+  });
+}
+
+// ===== عرض الحركات =====
+function renderTransactions() {
+  recalcCustomerBalances();
+  transactionsTableBody.innerHTML = "";
+  let totalIncome = 0;
+  let totalExpense = 0;
+
+  transactions.forEach(tr => {
+    const trEl = document.createElement("tr");
+
+    const typeBadge = tr.type === "income"
+      ? '<span class="badge badge-income">دخل</span>'
+      : '<span class="badge badge-expense">مصروف</span>';
+
+    const customer = tr.customerId
+      ? (customers.find(c => c.id === tr.customerId) || null)
+      : null;
+
+    trEl.innerHTML = `
+      <td>${tr.date}</td>
+      <td>${typeBadge}</td>
+      <td>${tr.description}</td>
+      <td>${tr.amount.toFixed(2)}</td>
+      <td>${customer ? customer.name : "—"}</td>
+    `;
+
+    transactionsTableBody.appendChild(trEl);
+
+    if (tr.type === "income") totalIncome += tr.amount;
+    else totalExpense += tr.amount;
+  });
+
+  const balance = totalIncome - totalExpense;
+
+  totalIncomeSpan.textContent = totalIncome.toFixed(2);
+  totalExpenseSpan.textContent = totalExpense.toFixed(2);
+  balanceSpan.textContent = balance.toFixed(2);
+  transactionsCountSpan.textContent = transactions.length;
+
+  if (transactions.length > 0) {
+    const last = transactions[transactions.length - 1];
+    const customer = last.customerId
+      ? (customers.find(c => c.id === last.customerId) || null)
+      : null;
+    lastTransactionTextSpan.textContent =
+      `${last.type === "income" ? "دخل" : "مصروف"} - ${last.amount.toFixed(2)} ريال - ${last.description}` +
+      (customer ? ` (عميل: ${customer.name})` : "");
+  } else {
+    lastTransactionTextSpan.textContent = "لا يوجد";
+  }
+
+  renderCustomers(); // لتحديث أرصدة العملاء والكروت
+}
+
+// ===== صلاحيات المستخدمين =====
+function applyPermissions() {
+  if (!currentUser) return;
+
+  if (currentUser.role === "viewer") {
+    addTransactionBtn.disabled = true;
+    transactionPermissionNote.textContent = "هذا المستخدم للعرض فقط، لا يمكنه إضافة حركات.";
+    addCustomerBtn.disabled = true;
+  } else if (currentUser.role === "cashier") {
+    addTransactionBtn.disabled = false;
+    transactionPermissionNote.textContent = "يمكن لهذا المستخدم إضافة حركات مالية.";
+    addCustomerBtn.disabled = true;
+  } else if (currentUser.role === "admin") {
+    addTransactionBtn.disabled = false;
+    transactionPermissionNote.textContent = "مدير النظام، يمتلك كامل الصلاحيات.";
+    addCustomerBtn.disabled = false;
+  }
+
+  currentUserNameSpan.textContent = currentUser.username + " - ";
+  currentUserRoleSpan.textContent =
+    currentUser.role === "admin" ? "مدير" :
+    currentUser.role === "cashier" ? "كاشير" : "عرض فقط";
+
+  currentUserRoleSpan.className = "badge " + (
+    currentUser.role === "admin" ? "badge-role-admin" :
+    currentUser.role === "cashier" ? "badge-role-cashier" :
+    "badge-role-viewer"
+  );
+}
+
+// ===== تسجيل الدخول =====
+loginBtn.addEventListener("click", () => {
+  const u = usernameInput.value.trim();
+  const p = passwordInput.value.trim();
+
+  const found = USERS.find(user => user.username === u && user.password === p);
+
+  if (found) {
+    currentUser = found;
+    loginScreen.classList.add("hidden");
+    appShell.classList.remove("hidden");
+    renderTransactions();
+    populateCustomerSelect();
+    applyPermissions();
+  } else {
+    alert("بيانات الدخول غير صحيحة");
+  }
+});
+
+// ===== تسجيل الخروج =====
+logoutBtn.addEventListener("click", () => {
+  currentUser = null;
+  appShell.classList.add("hidden");
+  loginScreen.classList.remove("hidden");
+  usernameInput.value = "";
+  passwordInput.value = "";
+});
+
+// ===== إضافة حركة =====
+addTransactionBtn.addEventListener("click", () => {
+  if (!currentUser) {
+    alert("يجب تسجيل الدخول أولاً");
+    return;
+  }
+
+  if (currentUser.role === "viewer") {
+    alert("هذا المستخدم لا يملك صلاحية إضافة حركات");
+    return;
+  }
+
+  const type = typeSelect.value;
+  const description = descriptionInput.value.trim();
+  const amount = parseFloat(amountInput.value);
+  const customerId = transactionCustomerSelect.value || null;
+
+  if (!description || isNaN(amount) || amount <= 0) {
+    alert("من فضلك أدخل وصف صحيح ومبلغ أكبر من صفر");
+    return;
+  }
+
+  const newTransaction = {
+    id: Date.now().toString(),
+    type,
+    description,
+    amount,
+    date: new Date().toLocaleString("ar-EG"),
+    customerId
+  };
+
+  transactions.push(newTransaction);
+  saveTransactions();
+  renderTransactions();
+
+  descriptionInput.value = "";
+  amountInput.value = "";
+  transactionCustomerSelect.value = "";
+});
+
+// ===== العملاء =====
+const customersGrid = document.getElementById("customersGrid");
+const customersEmptyText = document.getElementById("customersEmptyText");
+const addCustomerBtn = document.getElementById("addCustomerBtn");
+const customerSearchInput = document.getElementById("customerSearchInput");
+const customerBalanceFilter = document.getElementById("customerBalanceFilter");
+
+// Popup عناصر
+const customerFormOverlay = document.getElementById("customerFormOverlay");
+const customerFormTitle = document.getElementById("customerFormTitle");
+const closeCustomerFormPopup = document.getElementById("closeCustomerFormPopup");
+const customerIdField = document.getElementById("customerIdField");
+const customerNameField = document.getElementById("customerNameField");
+const customerPhoneField = document.getElementById("customerPhoneField");
+const customerAddressField = document.getElementById("customerAddressField");
+const customerOpeningBalanceField = document.getElementById("customerOpeningBalanceField");
+const customerNotesField = document.getElementById("customerNotesField");
+const saveCustomerBtn = document.getElementById("saveCustomerBtn");
+
+// Popup تفاصيل
+const customerDetailsOverlay = document.getElementById("customerDetailsOverlay");
+const customerDetailsTitle = document.getElementById("customerDetailsTitle");
+const closeCustomerDetailsPopup = document.getElementById("closeCustomerDetailsPopup");
+const customerDetailsInfo = document.getElementById("customerDetailsInfo");
+const customerTransactionsBody = document.getElementById("customerTransactionsBody");
+
+// فتح نموذج إضافة عميل
+addCustomerBtn.addEventListener("click", () => {
+  if (!currentUser || currentUser.role !== "admin") {
+    alert("فقط المدير يمكنه إدارة العملاء.");
+    return;
+  }
+  openCustomerForm();
+});
+
+closeCustomerFormPopup.addEventListener("click", () => {
+  customerFormOverlay.classList.add("hidden");
+});
+
+closeCustomerDetailsPopup.addEventListener("click", () => {
+  customerDetailsOverlay.classList.add("hidden");
+});
+
+// حفظ عميل (إضافة/تعديل)
+saveCustomerBtn.addEventListener("click", () => {
+  if (!currentUser || currentUser.role !== "admin") {
+    alert("فقط المدير يمكنه إدارة العملاء.");
+    return;
+  }
+
+  const id = customerIdField.value || null;
+  const name = customerNameField.value.trim();
+  const phone = customerPhoneField.value.trim();
+  const address = customerAddressField.value.trim();
+  const openingBalance = parseFloat(customerOpeningBalanceField.value || "0");
+  const notes = customerNotesField.value.trim();
+
+  if (!name) {
+    alert("من فضلك أدخل اسم العميل");
+    return;
+  }
+
+  if (id) {
+    const c = customers.find(cu => cu.id === id);
+    if (c) {
+      c.name = name;
+      c.phone = phone;
+      c.address = address;
+      c.openingBalance = openingBalance;
+      c.notes = notes;
+      c.updatedAt = new Date().toISOString();
+    }
+  } else {
+    const newCustomer = {
+      id: Date.now().toString(),
+      name,
+      phone,
+      address,
+      openingBalance,
+      balance: openingBalance,
+      notes,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    customers.push(newCustomer);
+  }
+
+  saveCustomers();
+  customerFormOverlay.classList.add("hidden");
+  renderCustomers();
+  populateCustomerSelect();
+});
+
+// فتح نموذج عميل
+function openCustomerForm(customer = null) {
+  if (customer) {
+    customerFormTitle.textContent = "تعديل عميل";
+    customerIdField.value = customer.id;
+    customerNameField.value = customer.name || "";
+    customerPhoneField.value = customer.phone || "";
+    customerAddressField.value = customer.address || "";
+    customerOpeningBalanceField.value = customer.openingBalance || 0;
+    customerNotesField.value = customer.notes || "";
+  } else {
+    customerFormTitle.textContent = "إضافة عميل";
+    customerIdField.value = "";
+    customerNameField.value = "";
+    customerPhoneField.value = "";
+    customerAddressField.value = "";
+    customerOpeningBalanceField.value = 0;
+    customerNotesField.value = "";
+  }
+  customerFormOverlay.classList.remove("hidden");
+}
+
+// عرض تفاصيل عميل
+function openCustomerDetails(customer) {
+  customerDetailsTitle.textContent = `تفاصيل العميل - ${customer.name}`;
+  const balanceClass = customer.balance > 0 ? "positive" : (customer.balance < 0 ? "negative" : "");
+  customerDetailsInfo.innerHTML = `
+    <p><strong>الاسم:</strong> ${customer.name}</p>
+    <p><strong>الهاتف:</strong> ${customer.phone || "—"}</p>
+    <p><strong>العنوان:</strong> ${customer.address || "—"}</p>
+    <p><strong>الرصيد الحالي:</strong> <span class="${balanceClass}">${customer.balance.toFixed(2)}</span> ريال</p>
+    <p><strong>ملاحظات:</strong> ${customer.notes || "—"}</p>
+  `;
+
+  // سجل التعاملات
+  customerTransactionsBody.innerHTML = "";
+  let runningBalance = Number(customer.openingBalance || 0);
+  const customerTransactions = transactions
+    .filter(tr => tr.customerId === customer.id)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  customerTransactions.forEach(tr => {
+    if (tr.type === "income") runningBalance += tr.amount;
+    else runningBalance -= tr.amount;
+
+    const trEl = document.createElement("tr");
+    trEl.innerHTML = `
+      <td>${tr.date}</td>
+      <td>${tr.type === "income" ? "دخل" : "مصروف"}</td>
+      <td>${tr.description}</td>
+      <td>${tr.amount.toFixed(2)}</td>
+      <td>${runningBalance.toFixed(2)}</td>
+    `;
+    customerTransactionsBody.appendChild(trEl);
+  });
+
+  customerDetailsOverlay.classList.remove("hidden");
+}
+
+// حذف عميل
+function deleteCustomer(customer) {
+  if (!currentUser || currentUser.role !== "admin") {
+    alert("فقط المدير يمكنه إدارة العملاء.");
+    return;
+  }
+
+  const hasTransactions = transactions.some(tr => tr.customerId === customer.id);
+  if (hasTransactions) {
+    const confirmDelete = confirm("هذا العميل لديه حركات مرتبطة. هل أنت متأكد من الحذف؟ لن يتم حذف الحركات.");
+    if (!confirmDelete) return;
+  } else {
+    const confirmDelete = confirm("هل أنت متأكد من حذف هذا العميل؟");
+    if (!confirmDelete) return;
+  }
+
+  customers = customers.filter(c => c.id !== customer.id);
+  saveCustomers();
+  renderCustomers();
+  populateCustomerSelect();
+}
+
+// بحث وفلترة العملاء
+customerSearchInput.addEventListener("input", renderCustomers);
+customerBalanceFilter.addEventListener("change", renderCustomers);
+
+// عرض العملاء في كروت
+function renderCustomers() {
+  recalcCustomerBalances();
+
+  let filtered = [...customers];
+
+  const search = customerSearchInput.value.trim().toLowerCase();
+  if (search) {
+    filtered = filtered.filter(c =>
+      (c.name && c.name.toLowerCase().includes(search)) ||
+      (c.phone && c.phone.toLowerCase().includes(search))
+    );
+  }
+
+  const filter = customerBalanceFilter.value;
+  if (filter === "positive") {
+    filtered = filtered.filter(c => c.balance > 0);
+  } else if (filter === "negative") {
+    filtered = filtered.filter(c => c.balance < 0);
+  } else if (filter === "zero") {
+    filtered = filtered.filter(c => c.balance === 0);
+  }
+
+  // ترتيب حسب الاسم
+  filtered.sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
+
+  customersGrid.innerHTML = "";
+  if (filtered.length === 0) {
+    customersEmptyText.style.display = "block";
+    return;
+  } else {
+    customersEmptyText.style.display = "none";
+  }
+
+  filtered.forEach(customer => {
+    const card = document.createElement("div");
+    card.className = "customer-card";
+
+    const balanceClass = customer.balance > 0 ? "positive" : (customer.balance < 0 ? "negative" : "");
+    const lastTransaction = transactions
+      .filter(tr => tr.customerId === customer.id)
+      .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+
+    card.innerHTML = `
+      <div class="customer-card-header">
+        <div class="customer-card-header-left">
+          <div class="customer-avatar">${(customer.name || "?").charAt(0)}</div>
+          <div class="customer-name">${customer.name}</div>
+        </div>
+        <div class="customer-balance ${balanceClass}">
+          <div>الرصيد</div>
+          <div>${customer.balance.toFixed(2)} ريال</div>
+        </div>
+      </div>
+      <div class="customer-card-body">
+        <div class="customer-card-body-row">
+          <span class="muted">الهاتف:</span>
+          <span>${customer.phone || "—"}</span>
+        </div>
+        <div class="customer-card-body-row">
+          <span class="muted">العنوان:</span>
+          <span>${customer.address || "—"}</span>
+        </div>
+        <div class="customer-card-body-row">
+          <span class="muted">آخر تعامل:</span>
+          <span>${lastTransaction
+            ? `${lastTransaction.type === "income" ? "دخل" : "مصروف"} - ${lastTransaction.amount.toFixed(2)}`
+            : "لا يوجد"}</span>
+        </div>
+      </div>
+      <div class="customer-card-footer">
+        <button class="btn-sm" data-action="details">تفاصيل</button>
+        <button class="btn-sm" data-action="edit">تعديل</button>
+        <button class="btn-sm" data-action="delete">حذف</button>
+      </div>
+    `;
+
+    const detailsBtn = card.querySelector('[data-action="details"]');
+    const editBtn = card.querySelector('[data-action="edit"]');
+    const deleteBtn = card.querySelector('[data-action="delete"]');
+
+    detailsBtn.addEventListener("click", () => openCustomerDetails(customer));
+    editBtn.addEventListener("click", () => {
+      if (!currentUser || currentUser.role !== "admin") {
+        alert("فقط المدير يمكنه إدارة العملاء.");
+        return;
+      }
+      openCustomerForm(customer);
+    });
+    deleteBtn.addEventListener("click", () => deleteCustomer(customer));
+
+    customersGrid.appendChild(card);
+  });
+}
+
+// تعبئة قائمة العملاء في شاشة الحركات
+function populateCustomerSelect() {
+  const currentValue = transactionCustomerSelect.value;
+  transactionCustomerSelect.innerHTML = `<option value="">بدون عميل</option>`;
+  const sorted = [...customers].sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
+  sorted.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c.id;
+    opt.textContent = c.name;
+    transactionCustomerSelect.appendChild(opt);
+  });
+  if (currentValue) {
+    transactionCustomerSelect.value = currentValue;
+  }
+}
+
+// أول تحميل
+recalcCustomerBalances();
+renderCustomers();
+renderTransactions();
+populateCustomerSelect();
+</script>
+
+</body>
+</html>
