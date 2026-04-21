@@ -3,16 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reem</title>
+    <title>شركة ريم للاستثمار والتجارة العامة</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Cairo', sans-serif;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: #222;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        header img {
+            height: 70px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #D4AF37;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('banner.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 120px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            color: #D4AF37;
+        }
+
+        .hero p {
+            font-size: 22px;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        section {
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        section h2 {
+            font-size: 32px;
+            color: #0A8F3C;
+            margin-bottom: 20px;
+        }
+
+        .services, .team, .clients, .partners, .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .box {
+            background: white;
+            width: 300px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .box:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+
+        .box h3 {
+            color: #D4AF37;
+            font-size: 24px;
+        }
+
+        .team img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #ddd;
+            margin-bottom: 15px;
+        }
+
+        .faq details {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .faq summary {
+            font-size: 20px;
+            color: #D4AF37;
+        }
+
+        .counters {
+            background: #222;
+            color: white;
+        }
+
+        .counter-box {
+            width: 200px;
+        }
+
+        .counter-box h3 {
+            font-size: 48px;
+            color: #0A8F3C;
+        }
+
+        .gallery div {
+            width: 300px;
+            height: 200px;
+            background: #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: 0.4s;
+            cursor: pointer;
+        }
+
+        .gallery div:hover {
+            transform: scale(1.05);
+        }
+
+        .contact {
+            background: #222;
+            color: white;
+            padding: 50px;
+        }
+
+        .contact h2 {
+            color: #D4AF37;
+        }
+
+        footer {
+            background: #111;
+            color: #ccc;
+            padding: 15px;
+            text-align: center;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>ريم</h1>
-    <nav>
-        <ul>
-            <li><a href="education.html">المنصة التعليمية العربية</a></li>
-            <li><a href="marketing.html">التسويق الرقمي</a></li>
-            <li><a href="accounting.html">برنامج المحاسبة المتميز</a></li>
-        </ul>
-    </nav>
+
+    <!-- Header -->
+    <header>
+        <h1>شركة ريم للاستثمار والتجارة العامة</h1>
+        <img src="logo.png" alt="Reem Logo">
+    </header>
+
+    <!-- Hero -->
+    <div class="hero">
+        <h2>نقود الاستثمار نحو المستقبل</h2>
+        <p>شركة ريم تقدم حلولاً استثمارية وتجارية مبتكرة، تجمع بين الخبرة والاحترافية لتحقيق أعلى مستويات النجاح.</p>
+    </div>
+
+    <!-- About -->
+    <section>
+        <h2>من نحن</h2>
+        <p>شركة رائدة في مجال الاستثمار والتجارة العامة، نعمل على تقديم خدمات عالية الجودة تلبي احتياجات السوق المحلي والإقليمي.</p>
+    </section>
+
+    <!-- Services -->
+    <section>
+        <h2>خدماتنا</h2>
+        <div class="services">
+            <div class="box">
+                <h3>المنصة التعليمية العربية</h3>
+                <p>محتوى تعليمي احترافي يدعم التطور المعرفي.</p>
+            </div>
+
+            <div class="box">
+                <h3>التسويق الرقمي</h3>
+                <p>حلول تسويقية مبتكرة لزيادة الوصول وتحقيق النمو.</p>
+            </div>
+
+            <div class="box">
+                <h3>برنامج المحاسبة</h3>
+                <p>نظام محاسبي متكامل لإدارة الأعمال بكفاءة عالية.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clients -->
+    <section>
+        <h2>عملاؤنا</h2>
+        <div class="clients">
+            <div class="box"><h3>شركة الأفق</h3><p>شريك استراتيجي.</p></div>
+            <div class="box"><h3>مجموعة النور</h3><p>تعاون طويل الأمد.</p></div>
+            <div class="box"><h3>مؤسسة الريادة</h3><p>حلول مبتكرة.</p></div>
+        </div>
+    </section>
+
+    <!-- Partners -->
+    <section>
+        <h2>شركاؤنا</h2>
+        <div class="partners">
+            <div class="box"><h3>الشريك الذهبي</h3><p>دعم استثماري.</p></div>
+            <div class="box"><h3>الشريك التقني</h3><p>حلول تقنية.</p></div>
+            <div class="box"><h3>الشريك التجاري</h3><p>تعاون تجاري.</p></div>
+        </div>
+    </section>
+
+    <!-- Team -->
+    <section>
+        <h2>فريق العمل</h2>
+        <div class="team">
+            <div class="box">
+                <img>
+                <h3>م. خالد السبيعي</h3>
+                <p>المدير التنفيذي</p>
+            </div>
+
+            <div class="box">
+                <img>
+                <h3>أ. ريم العتيبي</h3>
+                <p>مديرة الاستثمار</p>
+            </div>
+
+            <div class="box">
+                <img>
+                <h3>أ. محمد السالم</h3>
+                <p>مدير التسويق</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section>
+        <h2>آراء العملاء</h2>
+        <div class="services">
+            <div class="box"><p>"حلول فعّالة ساعدتنا على التوسع."</p><h3>— مؤسسة الريادة</h3></div>
+            <div class="box"><p>"احترافية عالية وخدمة ممتازة."</p><h3>— مجموعة النور</h3></div>
+            <div class="box"><p>"شركة يعتمد عليها."</p><h3>— شركة الأفق</h3></div>
+        </div>
+    </section>
+
+    <!-- Counters -->
+    <section class="counters">
+        <h2>أرقام الشركة</h2>
+        <div style="display:flex; justify-content:center; gap:50px; flex-wrap:wrap; margin-top:40px;">
+            <div class="counter-box"><h3>+250</h3><p>عميل نشط</p></div>
+            <div class="counter-box"><h3>+120</h3><p>مشروع مكتمل</p></div>
+            <div class="counter-box"><h3>15</h3><p>سنة خبرة</p></div>
+            <div class="counter-box"><h3>+30</h3><p>شريك استراتيجي</p></div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section>
+        <h2>معرض الصور</h2>
+        <div class="gallery">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <div class="contact">
+        <h2>تواصل معنا</h2>
+        <p>البريد الإلكتروني: info@reem.com</p>
+        <p>الهاتف: 0000 000 000</p>
+    </div>
+
+    <footer>
+        © 2026 شركة ريم للاستثمار والتجارة العامة
+    </footer>
+
 </body>
 </html>
