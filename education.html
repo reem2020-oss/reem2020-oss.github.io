@@ -1,746 +1,950 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منصة الفلسفة وعلم النفس</title>
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Tahoma',sans-serif}
-body{
-background:radial-gradient(circle at top,#1e1b4b,#0f172a 60%,#020617);
-color:#e5e7eb;
-line-height:1.7;
-scroll-behavior:smooth;
-}
-.container{
-max-width:1200px;
-margin:auto;
-padding:20px;
-}
-header{
-background:linear-gradient(135deg,#4f46e5,#7c3aed);
-padding:40px 25px;
-border-radius:20px;
-box-shadow:0 25px 60px rgba(0,0,0,.5);
-position:relative;
-overflow:hidden;
-margin-bottom:25px;
-}
-header h1{font-size:2rem;margin-bottom:10px;}
-nav{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;}
-nav a{
-padding:8px 16px;
-background:rgba(15,23,42,.6);
-border:1px solid rgba(148,163,184,.4);
-border-radius:999px;
-color:#fff;
-text-decoration:none;
-transition:.2s;
-}
-nav a:hover{transform:translateY(-3px);border-color:#facc15;}
-section{
-background:radial-gradient(circle at top left,#111827,#020617 60%);
-padding:25px;
-margin-top:25px;
-border-radius:18px;
-border:1px solid rgba(55,65,81,.8);
-box-shadow:0 18px 45px rgba(0,0,0,.6);
-}
-section h2{margin-bottom:10px;color:#facc15;}
-.card{
-background:linear-gradient(135deg,#020617,#111827);
-padding:18px;
-border-radius:16px;
-border:1px solid rgba(55,65,81,.9);
-box-shadow:0 18px 40px rgba(0,0,0,.75);
-transform:perspective(900px) rotateX(6deg);
-transition:.25s;
-margin-bottom:15px;
-}
-.card:hover{
-transform:perspective(900px) rotateX(0deg) translateY(-6px);
-border-color:#facc15;
-}
-.btn{
-margin-top:12px;
-padding:10px 18px;
-border-radius:999px;
-background:linear-gradient(135deg,#facc15,#f97316);
-color:#111827;
-font-weight:bold;
-border:none;
-cursor:pointer;
-box-shadow:0 18px 40px rgba(0,0,0,.8);
-transition:.2s;
-}
-.btn:hover{transform:translateY(-3px);}
-.subjects{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
-.subject{
-padding:18px;
-border-radius:16px;
-background:linear-gradient(135deg,#0f172a,#1e1b4b);
-border:1px solid rgba(55,65,81,.9);
-box-shadow:0 18px 40px rgba(0,0,0,.75);
-transform:perspective(800px) rotateY(-8deg);
-transition:.25s;
-}
-.subject:nth-child(2){transform:perspective(800px) rotateY(8deg);}
-.subject:hover{transform:perspective(800px) rotateY(0deg) translateY(-6px);border-color:#facc15;}
-.unit{margin-top:10px;}
-.unit h4{color:#facc15;margin-bottom:5px;}
-.lesson{margin:5px 0 10px 0;}
-footer{text-align:center;margin-top:30px;color:#6b7280;font-size:.85rem;}
-input,select{
-background:#020617;
-color:#e5e7eb;
-border:1px solid #4b5563;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>منصة ريم التعليمية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
-<div class="container">
 
-<header>
-  <h1>منصة الفلسفة وعلم النفس</h1>
-  <nav>
-    <a href="#philosophy">الفلسفة</a>
-    <a href="#psychology">علم النفس</a>
-    <a href="#courses">الدروس</a>
-    <a href="#lesson">درس تجريبي</a>
-    <a href="#student">لوحة الطالب</a>
-    <a href="#wallet">المحفظة</a>
-    <a href="#progress">تقدم الطالب</a>
-    <a href="#teacherPanel">لوحة المعلم</a>
-    <a href="#profile">حسابي</a>
-    <a href="#signup">تسجيل حساب</a>
-    <a href="#login">تسجيل الدخول</a>
-  </nav>
-</header>
+<!-- ============================= -->
+<!-- شاشة تسجيل الدخول -->
+<!-- ============================= -->
+<section id="loginPage" class="page active">
+  <div class="login-wrapper">
+    <div class="login-card">
+      <h1>منصة ريم التعليمية</h1>
+      <p class="login-subtitle">تسجيل الدخول إلى حسابك</p>
 
-<!-- مادة الفلسفة -->
-<section id="philosophy">
-  <h2>مادة الفلسفة</h2>
-  <div class="card">
-    <h3>الوحدة الأولى: المعرفة</h3>
-    <p>شرح كامل + فيديو + PDF + اختبار</p>
-  </div>
-  <div class="card">
-    <h3>الوحدة الثانية: القيم</h3>
-    <p>شرح – تدريبات – امتحانات تراكميّة</p>
-  </div>
-  <div class="card">
-    <h3>الوحدة الثالثة: المنطق</h3>
-    <p>شرح – أمثلة – اختبارات</p>
-  </div>
-</section>
+      <label>رقم الجوال</label>
+      <input id="loginPhone" type="text" placeholder="أدخل رقم الجوال">
 
-<!-- مادة علم النفس -->
-<section id="psychology">
-  <h2>مادة علم النفس</h2>
-  <div class="card">
-    <h3>الوحدة الأولى: الذكاء والتعلم</h3>
-    <p>شرح كامل + فيديو + PDF + اختبار</p>
-  </div>
-  <div class="card">
-    <h3>الوحدة الثانية: الشخصية</h3>
-    <p>نماذج – تدريبات – اختبارات</p>
-  </div>
-  <div class="card">
-    <h3>الوحدة الثالثة: السلوك والانفعالات</h3>
-    <p>شرح – تطبيقات – امتحانات</p>
-  </div>
-</section>
+      <label>كلمة المرور</label>
+      <input id="loginPass" type="password" placeholder="أدخل كلمة المرور">
 
-<!-- لوحة الطالب -->
-<section id="student">
-  <h2>لوحة الطالب</h2>
-  <div class="card">
-    <h3>الدروس</h3>
-    <p>مشاهدة الفيديوهات + تحميل PDF</p>
-  </div>
-  <div class="card">
-    <h3>الاختبارات</h3>
-    <p>اختبارات على كل درس + امتحانات تراكميّة</p>
-  </div>
-  <div class="card">
-    <h3>المستوى</h3>
-    <p>تتبع التقدم في الفلسفة وعلم النفس</p>
-  </div>
-  <div class="card">
-    <h3>المحفظة</h3>
-    <p>شحن – اشتراكات – سجل العمليات</p>
-  </div>
-</section>
+      <label>نوع المستخدم</label>
+      <select id="loginRole">
+        <option value="student">طالب</option>
+        <option value="teacher">معلم</option>
+        <option value="admin">إداري</option>
+      </select>
 
-<!-- محفظة الطالب -->
-<section id="wallet">
-  <h2>محفظة الطالب – شحن الرصيد</h2>
-  <div class="card">
-    <p>رصيدك الحالي: <span id="balance">0</span> نقطة</p>
-    <label>أدخل كود الشحن:</label>
-    <input id="chargeCode" type="text" style="width:100%;padding:8px;border-radius:8px;margin-top:5px;">
-    <button class="btn" onclick="chargeWallet()">شحن</button>
-    <p id="walletMsg" style="margin-top:10px;color:#facc15;"></p>
-  </div>
-</section>
-
-<!-- الدروس الكاملة لكل مادة -->
-<section id="courses">
-  <h2>الدروس الكاملة لكل مادة</h2>
-
-  <div class="card">
-    <h3>مادة الفلسفة</h3>
-    <div class="unit">
-      <h4>الوحدة الأولى: المعرفة</h4>
-      <div class="lesson">
-        <h5>الدرس 1: مفهوم المعرفة</h5>
-        <button class="btn" onclick="openLesson('ph1')">عرض الدرس</button>
-      </div>
-      <div class="lesson">
-        <h5>الدرس 2: مصادر المعرفة</h5>
-        <button class="btn" onclick="openLesson('ph2')">عرض الدرس</button>
-      </div>
-    </div>
-    <div class="unit">
-      <h4>الوحدة الثانية: القيم</h4>
-      <div class="lesson">
-        <h5>الدرس 1: مفهوم القيم</h5>
-        <button class="btn" onclick="openLesson('ph3')">عرض الدرس</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>مادة علم النفس</h3>
-    <div class="unit">
-      <h4>الوحدة الأولى: الذكاء والتعلم</h4>
-      <div class="lesson">
-        <h5>الدرس 1: تعريف الذكاء</h5>
-        <button class="btn" onclick="openLesson('ps1')">عرض الدرس</button>
-      </div>
-      <div class="lesson">
-        <h5>الدرس 2: نظريات التعلم</h5>
-        <button class="btn" onclick="openLesson('ps2')">عرض الدرس</button>
-      </div>
+      <button onclick="loginUser()">دخول</button>
     </div>
   </div>
 </section>
 
-<!-- صفحة درس كاملة -->
-<section id="lessonPage" style="display:none;">
-  <h2 id="lessonTitle"></h2>
-  <div class="card" style="position:relative;overflow:hidden;">
-    <div id="wm" style="
-      position:absolute;
-      top:10px;
-      left:10px;
-      font-size:12px;
-      color:rgba(255,255,255,0.6);
-      background:rgba(0,0,0,0.4);
-      padding:4px 8px;
-      border-radius:8px;
-      z-index:10;">
+<!-- ============================= -->
+<!-- إطار المنصة بعد تسجيل الدخول -->
+<!-- ============================= -->
+<div id="appShell" class="app-shell page">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-box">
+        <!-- شعار الشركة (صورة) -->
+        <img src="reem-logo.png" alt="Reem Logo" class="logo-img">
+        <div class="logo-text">
+          <span class="logo-ar">شركة ريم للاستثمار والتجارة العامة</span>
+          <span class="logo-en">REEM COMPANY</span>
+        </div>
+      </div>
     </div>
 
-    <h3>فيديو الشرح</h3>
-    <iframe id="lessonVideo" width="100%" height="350" frameborder="0" allowfullscreen></iframe>
+    <nav class="sidebar-menu">
+      <p class="menu-title">القائمة الرئيسية</p>
 
-    <br><br>
+      <button class="menu-item" data-target="dashboardHome">
+        <span>الرئيسية</span>
+      </button>
 
-    <h3>ملزمة PDF</h3>
-    <a id="lessonPDF" class="btn" target="_blank">تحميل الملزمة PDF</a>
+      <button class="menu-item" data-target="studentDashboard">
+        <span>لوحة الطالب</span>
+      </button>
 
-    <br><br>
+      <button class="menu-item" data-target="teacherDashboard">
+        <span>لوحة المعلم</span>
+      </button>
 
-    <h3>اختبار الدرس</h3>
-    <div id="lessonExam"></div>
-    <p id="lessonResult" style="margin-top:10px;color:#facc15;"></p>
+      <button class="menu-item" data-target="examRoom">
+        <span>الامتحانات</span>
+      </button>
 
-    <button class="btn" onclick="backToCourses()">رجوع للدروس</button>
-  </div>
-</section>
+      <button class="menu-item" data-target="proctorRoom">
+        <span>المراقبة الذكية</span>
+      </button>
 
-<!-- درس تجريبي بسيط -->
-<section id="lesson">
-  <h2>الدرس التجريبي: مفهوم المعرفة</h2>
-  <div class="card">
-    <h3>شرح الدرس (فيديو)</h3>
-    <iframe width="100%" height="350"
-      src="https://www.youtube.com/embed/VIDEO_ID"
-      frameborder="0" allowfullscreen></iframe>
+      <button class="menu-item" data-target="aiCenter">
+        <span>مركز الذكاء الاصطناعي</span>
+      </button>
 
-    <br><br>
+      <button class="menu-item" data-target="libraryPage">
+        <span>المكتبة الرقمية</span>
+      </button>
 
-    <h3>ملزمة الدرس PDF</h3>
-    <a href="lesson1.pdf" class="btn">تحميل الملزمة PDF</a>
+      <button class="menu-item" data-target="storePage">
+        <span>المتجر</span>
+      </button>
 
-    <br><br>
+      <button class="menu-item" data-target="liveClass">
+        <span>البث المباشر</span>
+      </button>
 
-    <h3>اختبار الدرس</h3>
-    <p>سؤال 1: ما المقصود بالمعرفة؟</p>
-    <select id="q1" style="width:100%;padding:10px;border-radius:8px;">
-      <option value="">اختر الإجابة</option>
-      <option value="1">إدراك الشيء على حقيقته</option>
-      <option value="0">مجرد رأي شخصي</option>
-    </select>
+      <button class="menu-item" data-target="analyticsPage">
+        <span>تحليلات الأداء</span>
+      </button>
 
-    <p>سؤال 2: أي من التالي يعد مصدرًا للمعرفة؟</p>
-    <select id="q2" style="width:100%;padding:10px;border-radius:8px;">
-      <option value="">اختر الإجابة</option>
-      <option value="1">التجربة</option>
-      <option value="0">التخمين</option>
-    </select>
+      <button class="menu-item" data-target="attendancePage">
+        <span>الحضور والانصراف</span>
+      </button>
 
-    <button class="btn" onclick="checkExam()">تصحيح الاختبار</button>
-    <p id="examResult" style="margin-top:10px;color:#facc15;"></p>
-  </div>
-</section>
+      <button class="menu-item" data-target="chatPage">
+        <span>الدردشة والإشعارات</span>
+      </button>
 
-<!-- تقدم الطالب -->
-<section id="progress">
-  <h2>تقدم الطالب</h2>
-  <div class="card">
-    <p id="progressData">لا توجد درجات حتى الآن</p>
-  </div>
-</section>
+      <button class="menu-item" data-target="usersPage">
+        <span>إدارة المستخدمين</span>
+      </button>
 
-<!-- لوحة المعلم / الأدمن -->
-<section id="teacher">
-  <h2>لوحة المعلم / الأدمن</h2>
-  <div class="card">
-    <h3>إدارة المحتوى</h3>
-    <p>رفع فيديوهات – رفع PDF – تنظيم الوحدات والدروس</p>
-  </div>
-  <div class="card">
-    <h3>بنك الأسئلة</h3>
-    <p>MCQ + مقالي – ربط الأسئلة بالدروس</p>
-  </div>
-  <div class="card">
-    <h3>إدارة الطلاب</h3>
-    <p>متابعة الدرجات – الحضور – الأجهزة المسجلة</p>
-  </div>
-  <div class="card">
-    <h3>التقارير</h3>
-    <p>أرباح – اشتراكات – كروت شحن</p>
-  </div>
-</section>
+      <button class="menu-item" data-target="coursesPage">
+        <span>إدارة الدروس والدورات</span>
+      </button>
+    </nav>
 
-<!-- لوحة تحكم المعلم الكاملة -->
-<section id="teacherPanel">
-  <h2>لوحة تحكم المعلم – إدارة المحتوى</h2>
-  <div class="card">
-    <h3>إضافة درس جديد</h3>
+    <div class="sidebar-footer">
+      <button class="menu-item danger" onclick="logout()">
+        <span>تسجيل الخروج</span>
+      </button>
+    </div>
+  </aside>
 
-    <label>المادة:</label>
-    <select id="tp_subject" style="width:100%;padding:8px;border-radius:8px;">
-      <option value="ph">فلسفة</option>
-      <option value="ps">علم نفس</option>
-    </select>
+  <!-- ===== Main Area ===== -->
+  <main class="main-area">
 
-    <label>الوحدة:</label>
-    <input id="tp_unit" type="text" placeholder="مثال: الوحدة الأولى" style="width:100%;padding:8px;border-radius:8px;margin-top:5px;">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h2 id="currentPageTitle">الرئيسية</h2>
+      </div>
+      <div class="topbar-right">
+        <span id="currentUserRole">—</span>
+        <span id="currentUserPhone" class="user-pill"></span>
+      </div>
+    </header>
 
-    <label>عنوان الدرس:</label>
-    <input id="tp_title" type="text" placeholder="عنوان الدرس" style="width:100%;padding:8px;border-radius:8px;margin-top:5px;">
+    <!-- ============================= -->
+    <!-- صفحة: الرئيسية / نظرة عامة -->
+    <!-- ============================= -->
+    <section id="dashboardHome" class="content-page active">
+      <div class="cards-row">
+        <div class="stat-card">
+          <h3>عدد الطلاب</h3>
+          <p id="statStudents">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>عدد المعلمين</h3>
+          <p id="statTeachers">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>عدد الدورات</h3>
+          <p id="statCourses">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>امتحانات اليوم</h3>
+          <p id="statTodayExams">0</p>
+        </div>
+      </div>
 
-    <label>رابط الفيديو (YouTube / Vimeo):</label>
-    <input id="tp_video" type="text" placeholder="https://..." style="width:100%;padding:8px;border-radius:8px;margin-top:5px;">
+      <div class="panel-row">
+        <div class="panel">
+          <h3>آخر الامتحانات</h3>
+          <div id="latestExamsList"></div>
+        </div>
+        <div class="panel">
+          <h3>آخر الجلسات المباشرة</h3>
+          <div id="latestLiveList"></div>
+        </div>
+      </div>
+    </section>
 
-    <label>رابط ملف PDF:</label>
-    <input id="tp_pdf" type="text" placeholder="lesson1.pdf" style="width:100%;padding:8px;border-radius:8px;margin-top:5px;">
+    <!-- ============================= -->
+    <!-- لوحة الطالب -->
+    <!-- ============================= -->
+    <section id="studentDashboard" class="content-page">
+      <h2>لوحة الطالب</h2>
+      <div class="cards-row">
+        <div class="panel">
+          <h3>امتحاناتي القادمة</h3>
+          <div id="studentUpcomingExams"></div>
+        </div>
+        <div class="panel">
+          <h3>نتائجي الأخيرة</h3>
+          <div id="studentLastResults"></div>
+        </div>
+      </div>
+    </section>
 
-    <label>سؤال اختبار (اختيار من متعدد):</label>
-    <input id="tp_q" type="text" placeholder="نص السؤال" style="width:100%;padding:8px;border-radius:8px;margin-top:5px;">
-    <input id="tp_a1" type="text" placeholder="الإجابة الصحيحة" style="width:100%;padding:8px;border-radius:8px;margin-top:5px;">
-    <input id="tp_a2" type="text" placeholder="إجابة أخرى" style="width:100%;padding:8px;border-radius:8px;margin-top:5px;">
+    <!-- ============================= -->
+    <!-- لوحة المعلم -->
+    <!-- ============================= -->
+    <section id="teacherDashboard" class="content-page">
+      <h2>لوحة المعلم</h2>
+      <div class="cards-row">
+        <div class="panel">
+          <h3>امتحاناتي</h3>
+          <div id="teacherExamsList"></div>
+        </div>
+        <div class="panel">
+          <h3>أداء الطلاب</h3>
+          <canvas id="teacherPerformanceChart"></canvas>
+        </div>
+      </div>
+    </section>
 
-    <button class="btn" onclick="addLesson()">حفظ الدرس</button>
-    <p id="tp_msg" style="margin-top:10px;color:#facc15;"></p>
-  </div>
-</section>
+    <!-- ============================= -->
+    <!-- غرفة الامتحان -->
+    <!-- ============================= -->
+    <section id="examRoom" class="content-page">
+      <h2>غرفة الامتحان</h2>
+      <div id="examContainer"></div>
+    </section>
 
-<!-- حسابي -->
-<section id="profile">
-  <h2>حسابي</h2>
-  <div class="card">
-    <p><strong>الاسم:</strong> <span id="p_name"></span></p>
-    <p><strong>رقم الموبايل:</strong> <span id="p_phone"></span></p>
-    <p><strong>النوع:</strong> <span id="p_role"></span></p>
-    <button class="btn" onclick="logout()">تسجيل الخروج</button>
-  </div>
-</section>
+    <!-- ============================= -->
+    <!-- غرفة المراقبة الذكية -->
+    <!-- ============================= -->
+    <section id="proctorRoom" class="content-page">
+      <h2>المراقبة الذكية</h2>
+      <div class="proctor-layout">
+        <div class="proctor-video">
+          <video id="proctorCam" autoplay playsinline></video>
+          <p id="aiProctorMsg"></p>
+        </div>
+        <div class="proctor-heatmap">
+          <canvas id="heatmapCanvas" width="320" height="240"></canvas>
+        </div>
+      </div>
+    </section>
 
-<!-- تسجيل حساب جديد -->
-<section id="signup">
-  <h2>إنشاء حساب جديد</h2>
-  <div class="card">
-    <h3>تسجيل حساب جديد</h3>
+    <!-- ============================= -->
+    <!-- مركز الذكاء الاصطناعي -->
+    <!-- ============================= -->
+    <section id="aiCenter" class="content-page">
+      <h2>مركز الذكاء الاصطناعي</h2>
 
-    <label>الاسم الكامل:</label>
-    <input id="name" type="text" style="width:100%;padding:10px;margin:8px 0;border-radius:8px;border:none;">
+      <div class="ai-grid">
+        <div class="panel">
+          <h3>تلخيص الدروس</h3>
+          <textarea id="aiSummaryInput" rows="4" placeholder="ألصق نص الدرس هنا..."></textarea>
+          <button onclick="aiSummarize()">تلخيص</button>
+          <div id="aiSummaryOutput" class="ai-output"></div>
+        </div>
 
-    <label>رقم الموبايل:</label>
-    <input id="phone_signup" type="text" style="width:100%;padding:10px;margin:8px 0;border-radius:8px;border:none;">
+        <div class="panel">
+          <h3>توليد أسئلة</h3>
+          <textarea id="aiQuestionsInput" rows="4" placeholder="اكتب موضوع الدرس..."></textarea>
+          <button onclick="aiGenerateQuestions()">توليد أسئلة</button>
+          <div id="aiQuestionsOutput" class="ai-output"></div>
+        </div>
 
-    <label>كلمة المرور:</label>
-    <input id="password_signup" type="password" style="width:100%;padding:10px;margin:8px 0;border-radius:8px;border:none;">
+        <div class="panel">
+          <h3>تصحيح إجابات</h3>
+          <textarea id="aiCorrectInput" rows="4" placeholder="اكتب إجابة الطالب..."></textarea>
+          <button onclick="aiCorrectAnswer()">تصحيح</button>
+          <div id="aiCorrectOutput" class="ai-output"></div>
+        </div>
+      </div>
+    </section>
 
-    <label>نوع المستخدم:</label>
-    <select id="role_signup" style="width:100%;padding:10px;margin:8px 0;border-radius:8px;border:none;">
-      <option value="student">طالب</option>
-      <option value="teacher">معلم</option>
-      <option value="parent">ولي أمر</option>
-    </select>
+    <!-- ============================= -->
+    <!-- المكتبة الرقمية -->
+    <!-- ============================= -->
+    <section id="libraryPage" class="content-page">
+      <h2>المكتبة الرقمية</h2>
+      <div id="libraryList" class="list-grid"></div>
+    </section>
 
-    <button class="btn" onclick="signup()">إنشاء الحساب</button>
-    <p id="signupMsg" style="margin-top:10px;color:#facc15;"></p>
-  </div>
-</section>
+    <!-- ============================= -->
+    <!-- المتجر -->
+    <!-- ============================= -->
+    <section id="storePage" class="content-page">
+      <h2>المتجر</h2>
+      <div id="storeItems" class="list-grid"></div>
+    </section>
 
-<!-- تسجيل الدخول -->
-<section id="login">
-  <h2>تسجيل الدخول</h2>
-  <div class="card">
-    <h3>تسجيل الدخول إلى المنصة</h3>
+    <!-- ============================= -->
+    <!-- البث المباشر -->
+    <!-- ============================= -->
+    <section id="liveClass" class="content-page">
+      <h2>البث المباشر</h2>
+      <video id="liveVideo" controls autoplay></video>
+      <div id="liveChat" class="panel">
+        <h3>دردشة البث</h3>
+        <div id="liveChatMessages" class="chat-box"></div>
+        <input id="liveChatInput" type="text" placeholder="اكتب رسالة...">
+        <button onclick="sendLiveChat()">إرسال</button>
+      </div>
+    </section>
 
-    <label>رقم الموبايل:</label>
-    <input id="phone" type="text" style="width:100%;padding:10px;margin:8px 0;border-radius:8px;border:none;">
+    <!-- ============================= -->
+    <!-- تحليلات الأداء -->
+    <!-- ============================= -->
+    <section id="analyticsPage" class="content-page">
+      <h2>تحليلات الأداء</h2>
+      <canvas id="globalAnalyticsChart"></canvas>
+    </section>
 
-    <label>كلمة المرور:</label>
-    <input id="password" type="password" style="width:100%;padding:10px;margin:8px 0;border-radius:8px;border:none;">
+    <!-- ============================= -->
+    <!-- الحضور والانصراف -->
+    <!-- ============================= -->
+    <section id="attendancePage" class="content-page">
+      <h2>الحضور والانصراف</h2>
+      <div id="attendanceTable"></div>
+    </section>
 
-    <button class="btn" onclick="login()">تسجيل الدخول</button>
-    <p id="loginMsg" style="margin-top:10px;color:#facc15;"></p>
-  </div>
-</section>
+    <!-- ============================= -->
+    <!-- الدردشة والإشعارات -->
+    <!-- ============================= -->
+    <section id="chatPage" class="content-page">
+      <h2>الدردشة والإشعارات</h2>
+      <div class="chat-layout">
+        <div class="panel">
+          <h3>الدردشة</h3>
+          <div id="chatMessages" class="chat-box"></div>
+          <input id="chatInput" type="text" placeholder="اكتب رسالة...">
+          <button onclick="sendChat()">إرسال</button>
+        </div>
+        <div class="panel">
+          <h3>الإشعارات</h3>
+          <div id="notificationsList"></div>
+        </div>
+      </div>
+    </section>
 
-<footer>
-  جميع الحقوق محفوظة © 2026 – منصة الفلسفة وعلم النفس
-</footer>
+    <!-- ============================= -->
+    <!-- إدارة المستخدمين -->
+    <!-- ============================= -->
+    <section id="usersPage" class="content-page">
+      <h2>إدارة المستخدمين</h2>
+      <div id="usersTable"></div>
+    </section>
 
+    <!-- ============================= -->
+    <!-- إدارة الدروس والدورات -->
+    <!-- ============================= -->
+    <section id="coursesPage" class="content-page">
+      <h2>إدارة الدروس والدورات</h2>
+      <div id="coursesTable"></div>
+    </section>
+
+  </main>
 </div>
-
-<script>
-// حساب الأدمن الرئيسي (عدّل البيانات كما تحب)
-const MASTER_ADMIN = {
-    name: "محمود حمد",
-    phone: "01068014642",   // عدّل رقمك
-    password: "123456",     // عدّل الباسورد
-    role: "admin"
-};
-
-// بيانات دروس ثابتة
-const lessons = {
-    ph1: {
-        title: "الدرس 1: مفهوم المعرفة",
-        video: "https://www.youtube.com/embed/VIDEO_ID",
-        pdf: "lesson1.pdf",
-        exam: [
-            { q: "ما المقصود بالمعرفة؟", a1: "إدراك الشيء على حقيقته", a2: "مجرد رأي", correct: 1 },
-            { q: "أحد مصادر المعرفة:", a1: "التجربة", a2: "التخمين", correct: 1 }
-        ]
-    },
-    ph2: {
-        title: "الدرس 2: مصادر المعرفة",
-        video: "https://www.youtube.com/embed/VIDEO_ID",
-        pdf: "lesson2.pdf",
-        exam: [
-            { q: "من مصادر المعرفة:", a1: "العقل", a2: "الصدفة", correct: 1 }
-        ]
-    },
-    ph3: {
-        title: "الدرس 1: مفهوم القيم",
-        video: "https://www.youtube.com/embed/VIDEO_ID",
-        pdf: "values1.pdf",
-        exam: [
-            { q: "القيم هي:", a1: "معايير للسلوك", a2: "مجرد عادات", correct: 1 }
-        ]
-    },
-    ps1: {
-        title: "الدرس 1: تعريف الذكاء",
-        video: "https://www.youtube.com/embed/VIDEO_ID",
-        pdf: "psych1.pdf",
-        exam: [
-            { q: "الذكاء هو:", a1: "قدرة على التكيف", a2: "حفظ المعلومات فقط", correct: 1 }
-        ]
-    },
-    ps2: {
-        title: "الدرس 2: نظريات التعلم",
-        video: "https://www.youtube.com/embed/VIDEO_ID",
-        pdf: "psych2.pdf",
-        exam: [
-            { q: "من نظريات التعلم:", a1: "الشرطي الكلاسيكي", a2: "نظرية الصدفة", correct: 1 }
-        ]
-    }
-};
-
-// تهيئة تخزين الدروس المضافة من لوحة المعلم
-if (!localStorage.getItem("lessonsData")) {
-    localStorage.setItem("lessonsData", JSON.stringify({}));
-}
-
-// إنشاء حساب جديد
-function signup() {
-    let name = document.getElementById("name").value;
-    let phone = document.getElementById("phone_signup").value;
-    let pass = document.getElementById("password_signup").value;
-    let role = document.getElementById("role_signup").value;
-
-    if (name === "" || phone === "" || pass === "") {
-        document.getElementById("signupMsg").innerText = "من فضلك أدخل جميع البيانات";
-        return;
-    }
-
-    let user = { name, phone, password: pass, role, scores: {}, balance: 0 };
-    localStorage.setItem("user_" + phone, JSON.stringify(user));
-
-    document.getElementById("signupMsg").innerText = "تم إنشاء الحساب بنجاح";
-    setTimeout(() => { location.href = "#login"; }, 1000);
-}
-
-// تسجيل الدخول
-function login() {
-    let phone = document.getElementById("phone").value;
-    let pass  = document.getElementById("password").value;
-
-    // الأدمن الرئيسي
-    if (phone === MASTER_ADMIN.phone && pass === MASTER_ADMIN.password) {
-        localStorage.setItem("currentUser", JSON.stringify(MASTER_ADMIN));
-        document.getElementById("loginMsg").innerText = "تم تسجيل الدخول كأدمن رئيسي";
-        location.href = "#teacherPanel";
-        return;
-    }
-
-    let userData = localStorage.getItem("user_" + phone);
-    if (!userData) {
-        document.getElementById("loginMsg").innerText = "الحساب غير موجود";
-        return;
-    }
-
-    let user = JSON.parse(userData);
-    if (user.password !== pass) {
-        document.getElementById("loginMsg").innerText = "كلمة المرور غير صحيحة";
-        return;
-    }
-
-    localStorage.setItem("currentUser", JSON.stringify(user));
-    document.getElementById("loginMsg").innerText = "تم تسجيل الدخول بنجاح";
-
-    if (user.role === "student") location.href = "#student";
-    if (user.role === "teacher") location.href = "#teacherPanel";
-    if (user.role === "parent")  location.href = "#student";
-}
-
-// تسجيل الخروج
-function logout() {
-    localStorage.removeItem("currentUser");
-    alert("تم تسجيل الخروج");
-    location.href = "#login";
-}
-
-// تحميل بيانات الحساب
-function loadProfile() {
-    let user = JSON.parse(localStorage.getItem("currentUser"));
-    if (!user) return;
-    document.getElementById("p_name").innerText  = user.name;
-    document.getElementById("p_phone").innerText = user.phone;
-    document.getElementById("p_role").innerText  =
-        user.role === "student" ? "طالب" :
-        user.role === "teacher" ? "معلم" :
-        user.role === "admin"   ? "أدمن" : "ولي أمر";
-}
-
-// حماية الصفحات
-function protectPage() {
-    let user = JSON.parse(localStorage.getItem("currentUser"));
-    if (!user) {
-        alert("يجب تسجيل الدخول أولاً");
-        location.href = "#login";
-    }
-}
-
-function protectTeacherPanel() {
-    let user = JSON.parse(localStorage.getItem("currentUser"));
-    if (!user || (user.role !== "admin" && user.role !== "teacher")) {
-        alert("هذه الصفحة للمعلم فقط");
-        location.href = "#login";
-    }
-}
-
-// كروت شحن ثابتة
-const chargeCards = {
-    "ABC123": 50,
-    "VIP500": 500,
-    "STU100": 100
-};
-
-function loadBalance() {
-    let user = JSON.parse(localStorage.getItem("currentUser"));
-    if (!user) return;
-    if (!user.balance) user.balance = 0;
-    document.getElementById("balance").innerText = user.balance;
-    localStorage.setItem("currentUser", JSON.stringify(user));
-}
-
-function chargeWallet() {
-    let code = document.getElementById("chargeCode").value.trim();
-    let user = JSON.parse(localStorage.getItem("currentUser"));
-    if (!user) {
-        document.getElementById("walletMsg").innerText = "سجّل الدخول أولاً";
-        return;
-    }
-
-    if (!chargeCards[code]) {
-        document.getElementById("walletMsg").innerText = "كود غير صحيح";
-        return;
-    }
-
-    let amount = chargeCards[code];
-    if (!user.balance) user.balance = 0;
-    user.balance += amount;
-    localStorage.setItem("currentUser", JSON.stringify(user));
-
-    document.getElementById("walletMsg").innerText = "تم الشحن: +" + amount;
-    document.getElementById("balance").innerText = user.balance;
-    delete chargeCards[code];
-}
-
-// فتح درس من جدول الدروس
-function openLesson(id) {
-    let L = lessons[id];
-    if (!L) return;
-
-    document.getElementById("lessonTitle").innerText = L.title;
-    document.getElementById("lessonVideo").src = L.video;
-    document.getElementById("lessonPDF").href = L.pdf;
-
-    let examHTML = "";
-    L.exam.forEach((e, i) => {
-        examHTML += `
-        <p>${e.q}</p>
-        <select id="ex${i}" style="width:100%;padding:10px;border-radius:8px;">
-            <option value="">اختر الإجابة</option>
-            <option value="1">${e.a1}</option>
-            <option value="0">${e.a2}</option>
-        </select>
-        `;
-    });
-    examHTML += `<button class="btn" onclick="gradeExam('${id}')">تصحيح الاختبار</button>`;
-    document.getElementById("lessonExam").innerHTML = examHTML;
-
-    setWatermark();
-
-    document.getElementById("courses").style.display = "none";
-    document.getElementById("lessonPage").style.display = "block";
-}
-
-function backToCourses() {
-    document.getElementById("lessonPage").style.display = "none";
-    document.getElementById("courses").style.display = "block";
-}
-
-// تصحيح اختبار الدرس (من lessons)
-function gradeExam(id) {
-    let L = lessons[id];
-    let score = 0;
-    L.exam.forEach((e, i) => {
-        if (document.getElementById("ex" + i).value === "1") score++;
-    });
-
-    document.getElementById("lessonResult").innerText =
-        "نتيجتك: " + score + " من " + L.exam.length;
-
-    let user = JSON.parse(localStorage.getItem("currentUser"));
-    if (!user) return;
-    if (!user.scores) user.scores = {};
-    user.scores[id] = score;
-    localStorage.setItem("currentUser", JSON.stringify(user));
-}
-
-// تصحيح الاختبار التجريبي
-function checkExam() {
-    let score = 0;
-    if (document.getElementById("q1").value === "1") score++;
-    if (document.getElementById("q2").value === "1") score++;
-    document.getElementById("examResult").innerText = "نتيجتك: " + score + " من 2";
-}
-
-// عرض تقدم الطالب
-function loadProgress() {
-    let user = JSON.parse(localStorage.getItem("currentUser"));
-    if (!user || !user.scores) {
-        document.getElementById("progressData").innerText = "لا توجد درجات حتى الآن";
-        return;
-    }
-    let html = "";
-    for (let key in user.scores) {
-        if (lessons[key])
-            html += `<p><strong>${lessons[key].title}:</strong> ${user.scores[key]}</p>`;
-    }
-    document.getElementById("progressData").innerHTML = html || "لا توجد درجات حتى الآن";
-}
-
-// إضافة درس جديد من لوحة المعلم (يُخزن في LocalStorage فقط)
-function addLesson() {
-    let subject = document.getElementById("tp_subject").value;
-    let unit = document.getElementById("tp_unit").value;
-    let title = document.getElementById("tp_title").value;
-    let video = document.getElementById("tp_video").value;
-    let pdf = document.getElementById("tp_pdf").value;
-    let q = document.getElementById("tp_q").value;
-    let a1 = document.getElementById("tp_a1").value;
-    let a2 = document.getElementById("tp_a2").value;
-
-    if (!unit || !title || !video || !pdf || !q || !a1 || !a2) {
-        document.getElementById("tp_msg").innerText = "أكمل جميع البيانات";
-        return;
-    }
-
-    let data = JSON.parse(localStorage.getItem("lessonsData"));
-    if (!data[subject]) data[subject] = [];
-    data[subject].push({
-        unit, title, video, pdf,
-        exam: [{ q, a1, a2, correct: 1 }]
-    });
-
-    localStorage.setItem("lessonsData", JSON.stringify(data));
-    document.getElementById("tp_msg").innerText = "تم حفظ الدرس بنجاح (محليًا)";
-}
-
-// Watermark باسم الطالب
-function setWatermark() {
-    let user = JSON.parse(localStorage.getItem("currentUser"));
-    if (!user) return;
-    let wm = document.getElementById("wm");
-    if (!wm) return;
-    wm.innerText = user.name + " - " + user.phone;
-}
-
-// حماية بسيطة من بعض طرق الغش
-document.addEventListener("contextmenu", e => e.preventDefault());
-document.addEventListener("keydown", e => {
-    if (e.key === "PrintScreen") {
-        alert("التصوير غير مسموح أثناء مشاهدة الدرس");
-    }
-});
-
-// مراقبة تغيير الهاش للحماية والتحميل
-window.addEventListener("hashchange", () => {
-    let protectedPages = ["#student", "#teacher", "#lesson", "#wallet", "#progress", "#lessonPage"];
-    if (protectedPages.includes(location.hash)) protectPage();
-    if (location.hash === "#teacherPanel") protectTeacherPanel();
-    if (location.hash === "#profile") loadProfile();
-    if (location.hash === "#wallet") loadBalance();
-    if (location.hash === "#progress") loadProgress();
-});
-
-// تحميل أولي
-window.onload = () => {
-    // ممكن تضيف أي تهيئة هنا
-};
-</script>
 
 </body>
 </html>
+/* ================================
+   RESET
+================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Tajawal", sans-serif;
+}
+
+body {
+  background: #f4f4f4;
+  direction: rtl;
+  overflow: hidden;
+}
+
+/* ================================
+   صفحات عامة
+================================ */
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+/* ================================
+   شاشة تسجيل الدخول
+================================ */
+.login-wrapper {
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #4b0f1f, #7a1f33);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  width: 360px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.15);
+  text-align: center;
+}
+
+.login-card h1 {
+  margin-bottom: 10px;
+  color: #4b0f1f;
+}
+
+.login-card label {
+  display: block;
+  text-align: right;
+  margin: 10px 0 5px;
+  font-weight: bold;
+}
+
+.login-card input,
+.login-card select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  background: #7a1f33;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.login-card button:hover {
+  background: #4b0f1f;
+}
+
+/* ================================
+   APP SHELL
+================================ */
+.app-shell {
+  display: flex;
+  height: 100vh;
+}
+
+/* ================================
+   SIDEBAR
+================================ */
+.sidebar {
+  width: 280px;
+  background: #4b0f1f;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.logo-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+.logo-ar {
+  font-weight: bold;
+}
+
+.logo-en {
+  opacity: 0.8;
+  font-size: 12px;
+}
+
+/* ================================
+   SIDEBAR MENU
+================================ */
+.sidebar-menu {
+  padding: 20px;
+}
+
+.menu-title {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+
+.menu-item {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  text-align: right;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.menu-item:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.menu-item.active {
+  background: rgba(255,255,255,0.25);
+}
+
+.menu-item.danger {
+  background: #a00000;
+}
+
+.menu-item.danger:hover {
+  background: #700000;
+}
+
+/* ================================
+   MAIN AREA
+================================ */
+.main-area {
+  flex: 1;
+  background: #f4f4f4;
+  overflow-y: auto;
+  padding-bottom: 40px;
+}
+
+/* ================================
+   TOPBAR
+================================ */
+.topbar {
+  height: 65px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-pill {
+  background: #7a1f33;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+/* ================================
+   CONTENT PAGES
+================================ */
+.content-page {
+  display: none;
+  padding: 25px;
+}
+
+.content-page.active {
+  display: block;
+}
+
+/* ================================
+   CARDS & PANELS
+================================ */
+.cards-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 200px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.stat-card h3 {
+  color: #4b0f1f;
+  margin-bottom: 10px;
+}
+
+.stat-card p {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.panel {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+/* ================================
+   PROCTOR ROOM
+================================ */
+.proctor-layout {
+  display: flex;
+  gap: 20px;
+}
+
+.proctor-video video {
+  width: 320px;
+  border-radius: 12px;
+}
+
+.proctor-heatmap canvas {
+  border-radius: 12px;
+  background: #eee;
+}
+
+/* ================================
+   AI CENTER
+================================ */
+.ai-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.ai-output {
+  background: #f9f9f9;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 10px;
+  min-height: 60px;
+}
+
+/* ================================
+   CHAT
+================================ */
+.chat-box {
+  height: 250px;
+  overflow-y: auto;
+  background: #fafafa;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.chat-layout {
+  display: flex;
+  gap: 20px;
+}
+
+/* ================================
+   LIST GRID
+================================ */
+.list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.list-grid .panel {
+  min-height: 120px;
+}
+/* ================================
+   مساعد: إظهار/إخفاء الصفحات
+================================ */
+function showPage(pageId) {
+  document.querySelectorAll(".content-page").forEach(p => p.classList.remove("active"));
+  const target = document.getElementById(pageId);
+  if (target) target.classList.add("active");
+  const titleMap = {
+    dashboardHome: "الرئيسية",
+    studentDashboard: "لوحة الطالب",
+    teacherDashboard: "لوحة المعلم",
+    examRoom: "غرفة الامتحان",
+    proctorRoom: "المراقبة الذكية",
+    aiCenter: "مركز الذكاء الاصطناعي",
+    libraryPage: "المكتبة الرقمية",
+    storePage: "المتجر",
+    liveClass: "البث المباشر",
+    analyticsPage: "تحليلات الأداء",
+    attendancePage: "الحضور والانصراف",
+    chatPage: "الدردشة والإشعارات",
+    usersPage: "إدارة المستخدمين",
+    coursesPage: "إدارة الدروس والدورات"
+  };
+  document.getElementById("currentPageTitle").innerText = titleMap[pageId] || "الرئيسية";
+}
+
+/* ================================
+   تفعيل أزرار الـ Sidebar
+================================ */
+document.querySelectorAll(".menu-item[data-target]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".menu-item").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const target = btn.getAttribute("data-target");
+    showPage(target);
+  });
+});
+
+/* ================================
+   بيانات تجريبية للمستخدمين
+================================ */
+if (!localStorage.getItem("users")) {
+  localStorage.setItem("users", JSON.stringify([
+    { phone: "111", pass: "111", role: "student" },
+    { phone: "222", pass: "222", role: "teacher" },
+    { phone: "333", pass: "333", role: "admin" }
+  ]));
+}
+
+/* ================================
+   تسجيل الدخول
+================================ */
+function loginUser() {
+  const phone = document.getElementById("loginPhone").value.trim();
+  const pass = document.getElementById("loginPass").value.trim();
+  const role = document.getElementById("loginRole").value;
+
+  const users = JSON.parse(localStorage.getItem("users") || "[]");
+  const found = users.find(u => u.phone === phone && u.pass === pass && u.role === role);
+
+  if (!found) {
+    alert("بيانات الدخول غير صحيحة");
+    return;
+  }
+
+  localStorage.setItem("currentUser", JSON.stringify(found));
+
+  // إظهار الـ appShell وإخفاء صفحة الدخول
+  document.getElementById("loginPage").classList.remove("active");
+  document.getElementById("appShell").classList.add("active");
+
+  document.getElementById("currentUserPhone").innerText = found.phone;
+  document.getElementById("currentUserRole").innerText =
+    found.role === "student" ? "طالب" :
+    found.role === "teacher" ? "معلم" : "إداري";
+
+  // فتح الصفحة المناسبة
+  showPage("dashboardHome");
+}
+
+/* ================================
+   تسجيل الخروج
+================================ */
+function logout() {
+  localStorage.removeItem("currentUser");
+  document.getElementById("appShell").classList.remove("active");
+  document.getElementById("loginPage").classList.add("active");
+}
+
+/* ================================
+   تعبئة إحصائيات تجريبية
+================================ */
+function loadStats() {
+  document.getElementById("statStudents").innerText = 120;
+  document.getElementById("statTeachers").innerText = 15;
+  document.getElementById("statCourses").innerText = 32;
+  document.getElementById("statTodayExams").innerText = 4;
+}
+loadStats();
+
+/* ================================
+   المكتبة التجريبية
+================================ */
+if (!localStorage.getItem("library")) {
+  localStorage.setItem("library", JSON.stringify([
+    { title: "مقدمة في الرياضيات", desc: "أساسيات الجبر والحساب." },
+    { title: "مبادئ الفيزياء", desc: "الحركة، القوى، الطاقة." },
+    { title: "مهارات التعلم", desc: "كيف تذاكر بذكاء." }
+  ]));
+}
+
+function loadLibrary() {
+  const list = JSON.parse(localStorage.getItem("library") || "[]");
+  const container = document.getElementById("libraryList");
+  container.innerHTML = "";
+  list.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "panel";
+    div.innerHTML = `<h4>${item.title}</h4><p>${item.desc}</p>`;
+    container.appendChild(div);
+  });
+}
+loadLibrary();
+
+/* ================================
+   المتجر التجريبي
+================================ */
+if (!localStorage.getItem("store")) {
+  localStorage.setItem("store", JSON.stringify([
+    { name: "كورس رياضيات كامل", price: 150 },
+    { name: "كورس فيزياء شامل", price: 180 },
+    { name: "حزمة ملخصات PDF", price: 60 }
+  ]));
+}
+
+function loadStore() {
+  const list = JSON.parse(localStorage.getItem("store") || "[]");
+  const container = document.getElementById("storeItems");
+  container.innerHTML = "";
+  list.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "panel";
+    div.innerHTML = `<h4>${item.name}</h4><p>السعر: ${item.price} ريال</p>`;
+    container.appendChild(div);
+  });
+}
+loadStore();
+
+/* ================================
+   دردشة بسيطة + بث
+================================ */
+function sendChat() {
+  const input = document.getElementById("chatInput");
+  const msg = input.value.trim();
+  if (!msg) return;
+  const box = document.getElementById("chatMessages");
+  const p = document.createElement("p");
+  p.textContent = "أنت: " + msg;
+  box.appendChild(p);
+  box.scrollTop = box.scrollHeight;
+  input.value = "";
+}
+
+function sendLiveChat() {
+  const input = document.getElementById("liveChatInput");
+  const msg = input.value.trim();
+  if (!msg) return;
+  const box = document.getElementById("liveChatMessages");
+  const p = document.createElement("p");
+  p.textContent = "أنت: " + msg;
+  box.appendChild(p);
+  box.scrollTop = box.scrollHeight;
+  input.value = "";
+}
+
+/* ================================
+   مركز الذكاء الاصطناعي (محاكاة)
+================================ */
+function aiSummarize() {
+  const txt = document.getElementById("aiSummaryInput").value.trim();
+  const out = document.getElementById("aiSummaryOutput");
+  if (!txt) {
+    out.innerText = "من فضلك أدخل نصًا ليتم تلخيصه.";
+    return;
+  }
+  out.innerText = "ملخص (محاكاة): " + txt.slice(0, 80) + (txt.length > 80 ? "..." : "");
+}
+
+function aiGenerateQuestions() {
+  const txt = document.getElementById("aiQuestionsInput").value.trim();
+  const out = document.getElementById("aiQuestionsOutput");
+  if (!txt) {
+    out.innerText = "من فضلك أدخل موضوعًا لتوليد أسئلة.";
+    return;
+  }
+  out.innerHTML = `
+    1) ما هو المفهوم الرئيسي في هذا الدرس؟<br>
+    2) اذكر مثالًا تطبيقيًا على ${txt}.<br>
+    3) ما الفرق بين الفكرة الأساسية والتفاصيل الفرعية في هذا الموضوع؟
+  `;
+}
+
+function aiCorrectAnswer() {
+  const txt = document.getElementById("aiCorrectInput").value.trim();
+  const out = document.getElementById("aiCorrectOutput");
+  if (!txt) {
+    out.innerText = "من فضلك أدخل إجابة الطالب.";
+    return;
+  }
+  out.innerText = "تقييم (محاكاة): إجابة جيدة بشكل عام، تحتاج إلى مزيد من التفصيل في النقاط الأساسية.";
+}
+
+/* ================================
+   المراقبة: تشغيل الكاميرا + Heatmap بسيطة
+================================ */
+let heatmap = { center: 0, left: 0, right: 0, up: 0, down: 0 };
+let cheatScore = 0;
+
+function startProctor() {
+  const video = document.getElementById("proctorCam");
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+
+  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(stream => {
+      video.srcObject = stream;
+    })
+    .catch(() => {
+      document.getElementById("aiProctorMsg").innerText = "تعذر تشغيل الكاميرا.";
+    });
+
+  setInterval(() => {
+    const canvas = document.getElementById("heatmapCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    // محاكاة حركة العين
+    const dir = Math.floor(Math.random() * 5);
+    if (dir === 0) heatmap.center++;
+    if (dir === 1) heatmap.left++;
+    if (dir === 2) heatmap.right++;
+    if (dir === 3) heatmap.up++;
+    if (dir === 4) heatmap.down++;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = `rgba(255,0,0,${heatmap.center / 20})`;
+    ctx.fillRect(100, 60, 120, 80);
+
+    ctx.fillStyle = `rgba(255,165,0,${heatmap.left / 20})`;
+    ctx.fillRect(0, 60, 100, 80);
+
+    ctx.fillStyle = `rgba(255,165,0,${heatmap.right / 20})`;
+    ctx.fillRect(220, 60, 100, 80);
+
+    ctx.fillStyle = `rgba(255,255,0,${heatmap.up / 20})`;
+    ctx.fillRect(100, 0, 120, 60);
+
+    ctx.fillStyle = `rgba(255,255,0,${heatmap.down / 20})`;
+    ctx.fillRect(100, 140, 120, 60);
+
+    if (dir !== 0) {
+      cheatScore++;
+      document.getElementById("aiProctorMsg").innerText =
+        "تحذير (محاكاة): حركة عين غير طبيعية — نقاط الغش: " + cheatScore;
+    }
+  }, 4000);
+}
+
+/* تشغيل المراقبة عند فتح صفحة المراقبة لأول مرة */
+document.querySelector('[data-target="proctorRoom"]').addEventListener("click", startProctor);
+
+/* ================================
+   تشغيل مبدئي
+================================ */
+showPage("dashboardHome");
